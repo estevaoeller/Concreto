@@ -50,3 +50,7 @@
 - T03: boss final tem 100% de chance de aparecer.
 - Revisão geral aprovada ao final da entrevista. Permanecem em aberto detalhes não respondidos e ambiguidades explicitadas acima.
 - Consolidação v0.4: atualizados documentos, inventário gráfico e plano de entrevista. Sem escolha de tecnologia, criação de assets ou programação.
+
+## 2026-11-15: estudos visuais
+
+Criada prancha preliminar com quatro alternativas de Concreto, estudos de movimento, gota, raio, espada e cenário de plataforma. A alternativa verde foi usada como exemplo, sem aprovação definitiva. A espada do protagonista diverge de A02 e permanece não aprovada. Referência documentada em `assets/concept-art/README.md`; upload do PNG pendente. Desenvolvimento previsto na nuvem, sem definição de tecnologia.
