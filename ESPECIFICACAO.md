@@ -165,5 +165,5 @@ Valores adotados apenas para tornar o protótipo jogável. Nenhum foi confirmado
 | Boss — ataque (B01) | Dano fora da janela; forma do ataque | O raio só causa dano na janela de 10 s; fora dela é bloqueado. O boss troca de posição a cada 2,5 s durante a janela. 24 pontos de vida. |
 | Boss — ciclo (B02) | Repetição do ciclo; intervalo entre golpes | Ciclo repete até a derrota; aviso de 1,1 s e 0,6 s entre os dois golpes. |
 | Fase 1 (F01) | Cthulhu Higiênico como boss da fase 1 | Adotado como boss da Fase 1. |
-| Arte e som (P04, G01–G19) | Cor, rosto, estilo, sons | Concreto verde-água com olhos; monstro roxo com espinhos; cenário e sons de teste. Nada aprovado. |
+| Arte e som (P04, G01–G19) | Cor, rosto, estilo, sons | Concreto como geleca verde-água translúcida, com base esparramada, topo curvado, brilho, bolhas internas, gota escorrendo, olhos escuros e sorriso (redesenho da rodada 007); monstro roxo com espinhos; cenário e sons de teste. Nada aprovado. |
 | Gota (P03) | Frequência e efeito | Uma gota a cada 2,2 s; apenas decorativa. |

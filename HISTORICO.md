@@ -59,3 +59,9 @@
 - Regras pendentes foram preenchidas com premissas provisórias, listadas na seção 13 da especificação v0.5. Nenhuma foi confirmada pelo criador.
 - Escopo limitado à Fase 1, cujo tema e boss são originais. As fases 2 e 5 dependem da avaliação das referências a Minecraft/Malgosha e Lego antes de qualquer implementação.
 - Verificação: percurso automatizado da fase e da luta contra o boss concluído sem erros no navegador; não houve teste com o criador.
+
+## 2026-11-15 — Rodada 007 — Redesenho do Concreto
+
+- Retorno do responsável: o Concreto do protótipo lembrava demais um fantasma de Pac-Man.
+- Redesenhado como geleca: base esparramada no lugar da barra ondulada, corpo translúcido com degradê, brilho, bolhas internas, gota escorrendo, olhos escuros sem branco e sorriso. Mantidos P01 (silhueta que lembra fantasma) e P02 (topo curvado).
+- Aparência continua provisória (P04); falta a validação do criador.

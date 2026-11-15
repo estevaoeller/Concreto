@@ -255,7 +255,7 @@ var Fase = (function () {
     f.raios.forEach(function (r) { Arte.raio(c, r.x - cam, r.y, r.dir, f.t); });
     if (!esconderJogador && !(j.invul > 0 && Math.floor(f.t * 14) % 2 === 0)) {
       Arte.concreto(c, j.x - cam, j.y, {
-        w: JW + 4, h: JH + 2, dir: j.dir, t: f.t + (j.vx ? f.t : 0),
+        w: JW + 8, h: JH + 8, dir: j.dir, t: f.t + (j.vx ? f.t : 0),
         espichar: j.noChao ? Math.sin(f.t * (j.vx ? 12 : 3)) * 0.12 : Math.max(-0.5, Math.min(0.9, -j.vy / 700)),
         atacando: j.atacando > 0
       });

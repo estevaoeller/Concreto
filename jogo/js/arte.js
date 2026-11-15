@@ -107,43 +107,91 @@ var Arte = (function () {
   }
 
   // Concreto visto de lado. (x, y) = meio dos pés.
+  // Geleca: base esparramada no chão, corpo mole que balança, topo curvado (P02),
+  // brilho de gel, bolhas por dentro e uma gota escorrendo (P03). Silhueta lembra fantasma (P01).
   function concreto(c, x, y, o) {
     o = o || {};
     var w = o.w || 44, h = o.h || 52, dir = o.dir || 1, t = o.t || 0;
     var esp = o.espichar || 0; // >0 estica (pulo), <0 achata
     var ww = w * (1 - esp * 0.18), hh = h * (1 + esp * 0.22);
+    var bal = Math.sin(t * 5) * ww * 0.04;          // o topo balança como gelatina
+    var pe = 1 + Math.max(0, -esp) * 0.25 - Math.max(0, esp) * 0.3; // base abre ao achatar
     c.save();
     c.translate(x, y);
-    c.fillStyle = CFG.concreto.cor;
-    c.strokeStyle = CFG.concreto.corEscura;
-    c.lineWidth = 3;
-    c.beginPath();
-    c.moveTo(-ww / 2, -hh * 0.45);
-    // topo curvado (P02), não pontudo
-    c.bezierCurveTo(-ww / 2, -hh * 1.12, ww / 2, -hh * 1.12, ww / 2, -hh * 0.45);
-    c.lineTo(ww / 2, -4);
-    // barra de baixo ondulada, formato de fantasma (P01)
-    var n = 3, passo = ww / n;
-    for (var i = 0; i < n; i++) {
-      var x0 = ww / 2 - i * passo;
-      var bal = Math.sin(t * 6 + i * 1.7) * 2;
-      c.quadraticCurveTo(x0 - passo / 2, 6 + bal, x0 - passo, -4);
+    c.scale(dir, 1);
+    function corpo() {
+      c.beginPath();
+      c.moveTo(-0.64 * ww * pe, 0);
+      c.bezierCurveTo(-0.68 * ww * pe, -0.14 * hh, -0.42 * ww, -0.14 * hh, -0.40 * ww, -0.42 * hh);
+      c.bezierCurveTo(-0.40 * ww + bal, -0.96 * hh, -0.04 * ww + bal, -1.13 * hh, 0.14 * ww + bal, -1.05 * hh);
+      c.bezierCurveTo(0.42 * ww + bal, -0.95 * hh, 0.45 * ww, -0.62 * hh, 0.42 * ww, -0.40 * hh);
+      c.bezierCurveTo(0.44 * ww, -0.14 * hh, 0.72 * ww * pe, -0.12 * hh, 0.66 * ww * pe, 0);
+      c.bezierCurveTo(0.5 * ww, 6, 0.22 * ww, 2, 0.02 * ww, 5);
+      c.bezierCurveTo(-0.24 * ww, 7, -0.5 * ww, 3, -0.64 * ww * pe, 0);
+      c.closePath();
     }
-    c.closePath();
-    c.fill(); c.stroke();
-    // brilho
+    // sombra no chão
+    if (!o.semSombra) {
+      c.fillStyle = 'rgba(8,30,22,0.18)';
+      c.beginPath(); c.ellipse(0, 4, ww * 0.7, hh * 0.07, 0, 0, 7); c.fill();
+    }
+    // corpo de gel: claro em cima, mais escuro embaixo
+    var g = c.createLinearGradient(0, -hh * 1.1, 0, 4);
+    g.addColorStop(0, '#b9f7dc');
+    g.addColorStop(0.35, CFG.concreto.cor);
+    g.addColorStop(1, '#2fa87c');
+    corpo();
+    c.fillStyle = g; c.fill();
+    c.save();
+    corpo(); c.clip();
+    // miolo mais escuro e bolhas por dentro
+    c.fillStyle = 'rgba(20,110,80,0.22)';
+    c.beginPath(); c.ellipse(-0.05 * ww, -0.3 * hh, ww * 0.3, hh * 0.3, 0, 0, 7); c.fill();
     c.fillStyle = 'rgba(255,255,255,0.35)';
-    c.beginPath(); c.ellipse(-ww * 0.18 * dir, -hh * 0.78, ww * 0.12, hh * 0.07, -0.5 * dir, 0, 7); c.fill();
-    // olhos
-    var ox = dir * ww * 0.12, oy = -hh * 0.55;
-    c.fillStyle = '#fff';
-    c.beginPath(); c.ellipse(ox - 8, oy, 6, 8, 0, 0, 7); c.fill();
-    c.beginPath(); c.ellipse(ox + 8, oy, 6, 8, 0, 0, 7); c.fill();
-    c.fillStyle = '#12261e';
-    c.beginPath(); c.arc(ox - 8 + dir * 2.5, oy + 1, 3, 0, 7); c.fill();
-    c.beginPath(); c.arc(ox + 8 + dir * 2.5, oy + 1, 3, 0, 7); c.fill();
+    for (var i = 0; i < 4; i++) {
+      var f = ((t * 0.25 + i * 0.27) % 1);
+      var bx = (-0.28 + 0.18 * i) * ww + Math.sin(t * 2 + i * 2) * 2;
+      c.beginPath(); c.arc(bx, -0.08 * hh - f * hh * 0.55, ww * (0.035 + 0.012 * i) * (1 - f * 0.5), 0, 7); c.fill();
+    }
+    // luz da borda (parece molhado)
+    c.strokeStyle = 'rgba(255,255,255,0.28)'; c.lineWidth = ww * 0.12;
+    c.beginPath(); c.moveTo(-0.36 * ww, -0.2 * hh);
+    c.bezierCurveTo(-0.36 * ww + bal, -0.8 * hh, -0.1 * ww + bal, -1.02 * hh, 0.1 * ww + bal, -1.0 * hh); c.stroke();
+    c.restore();
+    corpo();
+    c.strokeStyle = CFG.concreto.corEscura; c.lineWidth = Math.max(2.5, ww * 0.06); c.lineJoin = 'round'; c.stroke();
+    // brilho forte
+    c.fillStyle = 'rgba(255,255,255,0.8)';
+    c.beginPath(); c.ellipse(-0.14 * ww + bal, -0.86 * hh, ww * 0.1, hh * 0.045, -0.6, 0, 7); c.fill();
+    c.beginPath(); c.arc(-0.27 * ww + bal * 0.7, -0.7 * hh, ww * 0.035, 0, 7); c.fill();
+    // gota escorrendo pelas costas
+    var q = (t * 0.45) % 1;
+    c.fillStyle = CFG.concreto.cor; c.strokeStyle = CFG.concreto.corEscura; c.lineWidth = Math.max(1.5, ww * 0.035);
+    c.beginPath();
+    var gx = -0.43 * ww - q * 0.12 * ww, gy = -0.5 * hh + q * 0.4 * hh, gr = ww * (0.06 + 0.03 * q);
+    c.moveTo(gx, gy - gr * 2); c.quadraticCurveTo(gx + gr * 1.3, gy, gx, gy + gr);
+    c.quadraticCurveTo(gx - gr * 1.3, gy, gx, gy - gr * 2); c.fill(); c.stroke();
+    // rosto: olhos escuros e brilhantes, um pouco para a frente
+    var ox = 0.14 * ww + bal * 0.6, oy = -0.62 * hh;
+    var pisca = (t % 3.4) < 0.12;
+    [-1, 1].forEach(function (s) {
+      var ex = ox + s * 0.15 * ww, rx = ww * 0.085, ry = pisca ? hh * 0.012 : hh * (s > 0 ? 0.105 : 0.095);
+      c.fillStyle = '#0f2b22';
+      c.beginPath(); c.ellipse(ex, oy, rx, ry, 0, 0, 7); c.fill();
+      if (!pisca) {
+        c.fillStyle = '#fff';
+        c.beginPath(); c.arc(ex + rx * 0.3, oy - ry * 0.4, rx * 0.36, 0, 7); c.fill();
+        c.beginPath(); c.arc(ex - rx * 0.3, oy + ry * 0.4, rx * 0.16, 0, 7); c.fill();
+      }
+    });
+    c.fillStyle = 'rgba(255,150,170,0.45)'; // bochechas
+    c.beginPath(); c.ellipse(ox - 0.27 * ww, oy + 0.13 * hh, ww * 0.06, hh * 0.03, 0, 0, 7); c.fill();
+    c.beginPath(); c.ellipse(ox + 0.25 * ww, oy + 0.13 * hh, ww * 0.05, hh * 0.03, 0, 0, 7); c.fill();
+    c.strokeStyle = '#0f2b22'; c.fillStyle = '#0f2b22'; c.lineWidth = Math.max(1.6, ww * 0.04); c.lineCap = 'round';
     if (o.atacando) { // boca aberta soltando o raio
-      c.beginPath(); c.arc(ox + dir * 2, oy + 15, 5, 0, 7); c.fill();
+      c.beginPath(); c.ellipse(ox + 0.04 * ww, oy + 0.2 * hh, ww * 0.085, hh * 0.08, 0, 0, 7); c.fill();
+    } else {
+      c.beginPath(); c.arc(ox, oy + 0.12 * hh, ww * 0.09, 0.25, Math.PI - 0.25); c.stroke();
     }
     c.restore();
   }
