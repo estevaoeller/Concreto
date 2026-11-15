@@ -45,3 +45,7 @@ Os IDs deste catálogo são identificadores locais de arte; não substituem os I
 Para cada aprovação, preencher: ID | arquivo/versão | data | opção selecionada | origem/licença | decisão e ressalvas. Se a imagem introduzir detalhes contraditórios, registrar e resolver antes de utilizar.
 
 Ambiente de desenvolvimento previsto na nuvem; plataforma e tecnologia a definir. O repositório é público: evitar dados pessoais nas imagens, prompts e metadados, e avaliar direitos de referências a marcas e personagens antes de distribuição.
+
+## Mundo 1: Plantas
+
+Storyboard revisado com cenário vegetal, plataformas, progressão em três trechos, movimentos do protagonista, raio de geleca, monstros, interação de proximidade e portal. O criador confirmou que o Cthulhu Higiênico é feito de papel higiênico: um rolo com olhos e tentáculos de tiras desenroladas, não uma criatura vegetal. Arquivo previsto: `concreto-storyboard-mundo-1-plantas.png` (upload do PNG pendente). Os exemplos visuais de inimigos, moedas, geometria das plataformas e combate lateral contra o boss são ilustrativos; não alteram os requisitos confirmados, incluindo a perspectiva em primeira pessoa do combate contra o Cthulhu Higiênico.
