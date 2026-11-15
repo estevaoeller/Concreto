@@ -24,6 +24,7 @@
   window.Jogo = Jogo; // para testes
 
   function relogio() {
+    if (!T.ativo) return { noite: false, brilho: 0, falta: 0, desligado: true };
     var p = Jogo.relogio % cicloTotal, noite = p >= T.duracaoDia, mud = 10, n;
     if (!noite) n = p > T.duracaoDia - mud ? (p - (T.duracaoDia - mud)) / mud : 0;
     else n = p > cicloTotal - mud ? 1 - (p - (cicloTotal - mud)) / mud : 1;
@@ -45,7 +46,7 @@
     var toque = Entrada.toque;
 
     // FERRAMENTA DE TESTE: pular para o outro período tocando no sol/lua ou com a tecla N
-    if (T.atalhoDeTeste && (Jogo.estado === 'fase' || Jogo.estado === 'boss')) {
+    if (T.ativo && T.atalhoDeTeste && (Jogo.estado === 'fase' || Jogo.estado === 'boss')) {
       if (Entrada.pulouTempo || (toque && toque.x > W - 160 && toque.y < 70)) {
         var p = Jogo.relogio % cicloTotal;
         Jogo.relogio += (p < T.duracaoDia ? T.duracaoDia : cicloTotal) - p;
@@ -61,8 +62,8 @@
       var r = Fase.atualizar(Jogo.fase, dt, Jogo);
       if (r === 'morreu') { Fase.espalhar(Jogo.fase); Jogo.estado = 'morrendo'; Jogo.espera = 2.4; Jogo.morreuNoBoss = false; }
       if (r === 'portal') {
-        // Sorteio do encontro no portal (T02), uma vez por chegada.
-        var chance = relogio().noite ? CFG.portal.chanceBossNoite : CFG.portal.chanceBossDia;
+        // Encontro no portal. Sem o ciclo de dia e noite, vale CFG.portal.chanceBoss.
+        var chance = !T.ativo ? CFG.portal.chanceBoss : (relogio().noite ? CFG.portal.chanceBossNoite : CFG.portal.chanceBossDia);
         if (Math.random() < chance) novoBoss();
         else { Som.portal(); Jogo.estado = 'vitoria'; Jogo.espera = 0.8; }
       }
@@ -124,7 +125,7 @@
       faixa('O vento levou o Concreto!', ['As três vidas acabaram.', Jogo.morreuNoBoss ? 'Você volta para a luta contra o boss.' : 'Você volta para o começo da fase.'], 'Toque ou aperte Enter para tentar de novo');
     } else if (e === 'vitoria') {
       faixa('Você atravessou o portal!', [
-        Jogo.teveBoss ? 'O ' + CFG.boss.nome + ' foi derrotado!' : (rel.noite ? 'Desta vez não tinha boss no portal.' : 'De dia o portal estava livre.'),
+        Jogo.teveBoss ? 'O ' + CFG.boss.nome + ' foi derrotado!' : (rel.desligado ? 'O portal estava livre.' : rel.noite ? 'Desta vez não tinha boss no portal.' : 'De dia o portal estava livre.'),
         'O Mundo 2 ainda está sendo inventado.'
       ], 'Toque ou aperte Enter para jogar de novo');
     }

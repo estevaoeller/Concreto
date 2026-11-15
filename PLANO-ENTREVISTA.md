@@ -30,15 +30,16 @@ Adaptação de Grill Me e Grill with Docs, de Matt Pocock (https://github.com/ma
 
 Perguntar uma por vez, ajustando conforme respostas:
 
-1. "Quando você falou dos 50% de chance de aparecer um monstro à noite, você quis dizer o boss da fase ou um monstro comum?"
-2. "E se Concreto chegar ao portal de dia, o que acontece?"
-3. "Se não aparecer boss, o Concreto já pode entrar no portal? E se aparecer, precisa derrotá-lo?"
-4. "O Cthulhu Higiênico é o boss da primeira fase, a das plantas?"
-5. "A tela muda para primeira pessoa em todas as lutas de boss ou só na do Cthulhu? E todos têm a barrinha de vida grande?" Dividir em duas perguntas no diálogo.
-6. "Quando o boss vai atacar, como o Concreto escapa do golpe?" Explorar a fala sobre bater nos lados sem presumir que significa desviar.
-7. "Nos dez segundos, como o Concreto ataca? E o que acontece se tentar atacar fora desse tempo?"
-8. "Quando você perde as três vidas ou cai de uma plataforma, de onde começa de novo?" Dividir perda de vidas e queda.
-9. "O que acontece depois de derrotar o boss do último mundo?"
+Atualizado após a rodada 010 (respondidas: dano por contato e faca, invulnerabilidade, queda, reinício, Cthulhu na fase 1; retirado o ciclo de dia e noite).
+
+1. "Agora que não tem mais noite, o boss aparece sempre no portal?"
+2. "Você falou de uma espada e de um escudo. É para o Concreto ter no jogo? Como ele usaria?" Não presumir; a decisão vigente é A02 (sem espada).
+3. "Se o boss aparecer, precisa derrotá-lo para entrar no portal?"
+4. "A tela muda para primeira pessoa em todas as lutas de boss ou só na do Cthulhu? E todos têm a barrinha de vida grande?" Dividir em duas perguntas no diálogo.
+5. "Quando o boss vai atacar, como o Concreto escapa do golpe?" Explorar a fala sobre bater nos lados sem presumir que significa desviar.
+6. "Nos dez segundos, como o Concreto ataca? E o que acontece se tentar atacar fora desse tempo?"
+7. "O que acontece depois de derrotar o boss do último mundo?"
+8. "Qual dos quatro Concretos você escolhe: verde, azul, roxo ou laranja?"
 
 Depois resolver as dependências dos controles, inimigos normais, personalização dos mundos e direção de arte. Não ler o roteiro inteiro de uma vez.
 

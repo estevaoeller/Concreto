@@ -1,6 +1,6 @@
 # Concreto — Especificação do jogo
 
-Versão: 0.5 — 2026-11-15
+Versão: 0.6 — 2026-11-15
 Estado: descoberta e design, com protótipo jogável da Fase 1 autorizado pelo responsável (ver seções 11 e 13). O protótipo não encerra a descoberta nem converte premissas provisórias em requisitos.
 Convenção: requisitos numerados são decisões confirmadas, salvo indicação explícita de interpretação, proposta ou pendência. Referências visuais não são assets aprovados.
 
@@ -35,9 +35,10 @@ Convenção: requisitos numerados são decisões confirmadas, salvo indicação 
 - A02: Concreto não empunha espada nem faca. Correção explícita da rodada anterior: a arma pertence ao monstro. O raio de geleca do Concreto permanece confirmado.
 - I01: existem monstros nas plataformas.
 - I02: os monstros têm animações simples; foi mencionada uma representação parada. Deslocamento ainda não definido.
-- I03: contato com um monstro causa dano ao personagem, conforme decisão anterior ainda não revogada.
+- I03: contato com um monstro causa dano ao personagem. Reconfirmado na rodada 010.
+- I05: o golpe de faca também tira vida (rodada 010). Contato e faca são, portanto, duas fontes de dano.
 - I04: se Concreto estiver muito perto de um monstro, surge uma faca e o monstro ataca. Se estiver longe, a faca não aparece.
-- Pendente: distância que ativa a faca, tempo de preparação, área de dano, intervalo entre ataques, se a faca desaparece imediatamente ao afastar, se dano por contato e por faca são eventos distintos, tipos de monstros, dano do raio, alcance, recarga e condições de derrota de inimigos.
+- Pendente: distância que ativa a faca, tempo de preparação, área de dano, intervalo entre ataques, se a faca desaparece imediatamente ao afastar, tipos de monstros, dano do raio, alcance, recarga e condições de derrota de inimigos.
 
 ## 5. Vida, dano e derrota
 
@@ -45,7 +46,10 @@ Convenção: requisitos numerados são decisões confirmadas, salvo indicação 
 - V02: ao encostar em um monstro, perde uma das três vidas.
 - V03: ao sofrer dano, é jogado para trás (knockback).
 - V04: quando as três vidas acabam, ocorre uma animação na qual um vento espalha os pedaços de geleca do Concreto.
-- Pendente: invulnerabilidade temporária após dano, contato contínuo, direção e intensidade do knockback, quedas, armadilhas, recuperação de vida, reinício, checkpoints, persistência de vidas entre fases e interface pós-derrota. A tela de game over foi sugerida, mas não confirmada.
+- V05: depois de levar um golpe, Concreto fica um tempo sem poder levar outro (rodada 010). Duração não definida.
+- V06: ao cair num buraco, Concreto perde uma vida e volta para a última plataforma (rodada 010). Registro da fala: "ele morre" e, em seguida, "vai para a última plataforma quando ele cai"; lido como perda de uma vida, não de todas.
+- V07: sem vidas, recomeça a fase desde o início; se a derrota foi contra o boss, recomeça a luta (rodada 010).
+- Pendente: duração da invulnerabilidade, contato contínuo, direção e intensidade do knockback, armadilhas, recuperação de vida, quantas vidas tem ao recomeçar, persistência de vidas entre fases e interface pós-derrota. A tela de game over foi sugerida, mas não confirmada.
 
 ### Estados funcionais preliminares
 
@@ -53,16 +57,20 @@ Parado, deslocando-se, pulando, atacando, recebendo dano e derrotado. Trata-se d
 
 ## 6. Ciclo temporal e encontros no portal
 
-- T01: o jogo possui um ciclo de dia e noite; cada período dura 30 minutos.
-- T02: durante a noite, quando Concreto chega ao final, há 50% de chance de haver um monstro. A formulação aprovada foi "monstro"; confirmar se se refere ao boss do portal ou a outro inimigo.
+Decisão da rodada 010: o criador retirou o ciclo de dia e noite ("esse negócio de noite não deu certo", "vamos fazer normal, sem ser de noite"). T01 e T02 ficam substituídas e permanecem abaixo apenas como registro. Consequência em aberto: sem a noite não há mais sorteio definido para o boss das fases 1 a 4. O protótipo adota, como premissa provisória, que o boss aparece sempre; falta confirmação.
+
+Regras anteriores (substituídas, exceto T03):
+
+- T01 (substituída na rodada 010): o jogo possui um ciclo de dia e noite; cada período dura 30 minutos.
+- T02 (substituída na rodada 010): durante a noite, quando Concreto chega ao final, há 50% de chance de haver um monstro. A formulação aprovada foi "monstro"; confirmar se se refere ao boss do portal ou a outro inimigo.
 - T03: o último boss, na quinta fase, tem 100% de chance de aparecer. A exceção é explícita; não aplicar o sorteio a este boss.
-- Pendente: ocorrência de inimigos/bosses durante o dia, se o ciclo utiliza tempo de jogo ativo ou relógio real, período inicial, pausa, persistência entre fases, momento e unidade do sorteio (uma vez por fase, chegada, tentativa etc.), impacto visual, comportamento caso o portal não tenha inimigo e relação exata entre a chance de 50% e os bosses das fases 1–4.
+- Pendente: se o boss das fases 1 a 4 aparece sempre e o que acontece no portal quando não há boss.
 
 ## 7. Mundo e progressão
 
 | Fase | Cenário | Boss | Estado |
 |---|---|---|---|
-| 1 | Plantas/vegetação (descrita como "em planta") | Cthulhu Higiênico | Cenário e boss do portal confirmados; associação à fase 1 é interpretação contextual ("a primeira fica como eu falei"), a confirmar expressamente. |
+| 1 | Plantas/vegetação (descrita como "em planta") | Cthulhu Higiênico | Cenário e boss confirmados. F04: Cthulhu Higiênico é o boss da fase 1 (confirmado expressamente na rodada 010). |
 | 2 | Lugar tipo Nether | Malgosha do filme de Minecraft | Referência de cenário e boss confirmadas como intenção criativa. |
 | 3 | Céu | Anjo | Tema e tipo de boss confirmados. |
 | 4 | Mundo de bichinhos de pelúcia | Coelho de pelúcia | Tema e boss confirmados. |
@@ -126,13 +134,14 @@ Não há desenhos, sprites ou áudio aprovados. O estilo e o formato técnico pe
 
 ## 10. Decisões pendentes prioritárias
 
-1. Confirmar se os 50% de chance à noite significam boss ou monstro comum e o que ocorre durante o dia.
-2. Confirmar Cthulhu como boss da primeira fase; confirmar se a câmera em primeira pessoa e a barra de vida grande valem para todos os bosses.
-3. Definir como o jogador se defende dos dois ataques, como ataca durante a janela e se o boss pode receber dano fora dela.
-4. Definir relação portal/derrota do boss, repetição de ciclos, vitória final, continuidade de vidas, reinício, quedas e checkpoints.
-5. Definir controles de deslocamento, física, inimigos normais, dano, itens, pontuação e progressão.
-6. Validar conceitos de arte, interface, áudio e acessibilidade.
-7. Definir primeira versão jogável, direitos de uso das referências e critérios de aceitação.
+1. Sem o ciclo de dia e noite, confirmar se o boss de cada fase aparece sempre.
+2. Esclarecer a fala sobre espada e escudo da rodada 010 (ver histórico): se for pedido para o jogo, contraria A02 e precisa de decisão expressa.
+3. Confirmar se a câmera em primeira pessoa e a barra de vida grande valem para todos os bosses.
+4. Definir como o jogador se defende dos dois ataques, como ataca durante a janela e se o boss pode receber dano fora dela.
+5. Definir relação portal/derrota do boss, repetição de ciclos, vitória final e continuidade de vidas.
+6. Definir controles de deslocamento, física, inimigos normais, dano, itens, pontuação e progressão.
+7. Validar conceitos de arte, interface, áudio e acessibilidade.
+8. Definir primeira versão jogável, direitos de uso das referências e critérios de aceitação.
 
 ## 11. Implementação
 
@@ -144,7 +153,7 @@ Fora do protótipo: fases 2 a 5 e seus bosses, persistência, itens, pontuação
 
 O protótipo pode ser usado como apoio à entrevista: o criador joga, e cada premissa provisória da seção 13 vira uma pergunta concreta ("ficou como você imaginou?").
 
-Começar esclarecendo a regra de encontro no portal: "Quando você falou dos 50% de chance de aparecer um monstro à noite, você quis dizer o boss da fase ou um monstro comum?" Depois investigar o que acontece de dia, a generalização da primeira pessoa e como desviar dos golpes. Ver [plano de entrevista](PLANO-ENTREVISTA.md).
+Começar por: "Agora que não tem mais noite, o boss aparece sempre no portal?" Depois esclarecer a fala sobre espada e escudo, e seguir para Q06 (como escapar e atacar na luta) e Q07 (portal e final). Ver [plano de entrevista](PLANO-ENTREVISTA.md).
 
 ## 13. Premissas provisórias do protótipo
 
@@ -152,18 +161,15 @@ Valores adotados apenas para tornar o protótipo jogável. Nenhum foi confirmado
 
 | Tema | Pendência na especificação | Premissa adotada no protótipo |
 |---|---|---|
-| Encontro no portal (T02) | "Monstro" é o boss ou um monstro comum? O que ocorre de dia? | À noite, 50% de chance de o boss aparecer; de dia, 0% (portal livre). Sorteio uma vez por chegada ao portal. |
+| Encontro no portal | Sem o ciclo de dia e noite, quando o boss aparece? | O boss aparece sempre ao chegar ao portal. Ciclo desligado em `tempo.ativo`; reversível. |
 | Portal e boss | O portal depende da derrota do boss? | Se o boss aparece, é preciso vencê-lo para concluir a fase. |
-| Relógio (T01) | Tempo de jogo ou relógio real; período inicial | Tempo de jogo ativo, começa de dia. Atalho de teste (tecla N ou toque no sol/lua) pula o período. |
 | Movimento | Velocidade, altura do salto, pulo duplo | Um salto simples, com altura variável conforme o tempo de pressão do botão. |
-| Queda | Consequência de cair | Perde uma vida e volta à última plataforma segura. |
-| Dano (V02/V03) | Invulnerabilidade, intensidade do knockback | 1,2 s de invulnerabilidade com o personagem piscando. |
+| Dano (V05) | Duração da invulnerabilidade, intensidade do knockback | 1,2 s de invulnerabilidade com o personagem piscando. |
 | Raio (A01) | Alcance, recarga, dano | Projétil horizontal, alcance de 380 px, recarga de 0,35 s, dano 1. |
 | Monstros (I02/I04) | Tipos, movimento, vida, distância e tempo da faca | Um tipo, parado, 2 pontos de vida. A faca aparece a menos de 130 px, golpeia após 0,7 s e some se Concreto se afasta. Faca e contato tiram uma vida cada. |
-| Derrota (V04) | Reinício | Tela de derrota; reinício no começo da fase, ou no começo da luta se a derrota foi contra o boss. Vidas restauradas. |
+| Derrota (V07) | Vidas ao recomeçar; tela de derrota | Tela de derrota; três vidas ao recomeçar a fase ou a luta. |
 | Boss — defesa (8.2) | Como evitar os golpes; sentido de "bater nos lados" | Três posições (esquerda, meio, direita). O aviso de papel higiênico indica a posição atacada; mudar de posição evita o golpe. Interpretação não validada. |
 | Boss — ataque (B01) | Dano fora da janela; forma do ataque | O raio só causa dano na janela de 10 s; fora dela é bloqueado. O boss troca de posição a cada 2,5 s durante a janela. 24 pontos de vida. |
 | Boss — ciclo (B02) | Repetição do ciclo; intervalo entre golpes | Ciclo repete até a derrota; aviso de 1,1 s e 0,6 s entre os dois golpes. |
-| Fase 1 (F01) | Cthulhu Higiênico como boss da fase 1 | Adotado como boss da Fase 1. |
 | Arte e som (P04, G01–G19) | Cor, rosto, estilo, sons | Visual desenhado por código a partir da alternativa A dos estudos de personagem e do storyboard do Mundo 1 (rodada 009); monstro roxo com espinhos; cenário e sons de teste. Nada aprovado. |
 | Gota (P03) | Frequência e efeito | Uma gota a cada 2,2 s; apenas decorativa. |

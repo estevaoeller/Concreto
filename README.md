@@ -4,7 +4,7 @@ Jogo de plataforma em fase de descoberta e preparação para desenvolvimento. Co
 
 ## Estado atual
 
-Especificação v0.5 (2026-11-15): personagem, controles básicos, três vidas, portais, ciclo de dia e noite, cinco mundos temáticos e padrão de combate contra bosses. Pacote de preparação para desenvolvimento e produção visual publicado. Ainda existem regras a validar.
+Especificação v0.6 (2026-11-15): personagem, controles básicos, três vidas, portais, cinco mundos temáticos e padrão de combate contra bosses. Pacote de preparação para desenvolvimento e produção visual publicado. Ainda existem regras a validar.
 
 Existe um protótipo jogável da Fase 1 em [`jogo/`](jogo/), autorizado pelo responsável como instrumento de validação do design. As regras ainda não decididas pelo criador foram preenchidas com valores provisórios, todos identificados em [`jogo/js/config.js`](jogo/js/config.js) e na seção 13 da especificação. Valor provisório não é requisito.
 
@@ -15,7 +15,7 @@ Abrir `jogo/index.html` no navegador (não precisa instalar nada nem de internet
 - Teclado: setas ou A/D andam, espaço pula, X solta o raio de geleca, Enter confirma.
 - Celular ou tablet: botões na tela.
 - Na luta contra o boss: esquerda/direita mudam de lado, X (ou RAIO) atira.
-- Atalho de teste: tecla N, ou toque no sol/lua, pula para o outro período do dia. O boss só pode aparecer à noite (50%).
+- O ciclo de dia e noite foi retirado pelo criador; no protótipo o boss aparece sempre ao chegar ao portal (premissa a confirmar).
 
 Para gerar um arquivo HTML único (fácil de enviar): `node ferramentas/empacotar.js`.
 

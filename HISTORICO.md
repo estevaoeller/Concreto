@@ -105,3 +105,17 @@ Criada prancha preliminar com quatro alternativas de Concreto, estudos de movime
 - Recebidos S05 (storyboard do Mundo 5) e P02 (monstros comuns), totalizando 12 de 12 pranchas previstas. Arquivos movidos para caminhos padronizados, preservando os blobs originais.
 - Atualizados catálogo e README principal. Todos os estudos permanecem em revisão; não representam aprovação de novos requisitos nem assets finais de produção.
 >>>>>>> origin/main
+
+## 2026-11-15 — Rodada 010 — Respostas do criador após o protótipo
+
+Respostas recebidas por transcrição de voz, com trechos truncados. Registrado apenas o que ficou inteligível.
+
+- I03 reconfirmada e I05 nova: encostar no monstro tira vida e a faca também.
+- V05: após um golpe, Concreto fica um tempo sem poder levar outro. Duração não informada.
+- V06: cair no buraco tira uma vida e Concreto volta para a última plataforma. A fala começou com "ele morre" e seguiu com "vai para a última plataforma quando ele cai"; interpretação registrada como perda de uma vida.
+- V07: sem vidas, recomeça a fase; derrota no boss recomeça a luta.
+- Alteração de decisão anterior: ciclo de dia e noite retirado ("não deu certo", "vamos fazer normal, sem ser de noite"). T01 e T02 substituídas. Dependência revisada: a chance de 50% de encontro deixou de ter base; o protótipo passa a mostrar o boss sempre, como premissa provisória. T03 (boss final sempre aparece) não foi alterada.
+- F04: Cthulhu Higiênico confirmado expressamente como boss da primeira fase.
+- Não resolvido: um trecho menciona querer uma espada e, em seguida, um escudo, sem deixar claro se o pedido é para o jogo. Não implementado. Se for pedido de gameplay, altera A02 (Concreto sem espada) e precisa de confirmação expressa.
+- Sem resposta nesta rodada: Q01 (dispositivos), Q06 (defesa e ataque na luta), Q07 (portal e final), Q08 (cor e aparência) e as demais partes de Q05.
+- Protótipo atualizado: relógio e sorteio desligados por configuração, indicador de sol/lua removido da tela, boss sempre presente no portal. Especificação v0.6.

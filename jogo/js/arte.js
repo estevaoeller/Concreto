@@ -406,13 +406,14 @@ var Arte = (function () {
     c.fillText(s, x, y);
   }
 
-  // Vidas (gotinhas) e relógio de dia/noite.
+  // Vidas (gotinhas) e, se o ciclo estiver ligado, relógio de dia/noite.
   function painel(c, vidas, relogio) {
     for (var i = 0; i < CFG.vidas; i++) {
       c.globalAlpha = i < vidas ? 1 : 0.22;
       gota(c, 34 + i * 36, 42, 12);
       c.globalAlpha = 1;
     }
+    if (relogio.desligado) return;
     var x = W - 44, y = 38;
     c.fillStyle = 'rgba(8,20,16,0.35)';
     retArred(c, W - 150, 16, 134, 44, 22); c.fill();

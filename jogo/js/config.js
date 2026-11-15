@@ -16,9 +16,9 @@ var CFG = {
   },
 
   vidas: 3,                    // confirmado (V01)
-  invencivelAposDano: 1.2,     // PROVISÓRIO (segundos piscando sem levar dano)
+  invencivelAposDano: 1.2,     // existência confirmada (V05); duração PROVISÓRIA
   empurrao: { vx: 320, vy: 380 }, // confirmado que existe (V03); força PROVISÓRIA
-  quedaTiraVida: true,         // PROVISÓRIO (cair no buraco: perde 1 vida e volta para a última plataforma)
+  quedaTiraVida: true,         // confirmado (V06): cair no buraco tira 1 vida e volta para a última plataforma
 
   raio: {
     velocidade: 700,           // PROVISÓRIO
@@ -38,6 +38,7 @@ var CFG = {
   },
 
   tempo: {
+    ativo: false,              // DESLIGADO na rodada 010: o criador retirou a noite (T01/T02 substituídas). Reversível.
     duracaoDia: 30 * 60,       // confirmado (T01), em segundos
     duracaoNoite: 30 * 60,     // confirmado (T01)
     comecaDeDia: true,         // PROVISÓRIO
@@ -46,13 +47,14 @@ var CFG = {
   },
 
   portal: {
-    chanceBossNoite: 0.5,      // confirmado 50% à noite (T02); que o "monstro" é o boss é INTERPRETAÇÃO PROVISÓRIA
-    chanceBossDia: 0,          // PROVISÓRIO (pendente: o que acontece de dia)
+    chanceBoss: 1,             // PROVISÓRIO: sem a noite, o boss aparece sempre (a confirmar com o criador)
+    chanceBossNoite: 0.5,      // só vale com tempo.ativo = true (regra antiga T02)
+    chanceBossDia: 0,          // só vale com tempo.ativo = true
     precisaVencerBoss: true    // PROVISÓRIO
   },
 
   boss: {
-    nome: 'Cthulhu Higiênico', // confirmado (B03)
+    nome: 'Cthulhu Higiênico', // confirmado (B03); boss da fase 1 confirmado (F04)
     vida: 24,                  // PROVISÓRIO
     ataquesPorCiclo: 2,        // confirmado (B01)
     pausa: 10,                 // confirmado (B01), segundos
@@ -62,7 +64,7 @@ var CFG = {
     danoSoNaPausa: true,       // PROVISÓRIO (pendente: dano fora da janela)
     trocaDeLado: 2.5,          // PROVISÓRIO (na pausa o boss muda de lado a cada X s)
     desviarPelosLados: true,   // PROVISÓRIO (interpretação de "bater nos lados": andar para o lado para escapar)
-    recomecaNoBoss: true       // PROVISÓRIO (perdeu no boss: recomeça a luta, não a fase)
+    recomecaNoBoss: true       // confirmado (V07): perdeu no boss, recomeça a luta
   },
 
   som: true                    // PROVISÓRIO (sons simples de teste)

@@ -1,4 +1,4 @@
-# O jogo do Concreto — versão 0.5
+# O jogo do Concreto — versão 0.6
 
 ## O que já inventamos
 
@@ -8,13 +8,13 @@ Você vê o jogo de lado, como no Mario. Concreto anda e pula de plataforma em p
 
 Os monstros ficam nas plataformas. Quando Concreto chega muito perto, aparece uma faca e eles atacam. Concreto não usa faca nem espada.
 
-Ele tem três vidas. Quando encosta em um monstro, perde uma vida e é jogado para trás. Quando perde as três, um vento espalha os pedacinhos de geleca.
+Ele tem três vidas. Quando encosta em um monstro ou leva uma facada, perde uma vida e é jogado para trás. Depois do golpe, fica um tempinho sem poder levar outro. Se cair num buraco, perde uma vida e volta para a última plataforma. Quando perde as três, um vento espalha os pedacinhos de geleca e a fase começa de novo. Se perder para o boss, a luta começa de novo.
 
-No final de cada fase tem um portal para a próxima. O dia dura 30 minutos e a noite dura 30 minutos. À noite, existe 50% de chance de encontrar um monstro no final. O boss final sempre aparece!
+No final de cada fase tem um portal para a próxima. Você decidiu tirar a noite do jogo: agora é sempre normal, sem dia e noite. O boss final sempre aparece!
 
 ## Os cinco mundos
 
-1. Mundo das plantas. O boss do portal que inventamos é o Cthulhu Higiênico. Vamos confirmar se é o boss desta primeira fase.
+1. Mundo das plantas. O boss é o Cthulhu Higiênico. Confirmado!
 2. Mundo parecido com o Nether, com a Malgosha do filme do Minecraft como ideia de boss.
 3. Mundo no céu, com um boss que parece um anjo.
 4. Mundo de bichinhos de pelúcia, com um coelho de pelúcia como boss.
@@ -34,9 +34,10 @@ Fizemos uma primeira versão de teste do Mundo das Plantas, com a luta contra o 
 
 ## O que vamos descobrir depois
 
-- Os 50% de chance à noite são de encontrar o boss ou um monstro comum? O que acontece de dia?
+- Agora que não tem mais noite, o boss aparece sempre no portal?
+- Você falou de espada e de escudo: é para o Concreto ter no jogo?
 - Todos os bosses têm luta em primeira pessoa e barra de vida grande?
 - Como Concreto escapa dos ataques dos bosses?
-- O que acontece quando acaba a última vida? E quando ganha do último boss?
+- O que acontece quando ganha do último boss?
 
 As cores, desenhos, sons e outras regras ainda podem ser inventados. Você pode mudar suas ideias e nós vamos guardar as correções.
