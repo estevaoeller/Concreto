@@ -63,3 +63,8 @@ Criada prancha preliminar com quatro alternativas de Concreto, estudos de movime
 - Organizado catálogo e pastas para imagens por tipo, com versões e estados de aprovação, além de separação entre concept art e assets de produção.
 - Adicionados DESENVOLVIMENTO.md e AGENTS.md, com proposta de MVP de uma fase, roteiro D0–D7, critérios de aceitação, pendências e prompt inicial para agente. Desenvolvimento na nuvem mantido; stack ainda não escolhida.
 - Especificação de gameplay permanece v0.4. Nenhum código implementado; a preparação do desenvolvimento pode começar com D0. Imagens finais não são pré-requisito para protótipos reversíveis.
+
+## 2026-11-15 — Organização das pranchas recebidas
+
+- Verificados dez PNGs no repositório, movidos para os caminhos previstos no catálogo, preservando os blobs originais.
+- Atualizados nomes, links e status. Faltam S05 (Mundo 5) e P02 (monstros comuns). Recebimento não implica aprovação; divergências de S02 e B01 e integridade de B05 permanecem em revisão.

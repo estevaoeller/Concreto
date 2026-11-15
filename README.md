@@ -19,7 +19,7 @@ Especificação de gameplay v0.4 (2026-11-15): personagem, controles básicos, t
 - [Catálogo de concept art](assets/concept-art/README.md): estudos anteriores, nomes previstos, status e instruções de upload.
 - [Storyboards](assets/concept-art/storyboards/), [personagens](assets/concept-art/personagens/) e [bosses](assets/concept-art/bosses/): pastas para imagens.
 - [Assets do jogo](assets/game/README.md): recursos integráveis após aprovação, separados de estudos.
-- O estudo preliminar de personagem (quatro alternativas) continua registrado, com PNG pendente no momento do registro original e ressalva sobre a espada incorreta.
+- Inventário visual: 10 de 12 pranchas recebidas e organizadas; faltam o storyboard do Mundo 5 e os monstros comuns. O estudo do protagonista permanece preliminar e contém ressalva sobre a espada incorreta.
 
 ## Desenvolvimento
 
