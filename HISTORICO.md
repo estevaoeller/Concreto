@@ -54,3 +54,12 @@
 ## 2026-11-15: estudos visuais
 
 Criada prancha preliminar com quatro alternativas de Concreto, estudos de movimento, gota, raio, espada e cenário de plataforma. A alternativa verde foi usada como exemplo, sem aprovação definitiva. A espada do protagonista diverge de A02 e permanece não aprovada. Referência documentada em `assets/concept-art/README.md`; upload do PNG pendente. Desenvolvimento previsto na nuvem, sem definição de tecnologia.
+
+## 2026-11-15 — Preparação para desenvolvimento e produção visual
+
+- Pedido de centralizar prompts e imagens no GitHub, com upload progressivo de imagens pelo responsável do projeto.
+- Publicados 12 prompts independentes: cinco storyboards, Concreto, monstros comuns e cinco bosses; todos são estudos, não assets ou novas regras aprovadas.
+- Corrigidos os prompts para que apenas os monstros usem faca; protagonista mantém raio de geleca. Preservadas as referências de Thomas a Malgosha e Lego, com alternativas originais propostas para eventual distribuição, sem substituir decisões criativas.
+- Organizado catálogo e pastas para imagens por tipo, com versões e estados de aprovação, além de separação entre concept art e assets de produção.
+- Adicionados DESENVOLVIMENTO.md e AGENTS.md, com proposta de MVP de uma fase, roteiro D0–D7, critérios de aceitação, pendências e prompt inicial para agente. Desenvolvimento na nuvem mantido; stack ainda não escolhida.
+- Especificação de gameplay permanece v0.4. Nenhum código implementado; a preparação do desenvolvimento pode começar com D0. Imagens finais não são pré-requisito para protótipos reversíveis.
