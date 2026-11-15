@@ -68,3 +68,8 @@ Criada prancha preliminar com quatro alternativas de Concreto, estudos de movime
 
 - Verificados dez PNGs no repositório, movidos para os caminhos previstos no catálogo, preservando os blobs originais.
 - Atualizados nomes, links e status. Faltam S05 (Mundo 5) e P02 (monstros comuns). Recebimento não implica aprovação; divergências de S02 e B01 e integridade de B05 permanecem em revisão.
+
+## 2026-11-15 — Conclusão do inventário visual preliminar
+
+- Recebidos S05 (storyboard do Mundo 5) e P02 (monstros comuns), totalizando 12 de 12 pranchas previstas. Arquivos movidos para caminhos padronizados, preservando os blobs originais.
+- Atualizados catálogo e README principal. Todos os estudos permanecem em revisão; não representam aprovação de novos requisitos nem assets finais de produção.

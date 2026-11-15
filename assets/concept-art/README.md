@@ -14,17 +14,17 @@ Divergência: a espada empunhada pelo protagonista contraria A02. A arma pertenc
 
 ## Catálogo — inventário de imagens
 
-Caminhos relativos a esta pasta. Inventário verificado em 15/11/2026: 10 de 12 pranchas recebidas; nenhuma aprovação definitiva presumida.
+Caminhos relativos a esta pasta. Inventário verificado em 15/11/2026: 12 de 12 pranchas recebidas; nenhuma aprovação definitiva presumida.
 
 | ID | Prancha | Arquivo previsto | Status |
 |---|---|---|---|
 | P01 | Concreto| [personagens/concreto-v01.png](personagens/concreto-v01.png) | Recebido / em revisão |
-| P02 | Monstros comuns | personagens/monstros-comuns-v01.png | Aguardando |
+| P02 | Monstros comuns | [personagens/monstros-comuns-v01.png](personagens/monstros-comuns-v01.png) | Recebido / em revisão |
 | S01 | Mundo 1 — plantas| [storyboards/01-plantas-v01.png](storyboards/01-plantas-v01.png) | Recebido / em revisão |
 | S02 | Mundo 2 — Nether| [storyboards/02-nether-v01.png](storyboards/02-nether-v01.png) | Recebido / em revisão |
 | S03 | Mundo 3 — céu| [storyboards/03-ceu-v01.png](storyboards/03-ceu-v01.png) | Recebido / em revisão |
 | S04 | Mundo 4 — pelúcias| [storyboards/04-pelucias-v01.png](storyboards/04-pelucias-v01.png) | Recebido / em revisão |
-| S05 | Mundo 5 — blocos | storyboards/05-blocos-v01.png | Aguardando |
+| S05 | Mundo 5 — blocos | [storyboards/05-blocos-v01.png](storyboards/05-blocos-v01.png) | Recebido / em revisão |
 | B01 | Cthulhu Higiênico| [bosses/01-cthulhu-v01.png](bosses/01-cthulhu-v01.png) | Recebido / em revisão |
 | B02 | Boss vulcânico / Malgosha| [bosses/02-malgosha-referencia-v01.png](bosses/02-malgosha-referencia-v01.png) | Recebido / em revisão |
 | B03 | Anjo| [bosses/03-anjo-v01.png](bosses/03-anjo-v01.png) | Recebido / em revisão |
@@ -56,4 +56,4 @@ Storyboard revisado com cenário vegetal, plataformas, progressão em três trec
 - B01: a cena de combate lateral não representa a perspectiva confirmada em primeira pessoa; o aviso visual deve usar papel higiênico. Revisar antes da produção.
 - B05: o arquivo enviado corresponde à prancha de boss de blocos; a geração foi interrompida, portanto conferir integridade visual e conteúdo antes da aprovação.
 - Os exemplos de ataques, armas, moedas e obstáculos não são requisitos novos. O protagonista não usa espada. O boss final aparece sempre.
-- Pendentes de upload: S05 (storyboard já gerado), P02 (prancha de monstros comuns ainda a gerar).
+- Nenhuma prancha prevista pendente de upload. P02 contém vinte propostas de monstros (quatro por mundo), não necessariamente tipos jogáveis aprovados. S05 contém propostas de obstáculos e mecânicas ainda não aprovadas.
