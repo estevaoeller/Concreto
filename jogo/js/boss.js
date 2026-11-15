@@ -100,58 +100,76 @@ var Boss = (function () {
 
   function xTela(b, lado) { return W / 2 + (lado - b.visao) * PASSO; }
 
+  function tira(c, pts, larg) { // tira de papel: linha grossa com contorno
+    function tracar() {
+      c.beginPath(); c.moveTo(pts[0][0], pts[0][1]);
+      for (var i = 1; i < pts.length - 1; i++) {
+        c.quadraticCurveTo(pts[i][0], pts[i][1], (pts[i][0] + pts[i + 1][0]) / 2, (pts[i][1] + pts[i + 1][1]) / 2);
+      }
+      c.lineTo(pts[pts.length - 1][0], pts[pts.length - 1][1]);
+    }
+    c.lineCap = 'round'; c.lineJoin = 'round';
+    tracar(); c.strokeStyle = '#8f86b8'; c.lineWidth = larg + 5; c.stroke();
+    tracar(); c.strokeStyle = '#fbfaff'; c.lineWidth = larg; c.stroke();
+  }
+
+  // Cthulhu Higiênico como no storyboard: rolo de papel com olhos amarelos bravos e tentáculos de tiras desenroladas.
   function desenharBoss(c, b, x, y) {
-    var cansado = b.fase === 'pausa', t = b.t;
-    var some = b.fase === 'vencido' ? Math.max(0, 1 - b.vencido / 2) : 1;
+    var cansado = b.fase === 'pausa', vencido = b.fase === 'vencido', t = b.t;
+    var some = vencido ? Math.max(0, 1 - b.vencido / 2) : 1;
+    var forca = cansado || vencido ? 0.3 : 1;
     c.save();
-    c.translate(x, y + (cansado ? 26 : 0) + Math.sin(t * 2) * 6);
+    c.translate(x, y + (cansado ? 30 : 0) + Math.sin(t * 2) * 6);
     c.globalAlpha = some;
-    if (b.fase === 'vencido') c.rotate(b.vencido * 0.25);
-    // asinhas de papel
-    c.fillStyle = '#eef0f5'; c.strokeStyle = '#b9bfcc'; c.lineWidth = 2;
+    if (vencido) c.rotate(b.vencido * 0.25);
+    // tiras compridas voando dos lados
     [-1, 1].forEach(function (s) {
-      c.beginPath();
-      c.moveTo(s * 60, -30);
-      c.quadraticCurveTo(s * 170, -120 + Math.sin(t * 4) * (cansado ? 4 : 16), s * 190, -10);
-      c.quadraticCurveTo(s * 130, -20, s * 60, 20);
-      c.closePath(); c.fill(); c.stroke();
+      for (var k = 0; k < 2; k++) {
+        var o = Math.sin(t * 2.5 + k * 2 + s) * 24 * forca;
+        tira(c, [[s * 70, 10 + k * 40], [s * 150, -40 + k * 50 + o], [s * 210, 30 + k * 40 - o], [s * 270, -10 + k * 60 + o * 0.6]], 20 - k * 4);
+      }
     });
-    // tentáculos = tiras de papel higiênico
+    // tentáculos saindo de baixo do rosto
     for (var i = -3; i <= 3; i++) {
-      var comp = 110 + (3 - Math.abs(i)) * 22, bal = cansado ? 5 : 20;
-      c.beginPath();
-      var x0 = i * 19, y0 = 50;
-      c.moveTo(x0 - 8, y0);
-      var px = x0 + Math.sin(t * 3 + i) * bal, py = y0 + comp;
-      c.quadraticCurveTo(x0 - 8 + Math.sin(t * 2 + i) * bal, y0 + comp * 0.5, px - 6, py);
-      c.lineTo(px + 6, py);
-      c.quadraticCurveTo(x0 + 8 + Math.sin(t * 2 + i) * bal, y0 + comp * 0.5, x0 + 8, y0);
-      c.closePath();
-      c.fillStyle = '#f7f8fb'; c.fill(); c.stroke();
+      var comp = 120 + (3 - Math.abs(i)) * 18, w1 = Math.sin(t * 3 + i * 1.3) * 22 * forca;
+      var abre = cansado ? 0.5 : 1;
+      tira(c, [[i * 20, 40], [i * 34 * abre + w1, 40 + comp * 0.45], [i * 52 * abre - w1, 40 + comp * 0.8], [i * 62 * abre + w1 * 0.6, 40 + comp + (cansado ? 20 : 0)]], 17);
     }
     // corpo = rolo de papel
-    c.fillStyle = '#f7f8fb'; c.strokeStyle = '#b9bfcc'; c.lineWidth = 3;
-    Arte.retArred(c, -78, -80, 156, 140, 26); c.fill(); c.stroke();
-    c.strokeStyle = '#dfe3ec'; c.lineWidth = 2; c.setLineDash([6, 6]);
-    c.beginPath(); c.moveTo(-76, -20); c.lineTo(76, -20); c.moveTo(-76, 30); c.lineTo(76, 30); c.stroke();
+    var g = c.createLinearGradient(-90, 0, 90, 0);
+    g.addColorStop(0, '#d9d4ee'); g.addColorStop(0.35, '#ffffff'); g.addColorStop(1, '#cfc9e6');
+    c.fillStyle = g; c.strokeStyle = '#8f86b8'; c.lineWidth = 4;
+    Arte.retArred(c, -90, -86, 180, 150, 30); c.fill(); c.stroke();
+    c.fillStyle = '#ffffff';
+    c.beginPath(); c.ellipse(0, -86, 90, 28, 0, 0, 7); c.fill(); c.stroke();
+    c.fillStyle = '#8a5a34'; c.strokeStyle = '#5a3a1e'; c.lineWidth = 3;
+    c.beginPath(); c.ellipse(0, -86, 34, 11, 0, 0, 7); c.fill(); c.stroke();
+    c.strokeStyle = 'rgba(143,134,184,0.5)'; c.lineWidth = 2; c.setLineDash([7, 7]);
+    c.beginPath(); c.moveTo(-88, 32); c.lineTo(88, 32); c.stroke();
     c.setLineDash([]);
-    c.fillStyle = '#f7f8fb'; c.strokeStyle = '#b9bfcc'; c.lineWidth = 3;
-    c.beginPath(); c.ellipse(0, -80, 78, 24, 0, 0, 7); c.fill(); c.stroke();
-    c.fillStyle = '#b08a5a';
-    c.beginPath(); c.ellipse(0, -80, 30, 10, 0, 0, 7); c.fill();
     // olhos
     [-1, 1].forEach(function (s) {
-      if (cansado || b.fase === 'vencido') { // tonto: olhos em X
-        c.strokeStyle = '#3b4a3f'; c.lineWidth = 5;
-        c.beginPath(); c.moveTo(s * 34 - 12, -52); c.lineTo(s * 34 + 12, -32);
-        c.moveTo(s * 34 + 12, -52); c.lineTo(s * 34 - 12, -32); c.stroke();
+      if (cansado || vencido) { // tonto: olhos em X
+        c.strokeStyle = '#4a3f78'; c.lineWidth = 6; c.lineCap = 'round';
+        c.beginPath(); c.moveTo(s * 40 - 14, -34); c.lineTo(s * 40 + 14, -8);
+        c.moveTo(s * 40 + 14, -34); c.lineTo(s * 40 - 14, -8); c.stroke();
       } else {
-        c.fillStyle = '#1c2a22';
-        c.beginPath(); c.ellipse(s * 34, -42, 17, 15, 0, 0, 7); c.fill();
-        c.fillStyle = b.fase === 'aviso' || b.fase === 'golpe' ? '#ff5a4a' : '#8dff7a';
-        c.beginPath(); c.ellipse(s * 34, -40, 9, 10, 0, 0, 7); c.fill();
-        c.strokeStyle = '#1c2a22'; c.lineWidth = 5;
-        c.beginPath(); c.moveTo(s * 54, -66); c.lineTo(s * 16, -56); c.stroke();
+        var bravo = b.fase === 'aviso' || b.fase === 'golpe';
+        c.beginPath(); // olho inclinado, bravo
+        c.moveTo(s * 14, -18); c.quadraticCurveTo(s * 40, -52, s * 72, -44);
+        c.quadraticCurveTo(s * 70, -4, s * 36, 0); c.quadraticCurveTo(s * 18, -2, s * 14, -18);
+        c.closePath();
+        c.fillStyle = '#2a2050'; c.fill();
+        c.save(); c.clip();
+        c.shadowColor = bravo ? '#ff7a2a' : '#ffe14a'; c.shadowBlur = 16;
+        c.fillStyle = bravo ? '#ff9a2a' : '#ffe14a';
+        c.beginPath(); c.ellipse(s * 42, -18, 20, 17, 0, 0, 7); c.fill();
+        c.shadowBlur = 0;
+        c.fillStyle = '#fffbd0';
+        c.beginPath(); c.ellipse(s * 44, -20, 8, 7, 0, 0, 7); c.fill();
+        c.restore();
+        c.strokeStyle = '#2a2050'; c.lineWidth = 7; c.lineCap = 'round'; // sobrancelha
+        c.beginPath(); c.moveTo(s * 10, -22); c.lineTo(s * 76, -52); c.stroke();
       }
     });
     c.restore();
@@ -183,7 +201,22 @@ var Boss = (function () {
       c.beginPath(); c.moveTo(W / 2 + (l - b.visao) * PASSO * 0.45, 330);
       c.lineTo(W / 2 + (l - b.visao) * PASSO * 1.9, H); c.stroke();
     });
-    Arte.portal(c, xTela(b, 0) * 0.3 + W * 0.35, 348, b.t);
+    // arena do storyboard: clima roxo, colunas de pedra com cipó e rolinhos no chão
+    c.fillStyle = 'rgba(72,30,120,0.42)'; c.fillRect(-20, -20, W + 40, 352);
+    var luz = c.createRadialGradient(W / 2, 200, 20, W / 2, 200, 420);
+    luz.addColorStop(0, 'rgba(255,236,170,0.35)'); luz.addColorStop(1, 'rgba(255,236,170,0)');
+    c.fillStyle = luz; c.fillRect(-20, -20, W + 40, 352);
+    [-2.1, -1.35, 1.35, 2.1].forEach(function (l, i) {
+      var px = W / 2 + (l - b.visao * 0.6) * PASSO, larg = 46 + (i % 2) * 14;
+      c.fillStyle = '#a99a84'; c.strokeStyle = '#5e5346'; c.lineWidth = 3;
+      c.fillRect(px - larg / 2, -10, larg, 346); c.strokeRect(px - larg / 2, -10, larg, 346);
+      c.fillRect(px - larg / 2 - 8, 316, larg + 16, 22); c.strokeRect(px - larg / 2 - 8, 316, larg + 16, 22);
+      c.strokeStyle = '#3f9a3a'; c.lineWidth = 5;
+      c.beginPath(); c.moveTo(px - larg / 2, 20);
+      c.bezierCurveTo(px + larg, 90, px - larg, 170, px + larg / 2, 250); c.stroke();
+    });
+    Arte.portal(c, xTela(b, 0) * 0.3 + W * 0.35, 344, b.t);
+    [-1.7, -0.8, 0.9, 1.75].forEach(function (l) { rolo(c, W / 2 + (l - b.visao * 0.8) * PASSO, 356, 17); });
 
     desenharBoss(c, b, xTela(b, b.bossX), 220);
 
@@ -235,7 +268,7 @@ var Boss = (function () {
 
     // a beirada da geleca do Concreto, embaixo da tela (é ele quem está olhando)
     if (vidas > 0 && !(b.invul > 0 && Math.floor(b.t * 14) % 2 === 0)) {
-      c.fillStyle = CFG.concreto.cor; c.strokeStyle = CFG.concreto.corEscura; c.lineWidth = 4;
+      c.fillStyle = CFG.concreto.cor; c.strokeStyle = CFG.concreto.corEscura; c.lineWidth = 6;
       c.beginPath(); c.moveTo(W / 2 - 230, H + 10);
       for (var n = 0; n <= 10; n++) {
         var bx = W / 2 - 230 + n * 46;

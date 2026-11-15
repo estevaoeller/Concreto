@@ -131,7 +131,7 @@ var Fase = (function () {
     if (Entrada.ataqueApertou && j.recarga <= 0 && j.trava <= 0) {
       j.recarga = CFG.raio.recarga;
       j.atacando = 0.2;
-      f.raios.push({ x: j.x + j.dir * 24, y: j.y - JH * 0.45, dir: j.dir, andou: 0 });
+      f.raios.push({ x: j.x + j.dir * 40, y: j.y - JH * 0.45, dir: j.dir, andou: 0 });
       Som.raio();
     }
 
@@ -139,7 +139,7 @@ var Fase = (function () {
     j.proxGota -= dt;
     if (j.proxGota <= 0) {
       j.proxGota = C.intervaloGota;
-      f.gotas.push({ x: j.x - j.dir * 10, y: j.y - 8, vy: 0 });
+      f.gotas.push({ x: j.x + j.dir * 30, y: j.y - 30, vy: 0 });
     }
     f.gotas = f.gotas.filter(function (g) {
       g.vy += 900 * dt; g.y += g.vy * dt;
@@ -243,15 +243,12 @@ var Fase = (function () {
     Arte.ceu(c, noite, f.t);
     Arte.fundoPlantas(c, cam, noite);
     d.plataformas.forEach(function (p) { Arte.plataforma(c, p, cam, noite); });
-    Arte.portal(c, d.portalX - cam, 460, f.t);
+    Arte.portal(c, d.portalX - cam, 452, f.t);
     f.pocas.forEach(function (p) {
-      c.globalAlpha = Math.min(1, p.vida);
-      c.fillStyle = CFG.concreto.cor;
-      c.beginPath(); c.ellipse(p.x - cam, p.y - 1, 9, 3, 0, 0, 7); c.fill();
-      c.globalAlpha = 1;
+      Arte.poca(c, p.x - cam, p.y - 8, Math.min(1, p.vida));
     });
     f.monstros.forEach(function (m) { if (m.vida > 0) Arte.monstro(c, m.x - cam, m.y, m, f.t); });
-    f.gotas.forEach(function (g) { Arte.gota(c, g.x - cam, g.y, 5); });
+    f.gotas.forEach(function (g) { Arte.gota(c, g.x - cam, g.y, 6); });
     f.raios.forEach(function (r) { Arte.raio(c, r.x - cam, r.y, r.dir, f.t); });
     if (!esconderJogador && !(j.invul > 0 && Math.floor(f.t * 14) % 2 === 0)) {
       Arte.concreto(c, j.x - cam, j.y, {

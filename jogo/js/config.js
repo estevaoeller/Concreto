@@ -6,8 +6,8 @@ var CFG = {
   altura: 540,
 
   concreto: {
-    cor: '#5fd9a3',            // PROVISÓRIO (P04: cor em aberto)
-    corEscura: '#1f7a5a',      // PROVISÓRIO
+    cor: '#a8e61d',            // PROVISÓRIO: verde da alternativa A da prancha de estudos (P04 em aberto)
+    corEscura: '#1d6b1a',      // PROVISÓRIO
     velocidade: 260,           // PROVISÓRIO (px/s)
     forcaPulo: 680,            // PROVISÓRIO
     gravidade: 1800,           // PROVISÓRIO

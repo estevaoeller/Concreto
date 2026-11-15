@@ -113,9 +113,10 @@
     if (e === 'fase' && Jogo.fase.t < 4) Arte.texto(c, 'Fase 1 — ' + FASE1.nome, W / 2, 110, 30, '#f2fbf4');
 
     if (e === 'titulo') {
-      c.fillStyle = 'rgba(8,20,16,0.45)'; c.fillRect(0, 0, W, H);
-      Arte.texto(c, 'CONCRETO', W / 2, 130, 84, CFG.concreto.cor);
-      Arte.concreto(c, W / 2, 330, { w: 120, h: 140, dir: 1, t: Jogo.fase.t, espichar: Math.sin(Jogo.fase.t * 3) * 0.1 });
+      c.fillStyle = 'rgba(40,20,80,0.35)'; c.fillRect(0, 0, W, H);
+      Arte.texto(c, 'CONCRETO', W / 2, 134, 88, '#4a1f8a', 'center', 800, '#4a1f8a');
+      Arte.texto(c, 'CONCRETO', W / 2, 128, 88, '#b6f03a', 'center', 800, '#1d6b1a');
+      Arte.concreto(c, W / 2, 345, { w: 120, h: 140, dir: 1, t: Jogo.fase.t, espichar: Math.sin(Jogo.fase.t * 3) * 0.1 });
       if (Math.floor(Jogo.fase.t * 2) % 3 !== 0) Arte.texto(c, 'Toque na tela ou aperte Enter para jogar', W / 2, 400, 24, '#fff27a');
       Arte.texto(c, 'Teclado: setas andam · espaço pula · X solta o raio de geleca', W / 2, 470, 17, '#d9f3e2', 'center', 600);
       Arte.texto(c, 'Protótipo da Fase 1 — versão de teste', W / 2, 505, 14, '#a9cbb6', 'center', 600);

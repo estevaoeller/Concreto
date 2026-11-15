@@ -85,3 +85,11 @@ Criada prancha preliminar com quatro alternativas de Concreto, estudos de movime
 - Desvio de processo a registrar: o protótipo cobriu D1 a D4 sem passar pela proposta técnica D0 prevista em AGENTS.md. A stack (HTML/Canvas, sem dependências) e a arquitetura ficam sujeitas à revisão do responsável.
 - Verificado em `main`: não há arquivos de imagem no repositório; o catálogo registra o storyboard do Mundo 1 e a prancha de estudos do Concreto como "upload do PNG pendente". O redesenho da rodada 007 foi feito sem acesso a essas referências.
 - Pendente: receber os PNGs para alinhar Concreto, monstros, cenário e Cthulhu às pranchas.
+
+## 2026-11-15 — Rodada 009 — Arte do protótipo alinhada às pranchas
+
+- Recebidas quatro pranchas em `assets/concept-art/`: estudos de personagem e storyboards dos mundos 1, 2 e 3. Registradas no catálogo com os nomes originais; divergências com a especificação listadas lá.
+- Protótipo redesenhado por código seguindo a alternativa A (verde) e o storyboard do Mundo 1: Concreto verde-limão de contorno grosso com o topo tombado para o lado e barra escorrendo; monstro espinho roxo; plataformas de terra com grama; selva com cachoeira, cipós e flores; portal de pedra com espiral roxa; Cthulhu Higiênico de olhos amarelos com tentáculos de tiras de papel, em arena roxa com colunas.
+- Mantido o que a especificação confirma contra as pranchas: sem espada no Concreto (A02), monstro parado (I02) e luta do boss em primeira pessoa (B04). Moedas, blocos e corações não foram incluídos.
+- A escolha da alternativa A é provisória: foi a usada nas pranchas para demonstrar as ações, não uma aprovação do criador.
+- Verificação: percurso automatizado da fase e do boss repetido sem erros.

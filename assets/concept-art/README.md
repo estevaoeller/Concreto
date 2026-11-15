@@ -12,6 +12,26 @@ Estudos: parado, caminhada, salto com compressão e extensão, gota desprendida,
 
 Divergência: a espada empunhada pelo protagonista contraria A02. A arma pertence ao monstro; não implementar espada no protagonista. Corações, moedas e outros detalhes ilustrativos não são requisitos.
 
+## Imagens recebidas (2026-11-15)
+
+Enviadas pelo responsável nesta pasta, com os nomes originais do gerador. Não foram renomeadas nem movidas. Status de todas: recebido, sem aprovação do criador registrada.
+
+| Arquivo | Conteúdo | ID do catálogo |
+|---|---|---|
+| `file_0000000077ec820e9a70dd966e422867.png` | Estudos de personagem: quatro alternativas (A verde, B azul, C roxo, D laranja), animações, raio e espada | Referência preliminar / P01 |
+| `a_bright_colorful_cartoon_game_concept_storyboar.png` | Storyboard do Mundo 1: Plantas | S01 |
+| `file_00000000a9c0820e8cc64a2e06f702c2.png` | Storyboard do Mundo 2: Nether | S02 |
+| `file_000000000714820ebbbdb857f858b745.png` | Storyboard do Mundo 3: Céu | S03 |
+
+Divergências entre as pranchas e a especificação, a resolver com o criador (a especificação prevalece até decisão):
+
+- Estudos de personagem: "pode empunhar uma espada" e o quadro "Ataque: espada" contrariam A02.
+- Mundo 1: a luta contra o Cthulhu Higiênico aparece em visão lateral; B04 confirma primeira pessoa.
+- Mundo 2: o boss aparece como "Golem de Lava"; a especificação registra a Malgosha como intenção do criador.
+- Moedas, blocos com estrela, corações, placas, caixas e os nomes e comportamentos de monstros e obstáculos (por exemplo "Espinho Móvel", "Planta Mordedora", plataformas móveis, lava, espinhos) não são requisitos confirmados.
+
+Uso no protótipo: o visual da Fase 1 em `jogo/` foi redesenhado por código tomando como referência a alternativa A e o storyboard do Mundo 1. Nenhuma imagem foi usada como sprite.
+
 ## Catálogo — arquivos previstos
 
 Caminhos relativos a esta pasta. Status inicial: aguardando upload/validação; não afirmar que um arquivo existe até verificar.
