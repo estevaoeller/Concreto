@@ -32,7 +32,7 @@ Para gerar um arquivo HTML único (fácil de enviar): `node ferramentas/empacota
 - [Catálogo de concept art](assets/concept-art/README.md): estudos anteriores, nomes previstos, status e instruções de upload.
 - [Storyboards](assets/concept-art/storyboards/), [personagens](assets/concept-art/personagens/) e [bosses](assets/concept-art/bosses/): pastas para imagens.
 - [Assets do jogo](assets/game/README.md): recursos integráveis após aprovação, separados de estudos.
-- O estudo preliminar de personagem (quatro alternativas) continua registrado, com PNG pendente no momento do registro original e ressalva sobre a espada incorreta.
+- Inventário visual: 12 de 12 pranchas recebidas e organizadas; inventário preliminar completo. O estudo do protagonista permanece preliminar e contém ressalva sobre a espada incorreta.
 
 ## Desenvolvimento
 

@@ -64,6 +64,7 @@ Criada prancha preliminar com quatro alternativas de Concreto, estudos de movime
 - Adicionados DESENVOLVIMENTO.md e AGENTS.md, com proposta de MVP de uma fase, roteiro D0–D7, critérios de aceitação, pendências e prompt inicial para agente. Desenvolvimento na nuvem mantido; stack ainda não escolhida.
 - Especificação de gameplay permanece v0.4. Nenhum código implementado; a preparação do desenvolvimento pode começar com D0. Imagens finais não são pré-requisito para protótipos reversíveis.
 
+<<<<<<< HEAD
 ## 2026-11-15 — Rodada 006 — Início do protótipo
 
 - O responsável autorizou o início do desenvolvimento. Decisão de processo: o protótipo passa a ser instrumento de validação do design, em paralelo à entrevista. Altera a regra anterior de não programar antes da validação de regras e escopo.
@@ -93,3 +94,14 @@ Criada prancha preliminar com quatro alternativas de Concreto, estudos de movime
 - Mantido o que a especificação confirma contra as pranchas: sem espada no Concreto (A02), monstro parado (I02) e luta do boss em primeira pessoa (B04). Moedas, blocos e corações não foram incluídos.
 - A escolha da alternativa A é provisória: foi a usada nas pranchas para demonstrar as ações, não uma aprovação do criador.
 - Verificação: percurso automatizado da fase e do boss repetido sem erros.
+=======
+## 2026-11-15 — Organização das pranchas recebidas
+
+- Verificados dez PNGs no repositório, movidos para os caminhos previstos no catálogo, preservando os blobs originais.
+- Atualizados nomes, links e status. Faltam S05 (Mundo 5) e P02 (monstros comuns). Recebimento não implica aprovação; divergências de S02 e B01 e integridade de B05 permanecem em revisão.
+
+## 2026-11-15 — Conclusão do inventário visual preliminar
+
+- Recebidos S05 (storyboard do Mundo 5) e P02 (monstros comuns), totalizando 12 de 12 pranchas previstas. Arquivos movidos para caminhos padronizados, preservando os blobs originais.
+- Atualizados catálogo e README principal. Todos os estudos permanecem em revisão; não representam aprovação de novos requisitos nem assets finais de produção.
+>>>>>>> origin/main
