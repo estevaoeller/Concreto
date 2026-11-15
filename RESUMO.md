@@ -1,4 +1,4 @@
-# O jogo do Concreto — versão 0.4
+# O jogo do Concreto — versão 0.5
 
 ## O que já inventamos
 
@@ -27,6 +27,10 @@ Cada fase tem seu próprio boss.
 Todos os bosses atacam duas vezes. Depois do segundo ataque, ficam 10 segundos sem atacar. É a chance de Concreto atacar!
 
 O Cthulhu Higiênico parece um Cthulhu de papel higiênico. Quando você luta contra ele, a visão fica em primeira pessoa (como se estivesse olhando pelos olhos do Concreto). Quando ele vai atacar, aparece um papel higiênico. Ele tem uma barrinha de vida bem grande, como a dos bosses do Minecraft.
+
+## Já dá para jogar um pedacinho!
+
+Fizemos uma primeira versão de teste do Mundo das Plantas, com a luta contra o Cthulhu Higiênico. Algumas coisas que você ainda não decidiu, nós chutamos só para o jogo funcionar. Jogue e conte o que ficou certo e o que você quer mudar!
 
 ## O que vamos descobrir depois
 

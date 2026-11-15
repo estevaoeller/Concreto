@@ -9,7 +9,7 @@ Adaptação de Grill Me e Grill with Docs, de Matt Pocock (https://github.com/ma
 3. Distinguir decisões confirmadas, propostas, pendentes e substituídas. Se uma resposta mudar uma decisão anterior, revisar dependências e registrar a mudança.
 4. Investigar as consequências da resposta antes de avançar. Não repetir perguntas já respondidas, salvo contradição ou ambiguidade.
 5. A cada bloco coerente ou aproximadamente 5–8 decisões relevantes, fazer checkpoint: resumir em linguagem simples, atualizar especificação, inventário de recursos e histórico; publicar os arquivos alterados no GitHub e confirmar a gravação. Retomar a entrevista na próxima pergunta.
-6. Manter arquitetura e implementação separadas. Não programar antes da validação de regras e escopo.
+6. Manter arquitetura e implementação separadas. A partir da rodada 006 existe um protótipo da Fase 1 usado para validar regras; premissas provisórias do protótipo (seção 13 da especificação) não são decisões e devem ser levadas ao criador como perguntas.
 
 ## Árvore de descoberta — posição atual v0.4
 

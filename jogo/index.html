@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Concreto</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+<div id="jogo">
+  <div id="palco">
+    <canvas id="tela" width="960" height="540" aria-label="Jogo Concreto"></canvas>
+  </div>
+  <div id="controles" aria-label="Botões do jogo">
+    <div class="grupo">
+      <button id="btn-esq" type="button" aria-label="Andar para a esquerda">◀</button>
+      <button id="btn-dir" type="button" aria-label="Andar para a direita">▶</button>
+    </div>
+    <div class="grupo">
+      <button id="btn-ataque" type="button" class="acao ataque" aria-label="Raio de geleca">RAIO</button>
+      <button id="btn-pulo" type="button" class="acao pulo" aria-label="Pular">PULO</button>
+    </div>
+  </div>
+</div>
+<script src="js/config.js"></script>
+<script src="js/entrada.js"></script>
+<script src="js/arte.js"></script>
+<script src="js/fase.js"></script>
+<script src="js/boss.js"></script>
+<script src="js/principal.js"></script>
+</body>
+</html>

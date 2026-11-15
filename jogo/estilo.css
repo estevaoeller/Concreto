@@ -1,0 +1,88 @@
+/* Layout: palco 16:9 centralizado; botões sobre o palco em paisagem, abaixo dele em retrato. */
+:root {
+  --fundo: #10231c;
+  --geleca: #5fd9a3;
+  --geleca-escura: #1f7a5a;
+  --texto: #f2fbf4;
+  --botao: rgba(242, 251, 244, 0.16);
+  --botao-borda: rgba(242, 251, 244, 0.55);
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--texto);
+  font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  box-sizing: border-box;
+  overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-user-select: none; user-select: none;
+  -webkit-touch-callout: none;
+}
+#jogo {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+#palco {
+  width: 100%;
+  max-width: calc((100vh - 24px) * 16 / 9);
+  max-width: calc((100dvh - 24px) * 16 / 9);
+  aspect-ratio: 16 / 9;
+}
+#tela {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  touch-action: none;
+}
+#controles {
+  display: none;
+  width: 100%;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 12px;
+  touch-action: none;
+}
+.grupo { display: flex; gap: 12px; align-items: flex-end; }
+#controles button {
+  width: 68px; height: 68px;
+  border-radius: 50%;
+  border: 2px solid var(--botao-borda);
+  background: var(--botao);
+  color: var(--texto);
+  font: 700 22px/1 inherit;
+  font-family: inherit;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+#controles button.acao { font-size: 13px; letter-spacing: 0.06em; }
+#controles button.pulo { width: 80px; height: 80px; border-color: var(--geleca); }
+#controles button.ativo { background: var(--geleca); color: var(--fundo); }
+#controles button:focus-visible { outline: 3px solid var(--geleca); outline-offset: 3px; }
+
+/* Botões na tela só em aparelhos de toque; o teclado funciona sempre. */
+@media (hover: none), (pointer: coarse) {
+  #controles { display: flex; }
+  @media (orientation: landscape) {
+    #controles {
+      position: absolute;
+      left: 0; right: 0;
+      bottom: max(10px, env(safe-area-inset-bottom, 0px));
+      pointer-events: none;
+    }
+    #controles button { pointer-events: auto; }
+  }
+  @media (orientation: portrait) {
+    #jogo { justify-content: flex-start; padding-block: 12px; box-sizing: border-box; }
+    #controles { margin-top: auto; padding-bottom: 20px; }
+  }
+}

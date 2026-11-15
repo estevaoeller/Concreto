@@ -1,7 +1,7 @@
 # Concreto — Especificação do jogo
 
-Versão: 0.4 — 2026-11-15
-Estado: descoberta e design. Implementação ainda não autorizada.
+Versão: 0.5 — 2026-11-15
+Estado: descoberta e design, com protótipo jogável da Fase 1 autorizado pelo responsável (ver seções 11 e 13). O protótipo não encerra a descoberta nem converte premissas provisórias em requisitos.
 Convenção: requisitos numerados são decisões confirmadas, salvo indicação explícita de interpretação, proposta ou pendência. Referências visuais não são assets aprovados.
 
 ## 1. Conceito e ciclo principal
@@ -134,10 +134,36 @@ Não há desenhos, sprites ou áudio aprovados. O estilo e o formato técnico pe
 6. Validar conceitos de arte, interface, áudio e acessibilidade.
 7. Definir primeira versão jogável, direitos de uso das referências e critérios de aceitação.
 
-## 11. Implementação (pendente)
+## 11. Implementação
 
-Motor, arquitetura, formato de assets, resolução, dispositivos, persistência, testes e distribuição serão discutidos separadamente. Não presumir que botões na tela restringem o jogo a dispositivos móveis. A ferramenta mencionada como Fable Five ainda precisa ser identificada e avaliada. A combinação de exploração lateral e combate em primeira pessoa deve ser tratada como requisito funcional de perspectiva, sem impor motor 2D/3D ou arquitetura antes da avaliação.
+Protótipo da Fase 1 em `jogo/`: HTML, CSS e JavaScript puros, Canvas 2D, resolução lógica 960×540, teclado e botões de toque, gráficos desenhados por código e sons sintetizados. Sem dependências, sem build, sem assets de terceiros. A escolha visa a iteração rápida com o criador e não é decisão definitiva de motor ou arquitetura. A primeira pessoa é resolvida em 2D (três posições laterais), sem renderização 3D.
+
+Fora do protótipo: fases 2 a 5 e seus bosses, persistência, itens, pontuação, história e arte/áudio definitivos. Distribuição e direitos de uso das referências continuam em aberto. Não presumir que botões na tela restringem o jogo a dispositivos móveis. A ferramenta mencionada como Fable Five ainda precisa ser identificada e avaliada. A combinação de exploração lateral e combate em primeira pessoa deve ser tratada como requisito funcional de perspectiva, sem impor motor 2D/3D ou arquitetura antes da avaliação.
 
 ## 12. Próxima rodada
 
+O protótipo pode ser usado como apoio à entrevista: o criador joga, e cada premissa provisória da seção 13 vira uma pergunta concreta ("ficou como você imaginou?").
+
 Começar esclarecendo a regra de encontro no portal: "Quando você falou dos 50% de chance de aparecer um monstro à noite, você quis dizer o boss da fase ou um monstro comum?" Depois investigar o que acontece de dia, a generalização da primeira pessoa e como desviar dos golpes. Ver [plano de entrevista](PLANO-ENTREVISTA.md).
+
+## 13. Premissas provisórias do protótipo
+
+Valores adotados apenas para tornar o protótipo jogável. Nenhum foi confirmado pelo criador. Todos ficam em `jogo/js/config.js`, marcados como PROVISÓRIO, e podem ser alterados sem mexer no restante do código.
+
+| Tema | Pendência na especificação | Premissa adotada no protótipo |
+|---|---|---|
+| Encontro no portal (T02) | "Monstro" é o boss ou um monstro comum? O que ocorre de dia? | À noite, 50% de chance de o boss aparecer; de dia, 0% (portal livre). Sorteio uma vez por chegada ao portal. |
+| Portal e boss | O portal depende da derrota do boss? | Se o boss aparece, é preciso vencê-lo para concluir a fase. |
+| Relógio (T01) | Tempo de jogo ou relógio real; período inicial | Tempo de jogo ativo, começa de dia. Atalho de teste (tecla N ou toque no sol/lua) pula o período. |
+| Movimento | Velocidade, altura do salto, pulo duplo | Um salto simples, com altura variável conforme o tempo de pressão do botão. |
+| Queda | Consequência de cair | Perde uma vida e volta à última plataforma segura. |
+| Dano (V02/V03) | Invulnerabilidade, intensidade do knockback | 1,2 s de invulnerabilidade com o personagem piscando. |
+| Raio (A01) | Alcance, recarga, dano | Projétil horizontal, alcance de 380 px, recarga de 0,35 s, dano 1. |
+| Monstros (I02/I04) | Tipos, movimento, vida, distância e tempo da faca | Um tipo, parado, 2 pontos de vida. A faca aparece a menos de 130 px, golpeia após 0,7 s e some se Concreto se afasta. Faca e contato tiram uma vida cada. |
+| Derrota (V04) | Reinício | Tela de derrota; reinício no começo da fase, ou no começo da luta se a derrota foi contra o boss. Vidas restauradas. |
+| Boss — defesa (8.2) | Como evitar os golpes; sentido de "bater nos lados" | Três posições (esquerda, meio, direita). O aviso de papel higiênico indica a posição atacada; mudar de posição evita o golpe. Interpretação não validada. |
+| Boss — ataque (B01) | Dano fora da janela; forma do ataque | O raio só causa dano na janela de 10 s; fora dela é bloqueado. O boss troca de posição a cada 2,5 s durante a janela. 24 pontos de vida. |
+| Boss — ciclo (B02) | Repetição do ciclo; intervalo entre golpes | Ciclo repete até a derrota; aviso de 1,1 s e 0,6 s entre os dois golpes. |
+| Fase 1 (F01) | Cthulhu Higiênico como boss da fase 1 | Adotado como boss da Fase 1. |
+| Arte e som (P04, G01–G19) | Cor, rosto, estilo, sons | Concreto verde-água com olhos; monstro roxo com espinhos; cenário e sons de teste. Nada aprovado. |
+| Gota (P03) | Frequência e efeito | Uma gota a cada 2,2 s; apenas decorativa. |

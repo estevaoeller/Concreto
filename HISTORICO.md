@@ -50,3 +50,12 @@
 - T03: boss final tem 100% de chance de aparecer.
 - Revisão geral aprovada ao final da entrevista. Permanecem em aberto detalhes não respondidos e ambiguidades explicitadas acima.
 - Consolidação v0.4: atualizados documentos, inventário gráfico e plano de entrevista. Sem escolha de tecnologia, criação de assets ou programação.
+
+## 2026-11-15 — Rodada 006 — Início do protótipo
+
+- O responsável autorizou o início do desenvolvimento. Decisão de processo: o protótipo passa a ser instrumento de validação do design, em paralelo à entrevista. Altera a regra anterior de não programar antes da validação de regras e escopo.
+- Criado protótipo jogável da Fase 1 em `jogo/`: exploração lateral, pulo, raio de geleca, monstros com faca por proximidade, três vidas, knockback, derrota com vento, portal, ciclo de dia e noite e luta em primeira pessoa contra o Cthulhu Higiênico (dois ataques, 10 segundos de pausa, aviso de papel higiênico, barra de vida grande).
+- Tecnologia do protótipo: HTML/CSS/JavaScript com Canvas 2D, sem dependências. Não é decisão definitiva.
+- Regras pendentes foram preenchidas com premissas provisórias, listadas na seção 13 da especificação v0.5. Nenhuma foi confirmada pelo criador.
+- Escopo limitado à Fase 1, cujo tema e boss são originais. As fases 2 e 5 dependem da avaliação das referências a Minecraft/Malgosha e Lego antes de qualquer implementação.
+- Verificação: percurso automatizado da fase e da luta contra o boss concluído sem erros no navegador; não houve teste com o criador.
