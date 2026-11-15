@@ -1,20 +1,38 @@
-# O jogo do Concreto
+# O jogo do Concreto — versão 0.4
 
 ## O que já inventamos
 
-- O jogo é visto de lado, como no Mario.
-- O herói se chama Concreto. Ele é uma geleca com formato de fantasma, mas não é um fantasma!
-- A parte de cima dele é curvada e cai um pedacinho de geleca no chão.
-- Ele anda, pula nas plataformas e enfrenta monstros.
-- Tem um botão para pular e outro para atacar.
-- Quando você aperta o botão de ataque, ele faz uma animação e dispara um raio de geleca.
-- Uma espada aparece na geleca durante o ataque. Ainda vamos descobrir exatamente como ela funciona.
-- Os monstros têm animações simples.
-- Concreto tem três vidas. Quando encosta em um monstro, perde uma vida e é jogado para trás.
-- Quando perde as três vidas, passa um vento que espalha os pedaços de geleca.
+Concreto é uma geleca com formato parecido com um fantasma, mas ele NÃO é um fantasma! A parte de cima é curvada e uma gotinha de geleca cai no chão.
 
-## O que vamos inventar agora
+Você vê o jogo de lado, como no Mario. Concreto anda e pula de plataforma em plataforma. Tem um botão de pular e outro para disparar um raio de geleca.
 
-Qual é a missão do Concreto? Como ele ganha uma fase? Como são os monstros e como ele derrota cada um? O que acontece depois que acaba a última vida? Depois vamos inventar os mundos, os desenhos, os itens e os sons.
+Os monstros ficam nas plataformas. Quando Concreto chega muito perto, aparece uma faca e eles atacam. Concreto não usa faca nem espada.
 
-Você pode corrigir ou mudar suas ideias. Vamos guardar as decisões ao longo da criação.
+Ele tem três vidas. Quando encosta em um monstro, perde uma vida e é jogado para trás. Quando perde as três, um vento espalha os pedacinhos de geleca.
+
+No final de cada fase tem um portal para a próxima. O dia dura 30 minutos e a noite dura 30 minutos. À noite, existe 50% de chance de encontrar um monstro no final. O boss final sempre aparece!
+
+## Os cinco mundos
+
+1. Mundo das plantas. O boss do portal que inventamos é o Cthulhu Higiênico. Vamos confirmar se é o boss desta primeira fase.
+2. Mundo parecido com o Nether, com a Malgosha do filme do Minecraft como ideia de boss.
+3. Mundo no céu, com um boss que parece um anjo.
+4. Mundo de bichinhos de pelúcia, com um coelho de pelúcia como boss.
+5. Mundo de Lego, com uma peça de Lego como boss. Ele aparece sempre!
+
+Cada fase tem seu próprio boss.
+
+## As lutas contra bosses
+
+Todos os bosses atacam duas vezes. Depois do segundo ataque, ficam 10 segundos sem atacar. É a chance de Concreto atacar!
+
+O Cthulhu Higiênico parece um Cthulhu de papel higiênico. Quando você luta contra ele, a visão fica em primeira pessoa (como se estivesse olhando pelos olhos do Concreto). Quando ele vai atacar, aparece um papel higiênico. Ele tem uma barrinha de vida bem grande, como a dos bosses do Minecraft.
+
+## O que vamos descobrir depois
+
+- Os 50% de chance à noite são de encontrar o boss ou um monstro comum? O que acontece de dia?
+- Todos os bosses têm luta em primeira pessoa e barra de vida grande?
+- Como Concreto escapa dos ataques dos bosses?
+- O que acontece quando acaba a última vida? E quando ganha do último boss?
+
+As cores, desenhos, sons e outras regras ainda podem ser inventados. Você pode mudar suas ideias e nós vamos guardar as correções.
