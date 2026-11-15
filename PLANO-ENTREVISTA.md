@@ -11,25 +11,37 @@ Adaptação de Grill Me e Grill with Docs, de Matt Pocock (https://github.com/ma
 5. A cada bloco coerente ou aproximadamente 5–8 decisões relevantes, fazer checkpoint: resumir em linguagem simples, atualizar especificação, inventário de recursos e histórico; publicar os arquivos alterados no GitHub e confirmar a gravação. Retomar a entrevista na próxima pergunta.
 6. Manter arquitetura e implementação separadas. Não programar antes da validação de regras e escopo.
 
-## Árvore de descoberta
+## Árvore de descoberta — posição atual v0.4
 
-- A. Visão e missão: visão lateral confirmada. Pendente: missão, mundo, objetivo e condição para concluir fase, ciclo principal.
+- A. Visão e missão: visão lateral durante exploração; atravessar plataformas e chegar ao portal confirmados. Pendente: história, se todas plataformas precisam ser visitadas, condição de abertura do portal, final do jogo.
 - B. Movimentação: andar, pular e botão de pulo confirmados. Pendente: direções, controles de deslocamento, física, queda, plataformas móveis, habilidades e câmera.
-- C. Combate: botão separado e raio confirmados. Pendente: espada, alcance, acerto, limites, dano ao inimigo e recarga.
-- D. Inimigos e obstáculos: monstros e dano por contato confirmados. Pendente: tipos, comportamento, ataques, armadilhas e chefes.
-- E. Vitória e derrota: três vidas, perda de uma por contato, knockback e animação de vento confirmados. Pendente: completar fase, reinício, pontos de retorno, recuperação, invulnerabilidade e dificuldade.
-- F. Mundo e fases: temas, caminho, segredos, ordem, desbloqueio, duração, introdução e final.
+- C. Combate: botão separado e raio confirmados; arma dos monstros corrigida para faca por proximidade. Pendente: alcance, acerto, limites, dano ao inimigo e recarga.
+- D. Inimigos: monstros nas plataformas, contato causa dano e faca aparece ao aproximar. Pendente: tipos, movimento, distância de ataque, dano por faca vs. contato, ataques e armadilhas.
+- E. Vitória e derrota: três vidas, perda de uma por contato, knockback e animação de vento confirmados. Pendente: reinício, pontos de retorno, recuperação, invulnerabilidade, continuidade de vidas e dificuldade.
+- F. Mundo e fases: cinco temas e portais no final, com boss personalizado por fase. Pendente: confirmar Cthulhu na fase 1, caminhos, desenho das plataformas, duração, desbloqueio e final.
+- F2. Ciclo temporal: dia/noite de 30 min cada, 50% de encontro noturno no final e 100% de presença do último boss confirmados. Pendente: boss vs. monstro comum, chance de dia, unidade do sorteio, persistência e pausa.
+- F3. Bosses: dois ataques e janela de 10 segundos para todos; Cthulhu em primeira pessoa, aviso de papel higiênico e barra grande confirmados. Pendente: extensão de câmera e barra aos demais, ataque/defesa em primeira pessoa, vulnerabilidade, ciclo, dano, vida e padrões personalizados.
 - G. Itens e progressão: colecionáveis, pontuação, poderes, melhorias, custos e persistência.
-- H. Direção de arte: cor, rosto, textura, tamanho e silhueta; monstros, plataformas, cenários, animações e efeitos. Validar conceitos visuais antes de produzir assets finais.
+- H. Direção de arte: cor, rosto, textura, tamanho e silhueta; monstros, plataformas, cenários, animações e efeitos. Validar conceitos visuais antes de produzir assets finais. Referências a propriedades intelectuais existentes devem ser avaliadas antes de publicação.
 - I. Interface e som: telas, botões, informações, feedback, música, efeitos e acessibilidade.
 - J. Primeira versão: fase mínima que demonstra o núcleo do jogo; critérios de diversão e aceitação.
 
-## Próxima pergunta
+## Próxima entrevista — ordem sugerida
 
-"Qual é a missão do Concreto? O que ele precisa fazer para ganhar uma fase?"
+Perguntar uma por vez, ajustando conforme respostas:
 
-Depois aprofundar as consequências e retomar o combate e inimigos.
+1. "Quando você falou dos 50% de chance de aparecer um monstro à noite, você quis dizer o boss da fase ou um monstro comum?"
+2. "E se Concreto chegar ao portal de dia, o que acontece?"
+3. "Se não aparecer boss, o Concreto já pode entrar no portal? E se aparecer, precisa derrotá-lo?"
+4. "O Cthulhu Higiênico é o boss da primeira fase, a das plantas?"
+5. "A tela muda para primeira pessoa em todas as lutas de boss ou só na do Cthulhu? E todos têm a barrinha de vida grande?" Dividir em duas perguntas no diálogo.
+6. "Quando o boss vai atacar, como o Concreto escapa do golpe?" Explorar a fala sobre bater nos lados sem presumir que significa desviar.
+7. "Nos dez segundos, como o Concreto ataca? E o que acontece se tentar atacar fora desse tempo?"
+8. "Quando você perde as três vidas ou cai de uma plataforma, de onde começa de novo?" Dividir perda de vidas e queda.
+9. "O que acontece depois de derrotar o boss do último mundo?"
+
+Depois resolver as dependências dos controles, inimigos normais, personalização dos mundos e direção de arte. Não ler o roteiro inteiro de uma vez.
 
 ## Etapa de implementação
 
-Discutir plataforma, ferramentas, arquitetura, controles por dispositivo, resolução e pipeline de assets, física, estados, colisões, dados de fases, testes, distribuição e escopo inicial. Revisar com o criador decisões que afetem a experiência. Entregar documentação suficiente para implementação sem invenção de regras críticas.
+Discutir plataforma, ferramentas, arquitetura, controles por dispositivo, resolução e pipeline de assets, física, estados, colisões, dados de fases, testes, distribuição, direitos de uso de referências e escopo inicial. Avaliar a transição de perspectiva lateral para primeira pessoa sem assumir renderização 3D. Revisar com o criador decisões que afetem a experiência. Entregar documentação suficiente para implementação sem invenção de regras críticas.
