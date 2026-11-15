@@ -51,6 +51,19 @@
 - Revisão geral aprovada ao final da entrevista. Permanecem em aberto detalhes não respondidos e ambiguidades explicitadas acima.
 - Consolidação v0.4: atualizados documentos, inventário gráfico e plano de entrevista. Sem escolha de tecnologia, criação de assets ou programação.
 
+## 2026-11-15: estudos visuais
+
+Criada prancha preliminar com quatro alternativas de Concreto, estudos de movimento, gota, raio, espada e cenário de plataforma. A alternativa verde foi usada como exemplo, sem aprovação definitiva. A espada do protagonista diverge de A02 e permanece não aprovada. Referência documentada em `assets/concept-art/README.md`; upload do PNG pendente. Desenvolvimento previsto na nuvem, sem definição de tecnologia.
+
+## 2026-11-15 — Preparação para desenvolvimento e produção visual
+
+- Pedido de centralizar prompts e imagens no GitHub, com upload progressivo de imagens pelo responsável do projeto.
+- Publicados 12 prompts independentes: cinco storyboards, Concreto, monstros comuns e cinco bosses; todos são estudos, não assets ou novas regras aprovadas.
+- Corrigidos os prompts para que apenas os monstros usem faca; protagonista mantém raio de geleca. Preservadas as referências de Thomas a Malgosha e Lego, com alternativas originais propostas para eventual distribuição, sem substituir decisões criativas.
+- Organizado catálogo e pastas para imagens por tipo, com versões e estados de aprovação, além de separação entre concept art e assets de produção.
+- Adicionados DESENVOLVIMENTO.md e AGENTS.md, com proposta de MVP de uma fase, roteiro D0–D7, critérios de aceitação, pendências e prompt inicial para agente. Desenvolvimento na nuvem mantido; stack ainda não escolhida.
+- Especificação de gameplay permanece v0.4. Nenhum código implementado; a preparação do desenvolvimento pode começar com D0. Imagens finais não são pré-requisito para protótipos reversíveis.
+
 ## 2026-11-15 — Rodada 006 — Início do protótipo
 
 - O responsável autorizou o início do desenvolvimento. Decisão de processo: o protótipo passa a ser instrumento de validação do design, em paralelo à entrevista. Altera a regra anterior de não programar antes da validação de regras e escopo.
@@ -65,3 +78,10 @@
 - Retorno do responsável: o Concreto do protótipo lembrava demais um fantasma de Pac-Man.
 - Redesenhado como geleca: base esparramada no lugar da barra ondulada, corpo translúcido com degradê, brilho, bolhas internas, gota escorrendo, olhos escuros sem branco e sorriso. Mantidos P01 (silhueta que lembra fantasma) e P02 (topo curvado).
 - Aparência continua provisória (P04); falta a validação do criador.
+
+## 2026-11-15 — Rodada 008 — Integração com o pacote de preparação
+
+- A branch do protótipo foi criada antes da publicação do pacote de preparação (prompts, catálogo de concept art, DESENVOLVIMENTO.md e AGENTS.md) e não o considerou. Integrado agora por merge de `main`.
+- Desvio de processo a registrar: o protótipo cobriu D1 a D4 sem passar pela proposta técnica D0 prevista em AGENTS.md. A stack (HTML/Canvas, sem dependências) e a arquitetura ficam sujeitas à revisão do responsável.
+- Verificado em `main`: não há arquivos de imagem no repositório; o catálogo registra o storyboard do Mundo 1 e a prancha de estudos do Concreto como "upload do PNG pendente". O redesenho da rodada 007 foi feito sem acesso a essas referências.
+- Pendente: receber os PNGs para alinhar Concreto, monstros, cenário e Cthulhu às pranchas.
