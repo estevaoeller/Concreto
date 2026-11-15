@@ -18,3 +18,8 @@ Especificação v0.4 (2026-11-15): personagem, controles básicos, três vidas, 
 Entrevista adaptada de Grill Me / Grill with Docs: uma pergunta por vez, aprofundamento das consequências e consolidações periódicas. Sugestões não são requisitos até confirmação. Manter os documentos sincronizados e versionados no GitHub.
 
 A tecnologia e a implementação serão definidas após a validação do design e do escopo inicial. A ferramenta mencionada como Fable Five ainda precisa ser identificada e avaliada. Referências a jogos e marcas são referências criativas, não licenças de uso.
+
+## Desenvolvimento visual
+
+- [Estudos de personagem](assets/concept-art/README.md): alternativas visuais e ressalvas de design. PNG original com upload pendente.
+- Desenvolvimento previsto na nuvem; ambiente e tecnologia ainda a definir.
