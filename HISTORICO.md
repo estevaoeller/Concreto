@@ -119,3 +119,12 @@ Respostas recebidas por transcrição de voz, com trechos truncados. Registrado 
 - Não resolvido: um trecho menciona querer uma espada e, em seguida, um escudo, sem deixar claro se o pedido é para o jogo. Não implementado. Se for pedido de gameplay, altera A02 (Concreto sem espada) e precisa de confirmação expressa.
 - Sem resposta nesta rodada: Q01 (dispositivos), Q06 (defesa e ataque na luta), Q07 (portal e final), Q08 (cor e aparência) e as demais partes de Q05.
 - Protótipo atualizado: relógio e sorteio desligados por configuração, indicador de sol/lua removido da tela, boss sempre presente no portal. Especificação v0.6.
+
+## 2026-11-15 — Rodada 011 — Delegação de escolhas e ampliação da Fase 1
+
+- F05 confirmada: entrar no portal leva à luta contra o boss, sem sorteio ("do jeito que aconteceu").
+- Espada e escudo: decisão adiada pelo responsável. A02 continua valendo; nada implementado.
+- Decisão de processo: o responsável delegou ao desenvolvimento as escolhas ainda pendentes, tomando como base o que é usual em jogos de plataforma para crianças, com revisão posterior ("assume a melhor coisa, depois a gente revê"). As escolhas feitas estão na seção 13 da especificação v0.7, todas reversíveis e nenhuma tratada como decisão do criador.
+- Protótipo ampliado: fase em três trechos; 62 gotinhas coletáveis com contador; dois corações que devolvem vida; vidas mostradas como corações; quatro aparências de monstro da prancha P02 com sinal de alerta; pulo mais tolerante; placas de dica; entrada animada no portal; Cthulhu com manto e medalhão em salão roxo, com a onda de papel abaixo de metade da vida.
+- Mantido sem alteração: Concreto sem espada (A02), monstros parados (I02), dois ataques e pausa de 10 s (B01), luta em primeira pessoa (B04), aviso de papel higiênico (B05).
+- Testes: criado `testes/percurso.js`, com 21 verificações no navegador identificadas pelos IDs da especificação. Resultado nesta rodada: todas passaram. Limitação: é um robô; dificuldade e diversão para uma criança de 9 anos não foram testadas.

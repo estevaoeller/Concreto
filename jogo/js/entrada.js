@@ -100,6 +100,10 @@ var Som = (function () {
     acerto: function () { bip(520, 0.08, 'square', 760, 0.07); },
     bloqueio: function () { bip(180, 0.08, 'square', 160, 0.06); },
     aviso: function () { bip(880, 0.12, 'square', 880, 0.06); },
+    gotinha: function () { bip(900, 0.07, 'sine', 1400, 0.07); },
+    vida: function () { bip(500, 0.12, 'triangle', 900); setTimeout(function () { bip(900, 0.2, 'triangle', 1300); }, 110); },
+    percebeu: function () { bip(1100, 0.07, 'square', 1100, 0.04); },
+    derrotou: function () { bip(400, 0.2, 'triangle', 120, 0.1); },
     portal: function () { bip(260, 0.6, 'sine', 1040); },
     vitoria: function () { bip(520, 0.15, 'triangle'); setTimeout(function () { bip(780, 0.3, 'triangle'); }, 150); }
   };

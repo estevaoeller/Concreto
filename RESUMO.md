@@ -1,4 +1,4 @@
-# O jogo do Concreto — versão 0.6
+# O jogo do Concreto — versão 0.7
 
 ## O que já inventamos
 
@@ -30,12 +30,11 @@ O Cthulhu Higiênico parece um Cthulhu de papel higiênico. Quando você luta co
 
 ## Já dá para jogar um pedacinho!
 
-Fizemos uma primeira versão de teste do Mundo das Plantas, com a luta contra o Cthulhu Higiênico. Algumas coisas que você ainda não decidiu, nós chutamos só para o jogo funcionar. Jogue e conte o que ficou certo e o que você quer mudar!
+Fizemos uma versão de teste do Mundo das Plantas, com três trechos, quatro monstros diferentes e a luta contra o Cthulhu Higiênico depois do portal. Algumas coisas que você ainda não decidiu, nós inventamos para o jogo ficar divertido: gotinhas para pegar, corações que devolvem vida e uma onda de papel quando o Cthulhu está quase perdendo. Jogue e conte o que fica, o que muda e o que sai!
 
 ## O que vamos descobrir depois
 
-- Agora que não tem mais noite, o boss aparece sempre no portal?
-- Você falou de espada e de escudo: é para o Concreto ter no jogo?
+- Você falou de espada e de escudo: é para o Concreto ter no jogo? (Decidimos depois.)
 - Todos os bosses têm luta em primeira pessoa e barra de vida grande?
 - Como Concreto escapa dos ataques dos bosses?
 - O que acontece quando ganha do último boss?

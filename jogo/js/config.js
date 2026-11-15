@@ -12,6 +12,8 @@ var CFG = {
     forcaPulo: 680,            // PROVISÓRIO
     gravidade: 1800,           // PROVISÓRIO
     puloDuplo: false,          // PROVISÓRIO (pendente em M)
+    toleranciaBorda: 0.1,      // PROVISÓRIO: ainda dá para pular logo depois de sair da beirada
+    memoriaPulo: 0.12,         // PROVISÓRIO: apertar o pulo um pouco antes de pousar também vale
     intervaloGota: 2.2         // PROVISÓRIO (P03: frequência não definida)
   },
 
@@ -47,7 +49,7 @@ var CFG = {
   },
 
   portal: {
-    chanceBoss: 1,             // PROVISÓRIO: sem a noite, o boss aparece sempre (a confirmar com o criador)
+    chanceBoss: 1,             // confirmado (F05, rodada 011): entrou no portal, enfrenta o boss
     chanceBossNoite: 0.5,      // só vale com tempo.ativo = true (regra antiga T02)
     chanceBossDia: 0,          // só vale com tempo.ativo = true
     precisaVencerBoss: true    // PROVISÓRIO
@@ -62,6 +64,7 @@ var CFG = {
     golpe: 0.4,                // PROVISÓRIO
     entreAtaques: 0.6,         // PROVISÓRIO
     danoSoNaPausa: true,       // PROVISÓRIO (pendente: dano fora da janela)
+    ondaAbaixoDe: 0.5,         // PROVISÓRIO: com menos da metade da vida, o golpe cobre dois lados (sobra um seguro)
     trocaDeLado: 2.5,          // PROVISÓRIO (na pausa o boss muda de lado a cada X s)
     desviarPelosLados: true,   // PROVISÓRIO (interpretação de "bater nos lados": andar para o lado para escapar)
     recomecaNoBoss: true       // confirmado (V07): perdeu no boss, recomeça a luta

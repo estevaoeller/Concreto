@@ -1,32 +1,57 @@
 // Exploração de lado (visão lateral, C01): andar, pular, raio de geleca, monstros com faca, portal.
 
-// Fase 1 — mundo das plantas. Desenho da fase PROVISÓRIO.
-var FASE1 = {
-  nome: 'Mundo das Plantas',
-  largura: 5400,
-  inicio: { x: 90, y: 460 },
-  portalX: 5180,
-  plataformas: [
-    { x: 0, y: 460, w: 900, chao: true },
-    { x: 1030, y: 460, w: 700, chao: true },
-    { x: 1870, y: 460, w: 560, chao: true },
-    { x: 2570, y: 460, w: 500, chao: true },
-    { x: 3900, y: 460, w: 1500, chao: true },
-    { x: 500, y: 360, w: 160, h: 22 },
-    { x: 1250, y: 350, w: 160, h: 22 },
-    { x: 2050, y: 340, w: 180, h: 22 },
-    { x: 2700, y: 360, w: 160, h: 22 },
-    { x: 3150, y: 400, w: 140, h: 22 },
-    { x: 3370, y: 340, w: 140, h: 22 },
-    { x: 3590, y: 400, w: 140, h: 22 },
-    { x: 3760, y: 340, w: 100, h: 22 },
-    { x: 4300, y: 350, w: 180, h: 22 }
-  ],
-  monstros: [
-    { x: 700, y: 460 }, { x: 1500, y: 460 }, { x: 2140, y: 340 }, { x: 2330, y: 460 },
-    { x: 2900, y: 460 }, { x: 4200, y: 460 }, { x: 4390, y: 350 }, { x: 4750, y: 460 }
-  ]
-};
+// Fase 1 — mundo das plantas, em três trechos como no storyboard S01. Desenho da fase PROVISÓRIO.
+var FASE1 = (function () {
+  function fila(x, y, n, passo) { var r = []; for (var i = 0; i < n; i++) r.push({ x: x + i * (passo || 44), y: y }); return r; }
+  function arco(x0, x1, y, alt, n) { // gotinhas em curva, mostrando o caminho do pulo
+    var r = [];
+    for (var i = 0; i < n; i++) { var k = i / (n - 1); r.push({ x: x0 + (x1 - x0) * k, y: y - Math.sin(k * Math.PI) * alt }); }
+    return r;
+  }
+  var gotinhas = [].concat(
+    // trecho 1
+    fila(300, 420, 4), fila(545, 325, 3), arco(920, 1100, 400, 70, 4), fila(1425, 320, 3), fila(1665, 250, 3),
+    arco(2040, 2140, 400, 70, 3), fila(2375, 330, 3),
+    // trecho 2
+    arco(2820, 2930, 400, 70, 3), fila(3545, 360, 2), fila(3755, 300, 2), fila(3965, 360, 2), fila(4600, 420, 4),
+    arco(5020, 5130, 400, 70, 3), fila(5625, 360, 2), fila(5815, 300, 2),
+    // trecho 3
+    fila(6175, 320, 3), arco(6620, 6730, 400, 70, 3), fila(6925, 310, 3), fila(7350, 350, 2), fila(7545, 290, 2),
+    fila(8025, 320, 3), fila(8380, 420, 3)
+  );
+  return {
+    nome: 'Mundo das Plantas',
+    largura: 8800,
+    inicio: { x: 90, y: 460 },
+    portalX: 8580,
+    trechos: [{ x: 0, nome: 'Trecho 1' }, { x: 2800, nome: 'Trecho 2' }, { x: 5960, nome: 'Trecho 3' }],
+    plataformas: [
+      // trecho 1: apresenta o cenário e os primeiros desafios
+      { x: 0, y: 460, w: 1000, chao: true }, { x: 1120, y: 460, w: 900, chao: true }, { x: 2150, y: 460, w: 650, chao: true },
+      { x: 520, y: 370, w: 160, h: 22 }, { x: 1400, y: 360, w: 160, h: 22 }, { x: 1640, y: 290, w: 140, h: 22 }, { x: 2350, y: 370, w: 160, h: 22 },
+      // trecho 2: mais plataformas e monstros
+      { x: 2940, y: 460, w: 500, chao: true }, { x: 4300, y: 460, w: 700, chao: true }, { x: 5140, y: 460, w: 400, chao: true },
+      { x: 3520, y: 400, w: 130, h: 22 }, { x: 3730, y: 340, w: 130, h: 22 }, { x: 3940, y: 400, w: 130, h: 22 }, { x: 4130, y: 340, w: 110, h: 22 },
+      { x: 5600, y: 400, w: 120, h: 22 }, { x: 5790, y: 340, w: 120, h: 22 },
+      // trecho 3: plataforma e combate antes do portal
+      { x: 5960, y: 460, w: 640, chao: true }, { x: 6740, y: 460, w: 520, chao: true }, { x: 7700, y: 460, w: 1100, chao: true },
+      { x: 6150, y: 360, w: 160, h: 22 }, { x: 6900, y: 350, w: 160, h: 22 }, { x: 7330, y: 390, w: 120, h: 22 }, { x: 7520, y: 330, w: 120, h: 22 },
+      { x: 8000, y: 360, w: 170, h: 22 }
+    ],
+    // Quatro aparências do Mundo 1 (prancha P02). O comportamento é o mesmo para todas (I02/I04).
+    monstros: [
+      { x: 900, y: 460, tipo: 'espinho' }, { x: 1560, y: 460, tipo: 'semente' }, { x: 2560, y: 460, tipo: 'cogumelo' },
+      { x: 3200, y: 460, tipo: 'planta' }, { x: 4520, y: 460, tipo: 'espinho' }, { x: 4800, y: 460, tipo: 'cogumelo' }, { x: 5350, y: 460, tipo: 'semente' },
+      { x: 6380, y: 460, tipo: 'planta' }, { x: 6980, y: 350, tipo: 'cogumelo' }, { x: 7130, y: 460, tipo: 'semente' },
+      { x: 7960, y: 460, tipo: 'espinho' }, { x: 8280, y: 460, tipo: 'planta' }
+    ],
+    gotinhas: gotinhas,
+    coracoes: [{ x: 4185, y: 295 }, { x: 7580, y: 285 }],
+    placas: [
+      { x: 190, texto: 'Ande para a direita' }, { x: 410, texto: 'PULO para subir' }, { x: 745, texto: 'RAIO de longe!' }
+    ]
+  };
+})();
 
 var Fase = (function () {
   var W = CFG.largura, H = CFG.altura;
@@ -37,14 +62,16 @@ var Fase = (function () {
       dados: dados,
       j: {
         x: dados.inicio.x, y: dados.inicio.y, vx: 0, vy: 0, dir: 1, noChao: true,
-        invul: 0, trava: 0, recarga: 0, atacando: 0, pulosNoAr: 0,
+        invul: 0, trava: 0, recarga: 0, atacando: 0, pulosNoAr: 0, coiote: 0, memoriaPulo: 0, pouso: 0, entrando: 0,
         seguro: { x: dados.inicio.x, y: dados.inicio.y }, proxGota: CFG.concreto.intervaloGota
       },
       monstros: dados.monstros.map(function (m) {
-        return { x: m.x, y: m.y, vida: CFG.monstro.vida, olha: -1, estado: 'calmo', tempo: 0, piscando: 0, acertou: false };
+        return { x: m.x, y: m.y, tipo: m.tipo || 'espinho', vida: CFG.monstro.vida, olha: -1, estado: 'calmo', tempo: 0, piscando: 0, acertou: false };
       }),
+      gotinhas: dados.gotinhas.map(function (g) { return { x: g.x, y: g.y, pego: false }; }),
+      coracoes: dados.coracoes.map(function (g) { return { x: g.x, y: g.y, pego: false }; }),
       raios: [], gotas: [], pocas: [], particulas: [],
-      camX: 0, t: 0, chegouPortal: false
+      camX: 0, t: 0, tremor: 0, chegouPortal: false, trecho: 0, avisoTrecho: 0
     };
   }
 
@@ -58,8 +85,9 @@ var Fase = (function () {
     if (j.invul > 0) return;
     jogo.vidas--;
     Som.dano();
-    j.invul = CFG.invencivelAposDano;
+    j.invul = CFG.invencivelAposDano; // V05
     j.trava = 0.3;
+    f.tremor = 0.25;
     var lado = j.x >= deX ? 1 : -1;
     j.vx = lado * CFG.empurrao.vx; // jogado para trás (V03)
     j.vy = -CFG.empurrao.vy;
@@ -67,10 +95,10 @@ var Fase = (function () {
     poeira(f, j.x, j.y - JH / 2, CFG.concreto.cor, 8);
   }
 
-  function poeira(f, x, y, cor, n) {
+  function poeira(f, x, y, cor, n, forca) {
     for (var i = 0; i < n; i++) {
       f.particulas.push({
-        x: x, y: y, vx: (Math.random() - 0.5) * 260, vy: -Math.random() * 240,
+        x: x, y: y, vx: (Math.random() - 0.5) * 260 * (forca || 1), vy: -Math.random() * 240 * (forca || 1),
         vida: 0.5 + Math.random() * 0.3, r: 3 + Math.random() * 3, cor: cor, g: 700
       });
     }
@@ -80,16 +108,21 @@ var Fase = (function () {
   function atualizar(f, dt, jogo) {
     var j = f.j, C = CFG.concreto, d = f.dados;
     f.t += dt;
+    if (f.tremor > 0) f.tremor -= dt;
+    if (f.avisoTrecho > 0) f.avisoTrecho -= dt;
 
     // --- Concreto ---
+    j.coiote = j.noChao ? C.toleranciaBorda : j.coiote - dt;
+    j.memoriaPulo = Entrada.puloApertou ? C.memoriaPulo : j.memoriaPulo - dt;
+    if (j.pouso > 0) j.pouso -= dt;
     if (j.trava > 0) j.trava -= dt;
     else {
       var mov = (Entrada.dir ? 1 : 0) - (Entrada.esq ? 1 : 0);
       j.vx = mov * C.velocidade;
       if (mov) j.dir = mov;
-      if (Entrada.puloApertou) {
-        if (j.noChao) { j.vy = -C.forcaPulo; j.noChao = false; Som.pulo(); }
-        else if (C.puloDuplo && j.pulosNoAr < 1) { j.vy = -C.forcaPulo * 0.9; j.pulosNoAr++; Som.pulo(); }
+      if (j.memoriaPulo > 0) {
+        if (j.coiote > 0) { j.vy = -C.forcaPulo; j.noChao = false; j.coiote = 0; j.memoriaPulo = 0; Som.pulo(); }
+        else if (C.puloDuplo && j.pulosNoAr < 1 && Entrada.puloApertou) { j.vy = -C.forcaPulo * 0.9; j.pulosNoAr++; Som.pulo(); }
       }
     }
     if (!Entrada.pulo && j.vy < -260) j.vy = -260; // soltar o botão cedo = pulo mais baixo
@@ -107,7 +140,7 @@ var Fase = (function () {
       }
     });
     // mover em Y e resolver chão/teto
-    var yAntes = j.y;
+    var yAntes = j.y, vyAntes = j.vy, estavaNoChao = j.noChao;
     j.y += j.vy * dt;
     j.noChao = false;
     d.plataformas.forEach(function (p) {
@@ -119,8 +152,9 @@ var Fase = (function () {
         j.y = p.y + p.h + JH; j.vy = 0;
       }
     });
+    if (j.noChao && !estavaNoChao && vyAntes > 300) { j.pouso = 0.14; poeira(f, j.x, j.y, '#e8f7c8', 5, 0.5); }
 
-    // caiu no buraco
+    // caiu no buraco: perde uma vida e volta para a última plataforma (V06)
     if (j.y > H + 120) {
       if (CFG.quedaTiraVida) { jogo.vidas--; Som.dano(); }
       j.x = j.seguro.x; j.y = j.seguro.y; j.vx = 0; j.vy = 0;
@@ -135,7 +169,7 @@ var Fase = (function () {
       Som.raio();
     }
 
-    // gotinha de geleca que cai no chão (P03) — só enfeite por enquanto
+    // gotinha de geleca que cai no chão (P03) — só enfeite
     j.proxGota -= dt;
     if (j.proxGota <= 0) {
       j.proxGota = C.intervaloGota;
@@ -154,6 +188,20 @@ var Fase = (function () {
     });
     f.pocas = f.pocas.filter(function (p) { p.vida -= dt; return p.vida > 0; });
 
+    // coletáveis (PROVISÓRIO): gotinhas contam pontos, coração devolve uma vida
+    f.gotinhas.forEach(function (g) {
+      if (!g.pego && Math.abs(g.x - j.x) < 30 && Math.abs(g.y - (j.y - JH / 2)) < 38) {
+        g.pego = true; jogo.gotinhas++; Som.gotinha();
+        poeira(f, g.x, g.y, '#eaffa0', 4, 0.5);
+      }
+    });
+    f.coracoes.forEach(function (g) {
+      if (!g.pego && jogo.vidas < CFG.vidas && Math.abs(g.x - j.x) < 34 && Math.abs(g.y - (j.y - JH / 2)) < 42) {
+        g.pego = true; jogo.vidas++; Som.vida();
+        poeira(f, g.x, g.y, '#ff6f91', 10);
+      }
+    });
+
     // --- raios ---
     f.raios = f.raios.filter(function (r) {
       var passo = CFG.raio.velocidade * dt;
@@ -169,7 +217,7 @@ var Fase = (function () {
           m.vida -= CFG.raio.dano; m.piscando = 0.15;
           Som.acerto();
           poeira(f, r.x, r.y, CFG.concreto.cor, 5);
-          if (m.vida <= 0) poeira(f, m.x, m.y - MH / 2, '#7d4bb3', 16);
+          if (m.vida <= 0) { poeira(f, m.x, m.y - MH / 2, Arte.corMonstro(m.tipo), 18); Som.derrotou(); }
           return false;
         }
       }
@@ -185,20 +233,20 @@ var Fase = (function () {
       if (m.estado !== 'golpe') m.olha = dx >= 0 ? 1 : -1;
       m.tempo += dt;
       if (m.estado === 'calmo') {
-        if (perto) { m.estado = 'preparando'; m.tempo = 0; }
+        if (perto) { m.estado = 'preparando'; m.tempo = 0; Som.percebeu(); }
       } else if (m.estado === 'preparando') {
         if (!perto) m.estado = 'calmo';                 // longe: a faca some (I04)
         else if (m.tempo >= M.preparoFaca) { m.estado = 'golpe'; m.tempo = 0; m.acertou = false; }
       } else if (m.estado === 'golpe') {
         var fx = m.olha > 0 ? m.x + MW / 2 : m.x - MW / 2 - M.alcanceFaca;
         if (!m.acertou && toca(j.x - JW / 2, j.y - JH, JW, JH, fx, m.y - 36, M.alcanceFaca, 26)) {
-          m.acertou = true; ferir(f, jogo, m.x);
+          m.acertou = true; ferir(f, jogo, m.x);       // a faca tira vida (I05)
         }
         if (m.tempo >= M.duracaoGolpe) { m.estado = 'descanso'; m.tempo = 0; }
       } else if (m.estado === 'descanso') {
-        if (m.tempo >= M.descanso) m.estado = perto ? 'preparando' : 'calmo', m.tempo = 0;
+        if (m.tempo >= M.descanso) { m.estado = perto ? 'preparando' : 'calmo'; m.tempo = 0.3; }
       }
-      // encostar no monstro tira uma vida (V02)
+      // encostar no monstro tira uma vida (V02/I03)
       if (toca(j.x - JW / 2 + 4, j.y - JH + 4, JW - 8, JH - 4, m.x - MW / 2 + 4, m.y - MH + 6, MW - 8, MH - 6)) ferir(f, jogo, m.x);
     });
 
@@ -208,9 +256,14 @@ var Fase = (function () {
       return p.vida > 0;
     });
 
-    // câmera segue Concreto
-    var alvo = j.x - W * 0.4;
-    f.camX += (alvo - f.camX) * Math.min(1, dt * 8);
+    // aviso de trecho novo
+    var tr = 0;
+    d.trechos.forEach(function (t, i) { if (j.x >= t.x) tr = i; });
+    if (tr !== f.trecho) { f.trecho = tr; f.avisoTrecho = 2.5; }
+
+    // câmera segue Concreto, olhando um pouco para a frente
+    var alvo = j.x - W * 0.4 + j.dir * 40;
+    f.camX += (alvo - f.camX) * Math.min(1, dt * 6);
     f.camX = Math.max(0, Math.min(d.largura - W, f.camX));
 
     if (jogo.vidas <= 0) return 'morreu';
@@ -240,22 +293,41 @@ var Fase = (function () {
 
   function desenhar(c, f, noite, esconderJogador) {
     var d = f.dados, j = f.j, cam = Math.round(f.camX);
+    c.save();
+    if (f.tremor > 0) c.translate((Math.random() - 0.5) * 10, (Math.random() - 0.5) * 8);
     Arte.ceu(c, noite, f.t);
     Arte.fundoPlantas(c, cam, noite);
+    d.placas.forEach(function (p) { if (p.x - cam > -200 && p.x - cam < W + 200) Arte.placa(c, p.x - cam, 452, p.texto); });
     d.plataformas.forEach(function (p) { Arte.plataforma(c, p, cam, noite); });
     Arte.portal(c, d.portalX - cam, 452, f.t);
-    f.pocas.forEach(function (p) {
-      Arte.poca(c, p.x - cam, p.y - 8, Math.min(1, p.vida));
+    f.pocas.forEach(function (p) { Arte.poca(c, p.x - cam, p.y - 8, Math.min(1, p.vida)); });
+    f.gotinhas.forEach(function (g, i) {
+      var x = g.x - cam;
+      if (!g.pego && x > -30 && x < W + 30) Arte.gotinha(c, x, g.y + Math.sin(f.t * 4 + i) * 3, f.t + i);
     });
-    f.monstros.forEach(function (m) { if (m.vida > 0) Arte.monstro(c, m.x - cam, m.y, m, f.t); });
+    f.coracoes.forEach(function (g, i) {
+      var x = g.x - cam;
+      if (!g.pego && x > -40 && x < W + 40) Arte.coracao(c, x, g.y + Math.sin(f.t * 3 + i) * 4, 15 + Math.sin(f.t * 6) * 1.5, true);
+    });
+    f.monstros.forEach(function (m) {
+      var x = m.x - cam;
+      if (m.vida > 0 && x > -80 && x < W + 80) Arte.monstro(c, x, m.y, m, f.t);
+    });
     f.gotas.forEach(function (g) { Arte.gota(c, g.x - cam, g.y, 6); });
     f.raios.forEach(function (r) { Arte.raio(c, r.x - cam, r.y, r.dir, f.t); });
     if (!esconderJogador && !(j.invul > 0 && Math.floor(f.t * 14) % 2 === 0)) {
-      Arte.concreto(c, j.x - cam, j.y, {
-        w: JW + 8, h: JH + 8, dir: j.dir, t: f.t + (j.vx ? f.t : 0),
-        espichar: j.noChao ? Math.sin(f.t * (j.vx ? 12 : 3)) * 0.12 : Math.max(-0.5, Math.min(0.9, -j.vy / 700)),
-        atacando: j.atacando > 0
-      });
+      var esp = j.pouso > 0 ? -0.5 * (j.pouso / 0.14)
+        : j.noChao ? Math.sin(f.t * (j.vx ? 12 : 3)) * 0.12 : Math.max(-0.5, Math.min(0.9, -j.vy / 700));
+      if (j.entrando > 0) { // sendo puxado para dentro do portal
+        var k = 1 - j.entrando;
+        c.save();
+        c.translate(j.x - cam + (d.portalX - j.x) * j.entrando, j.y - 60 * j.entrando);
+        c.rotate(j.entrando * 7); c.scale(k, k);
+        Arte.concreto(c, 0, 26, { w: JW + 8, h: JH + 8, dir: j.dir, t: f.t, semSombra: true });
+        c.restore();
+      } else {
+        Arte.concreto(c, j.x - cam, j.y, { w: JW + 8, h: JH + 8, dir: j.dir, t: f.t + (j.vx ? f.t : 0), espichar: esp, atacando: j.atacando > 0 });
+      }
     }
     f.particulas.forEach(function (p) {
       c.globalAlpha = Math.min(1, p.vida * 2);
@@ -263,7 +335,8 @@ var Fase = (function () {
       c.beginPath(); c.arc(p.x - cam, p.y, p.r, 0, 7); c.fill();
       c.globalAlpha = 1;
     });
-    if (noite > 0) { c.fillStyle = 'rgba(10,16,52,' + (0.3 * noite) + ')'; c.fillRect(0, 0, W, H); }
+    if (noite > 0) { c.fillStyle = 'rgba(10,16,52,' + (0.3 * noite) + ')'; c.fillRect(-20, -20, W + 40, H + 40); }
+    c.restore();
   }
 
   return { criar: criar, atualizar: atualizar, desenhar: desenhar, espalhar: espalhar, soParticulas: soParticulas };

@@ -1,6 +1,6 @@
 # Concreto — Especificação do jogo
 
-Versão: 0.6 — 2026-11-15
+Versão: 0.7 — 2026-11-15
 Estado: descoberta e design, com protótipo jogável da Fase 1 autorizado pelo responsável (ver seções 11 e 13). O protótipo não encerra a descoberta nem converte premissas provisórias em requisitos.
 Convenção: requisitos numerados são decisões confirmadas, salvo indicação explícita de interpretação, proposta ou pendência. Referências visuais não são assets aprovados.
 
@@ -57,14 +57,14 @@ Parado, deslocando-se, pulando, atacando, recebendo dano e derrotado. Trata-se d
 
 ## 6. Ciclo temporal e encontros no portal
 
-Decisão da rodada 010: o criador retirou o ciclo de dia e noite ("esse negócio de noite não deu certo", "vamos fazer normal, sem ser de noite"). T01 e T02 ficam substituídas e permanecem abaixo apenas como registro. Consequência em aberto: sem a noite não há mais sorteio definido para o boss das fases 1 a 4. O protótipo adota, como premissa provisória, que o boss aparece sempre; falta confirmação.
+Decisão da rodada 010: o criador retirou o ciclo de dia e noite ("esse negócio de noite não deu certo", "vamos fazer normal, sem ser de noite"). T01 e T02 ficam substituídas e permanecem abaixo apenas como registro. F05 (rodada 011): ao entrar no portal, Concreto vai enfrentar o boss; não há sorteio. Confirmado a partir da experiência com o protótipo ("do jeito que aconteceu: entrei no portal e fui enfrentar o boss").
 
 Regras anteriores (substituídas, exceto T03):
 
 - T01 (substituída na rodada 010): o jogo possui um ciclo de dia e noite; cada período dura 30 minutos.
 - T02 (substituída na rodada 010): durante a noite, quando Concreto chega ao final, há 50% de chance de haver um monstro. A formulação aprovada foi "monstro"; confirmar se se refere ao boss do portal ou a outro inimigo.
 - T03: o último boss, na quinta fase, tem 100% de chance de aparecer. A exceção é explícita; não aplicar o sorteio a este boss.
-- Pendente: se o boss das fases 1 a 4 aparece sempre e o que acontece no portal quando não há boss.
+- Pendente: o que acontece depois de vencer o boss (ver seção 7).
 
 ## 7. Mundo e progressão
 
@@ -134,8 +134,8 @@ Não há desenhos, sprites ou áudio aprovados. O estilo e o formato técnico pe
 
 ## 10. Decisões pendentes prioritárias
 
-1. Sem o ciclo de dia e noite, confirmar se o boss de cada fase aparece sempre.
-2. Esclarecer a fala sobre espada e escudo da rodada 010 (ver histórico): se for pedido para o jogo, contraria A02 e precisa de decisão expressa.
+1. Validar com o criador as escolhas delegadas na rodada 011 (seção 13), jogando o protótipo.
+2. Espada e escudo: decisão adiada pelo responsável na rodada 011. Até lá vale A02 (Concreto sem espada).
 3. Confirmar se a câmera em primeira pessoa e a barra de vida grande valem para todos os bosses.
 4. Definir como o jogador se defende dos dois ataques, como ataca durante a janela e se o boss pode receber dano fora dela.
 5. Definir relação portal/derrota do boss, repetição de ciclos, vitória final e continuidade de vidas.
@@ -153,15 +153,14 @@ Fora do protótipo: fases 2 a 5 e seus bosses, persistência, itens, pontuação
 
 O protótipo pode ser usado como apoio à entrevista: o criador joga, e cada premissa provisória da seção 13 vira uma pergunta concreta ("ficou como você imaginou?").
 
-Começar por: "Agora que não tem mais noite, o boss aparece sempre no portal?" Depois esclarecer a fala sobre espada e escudo, e seguir para Q06 (como escapar e atacar na luta) e Q07 (portal e final). Ver [plano de entrevista](PLANO-ENTREVISTA.md).
+O responsável delegou as escolhas pendentes ao desenvolvimento, com revisão posterior (rodada 011). A próxima rodada é de revisão: o criador joga e diz o que manter, mudar ou tirar entre os itens da seção 13. Perguntas que continuam sendo dele: espada e escudo, cor do Concreto e o final do jogo. Ver [plano de entrevista](PLANO-ENTREVISTA.md).
 
 ## 13. Premissas provisórias do protótipo
 
-Valores adotados apenas para tornar o protótipo jogável. Nenhum foi confirmado pelo criador. Todos ficam em `jogo/js/config.js`, marcados como PROVISÓRIO, e podem ser alterados sem mexer no restante do código.
+Valores adotados para tornar o protótipo jogável e, desde a rodada 011, escolhas delegadas pelo responsável ("assume a melhor coisa, depois a gente revê"). Nenhum foi confirmado pelo criador. Todos ficam em `jogo/js/config.js`, marcados como PROVISÓRIO, e podem ser alterados sem mexer no restante do código.
 
 | Tema | Pendência na especificação | Premissa adotada no protótipo |
 |---|---|---|
-| Encontro no portal | Sem o ciclo de dia e noite, quando o boss aparece? | O boss aparece sempre ao chegar ao portal. Ciclo desligado em `tempo.ativo`; reversível. |
 | Portal e boss | O portal depende da derrota do boss? | Se o boss aparece, é preciso vencê-lo para concluir a fase. |
 | Movimento | Velocidade, altura do salto, pulo duplo | Um salto simples, com altura variável conforme o tempo de pressão do botão. |
 | Dano (V05) | Duração da invulnerabilidade, intensidade do knockback | 1,2 s de invulnerabilidade com o personagem piscando. |
@@ -173,3 +172,13 @@ Valores adotados apenas para tornar o protótipo jogável. Nenhum foi confirmado
 | Boss — ciclo (B02) | Repetição do ciclo; intervalo entre golpes | Ciclo repete até a derrota; aviso de 1,1 s e 0,6 s entre os dois golpes. |
 | Arte e som (P04, G01–G19) | Cor, rosto, estilo, sons | Visual desenhado por código a partir da alternativa A dos estudos de personagem e do storyboard do Mundo 1 (rodada 009); monstro roxo com espinhos; cenário e sons de teste. Nada aprovado. |
 | Gota (P03) | Frequência e efeito | Uma gota a cada 2,2 s; apenas decorativa. |
+| Coletáveis | Itens e pontuação (árvore G) não definidos | 62 gotinhas de geleca espalhadas pela fase, com contador na tela e total no fim. Não afetam vidas nem progresso. |
+| Recuperar vida | Recuperação de vida não definida | Dois corações na fase; cada um devolve uma vida, só quando falta alguma. |
+| Indicador de vidas (G10) | Forma do indicador | Três corações no canto da tela. |
+| Tolerância do pulo | Física não definida | Ainda dá para pular 0,1 s depois de sair da beirada, e o pulo apertado 0,12 s antes de pousar também vale. |
+| Tamanho da fase | Duração e desenho não definidos | Três trechos de dificuldade crescente, como no storyboard S01; cerca de 35 s em linha reta. |
+| Tipos de monstro | Tipos não definidos | Quatro aparências da prancha P02 (Espinho, Planta Mordedora, Cogumelo, Semente), todas paradas e com o mesmo comportamento. Sinal de alerta quando percebem o Concreto. |
+| Dicas | Tutorial não definido | Três placas de madeira no começo da fase. |
+| Portal | Transição não definida | Concreto é puxado para dentro do portal e a tela clareia antes da luta. |
+| Boss — onda de papel | Variedade de ataques não definida | Com menos da metade da vida, cada golpe cobre dois dos três lados; sobra um lado seguro. A regra de dois ataques e pausa de 10 s (B01) não muda. |
+| Boss — aparência e arena | Arte não aprovada | Manto roxo, medalhão dourado e salão roxo com colunas e rolos, conforme a prancha B01. |

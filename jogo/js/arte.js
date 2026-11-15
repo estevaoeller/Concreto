@@ -276,41 +276,102 @@ var Arte = (function () {
     c.globalAlpha = 1;
   }
 
-  // Monstro comum: o "Espinho" roxo do storyboard. (x, y) = meio dos pés. Fica parado (I02).
+  // Monstros do Mundo 1 (prancha P02): quatro aparências, mesmo comportamento. (x, y) = meio dos pés.
+  var CORES_MONSTRO = { espinho: '#a45cf0', planta: '#e8364a', cogumelo: '#e8364a', semente: '#f5c62a' };
+  function corMonstro(tipo) { return CORES_MONSTRO[tipo] || CORES_MONSTRO.espinho; }
+
+  function olhosBravos(c, dir, cx, cy, esc, corOlho) {
+    [-1, 1].forEach(function (s) {
+      var ex = cx + dir * 3 + s * 9 * esc;
+      c.fillStyle = corOlho || '#fff'; c.strokeStyle = '#2a1050'; c.lineWidth = 2;
+      c.beginPath(); c.ellipse(ex, cy, 6.5 * esc, 7 * esc, 0, 0, 7); c.fill(); c.stroke();
+      c.fillStyle = '#2a1050';
+      c.beginPath(); c.arc(ex + dir * 2 - s * 1.5, cy + 1, 2.8 * esc, 0, 7); c.fill();
+      c.lineWidth = 3.5; c.lineCap = 'round';
+      c.beginPath(); c.moveTo(ex + s * 8 * esc, cy - 12 * esc); c.lineTo(ex - s * 5 * esc, cy - 6 * esc); c.stroke();
+    });
+  }
+
   function monstro(c, x, y, m, t) {
-    var dir = m.olha, bal = Math.sin(t * 3 + m.x) * 1.5;
+    var dir = m.olha, bal = Math.sin(t * 3 + m.x) * 1.5, i;
     c.save();
     c.translate(x, y);
     if (m.piscando > 0) c.globalAlpha = 0.5;
     c.fillStyle = 'rgba(60,40,110,0.2)';
     c.beginPath(); c.ellipse(0, 2, 28, 5, 0, 0, 7); c.fill();
-    c.lineJoin = 'round';
-    c.fillStyle = '#a45cf0'; c.strokeStyle = '#4a1f8a'; c.lineWidth = 3;
-    c.beginPath(); // corpo espinhudo
-    var n = 11, cx = 0, cy = -24;
-    for (var i = 0; i <= n * 2; i++) {
-      var a = Math.PI + (i / (n * 2)) * Math.PI * 2;
-      var ponta = i % 2 === 1, baixo = Math.sin(a) > 0.55;
-      var r = ponta && !baixo ? 33 + bal : 24;
-      var px = cx + Math.cos(a) * r * 1.08, py = cy + Math.sin(a) * r * (baixo ? 1 : 0.95);
-      if (i === 0) c.moveTo(px, py); else c.lineTo(px, py);
+    c.lineJoin = 'round'; c.lineCap = 'round';
+    if (m.tipo === 'planta') {            // Planta Mordedora
+      c.strokeStyle = '#2c7a1b'; c.lineWidth = 6;
+      c.beginPath(); c.moveTo(0, 0); c.quadraticCurveTo(-dir * 8, -14, 0, -24); c.stroke();
+      c.fillStyle = '#58c02e'; c.lineWidth = 2.5;
+      c.beginPath(); c.ellipse(-16, -6, 15, 7, 0.5, 0, 7); c.fill(); c.stroke();
+      c.beginPath(); c.ellipse(16, -6, 15, 7, -0.5, 0, 7); c.fill(); c.stroke();
+      var ab = 0.35 + Math.abs(Math.sin(t * 3 + m.x)) * 0.25;
+      c.save(); c.translate(0, -36 + bal); c.scale(dir, 1);
+      c.fillStyle = '#7a1024';
+      c.beginPath(); c.arc(0, 0, 21, 0, 7); c.fill();
+      c.fillStyle = '#e8364a'; c.strokeStyle = '#8a1226'; c.lineWidth = 3;
+      c.beginPath(); c.moveTo(0, 0); c.arc(0, 0, 24, ab, Math.PI * 2 - ab); c.closePath(); c.fill(); c.stroke();
+      c.fillStyle = '#fff';
+      for (i = 0; i < 3; i++) {
+        var q = 7 + i * 6;
+        c.beginPath(); c.moveTo(q, -Math.tan(ab) * q); c.lineTo(q + 3, -Math.tan(ab) * q + 7); c.lineTo(q + 6, -Math.tan(ab) * (q + 6)); c.fill();
+        c.beginPath(); c.moveTo(q, Math.tan(ab) * q); c.lineTo(q + 3, Math.tan(ab) * q - 7); c.lineTo(q + 6, Math.tan(ab) * (q + 6)); c.fill();
+      }
+      c.fillStyle = '#fff'; c.beginPath(); c.arc(-6, -13, 3, 0, 7); c.arc(-14, -4, 2.2, 0, 7); c.fill();
+      c.strokeStyle = '#2a1050'; c.lineWidth = 3.5;
+      c.beginPath(); c.moveTo(-4, -20); c.lineTo(8, -15); c.stroke();
+      c.restore();
+    } else if (m.tipo === 'cogumelo') {   // Cogumelo Saltador
+      c.fillStyle = '#fbe9c6'; c.strokeStyle = '#9a7440'; c.lineWidth = 3;
+      retArred(c, -15, -30, 30, 30, 10); c.fill(); c.stroke();
+      c.fillStyle = '#e8364a'; c.strokeStyle = '#8a1226';
+      c.beginPath(); c.moveTo(-30, -26 + bal);
+      c.bezierCurveTo(-30, -64 + bal, 30, -64 + bal, 30, -26 + bal);
+      c.quadraticCurveTo(0, -18 + bal, -30, -26 + bal); c.closePath(); c.fill(); c.stroke();
+      c.fillStyle = '#fff';
+      c.beginPath(); c.arc(-14, -40 + bal, 5.5, 0, 7); c.arc(10, -46 + bal, 6.5, 0, 7); c.arc(20, -32 + bal, 3.5, 0, 7); c.fill();
+      olhosBravos(c, dir, 0, -15, 0.72);
+      c.strokeStyle = '#2a1050'; c.lineWidth = 2;
+      c.beginPath(); c.arc(dir * 3, -3, 4, Math.PI + 0.5, -0.5); c.stroke();
+    } else if (m.tipo === 'semente') {    // Semente Brotante
+      c.strokeStyle = '#2c7a1b'; c.lineWidth = 4;
+      c.beginPath(); c.moveTo(0, -40); c.lineTo(0, -52 + bal); c.stroke();
+      c.fillStyle = '#58c02e'; c.lineWidth = 2.5;
+      c.beginPath(); c.ellipse(-11, -56 + bal, 12, 7, 0.6, 0, 7); c.fill(); c.stroke();
+      c.beginPath(); c.ellipse(11, -56 + bal, 12, 7, -0.6, 0, 7); c.fill(); c.stroke();
+      c.fillStyle = '#f5c62a'; c.strokeStyle = '#a06a08'; c.lineWidth = 3;
+      c.beginPath(); c.ellipse(0, -21, 23, 21 + bal * 0.4, 0, 0, 7); c.fill(); c.stroke();
+      c.fillStyle = 'rgba(255,244,170,0.8)';
+      c.beginPath(); c.ellipse(-dir * 9, -31, 7, 4, -0.4 * dir, 0, 7); c.fill();
+      olhosBravos(c, dir, 0, -23, 0.85);
+      c.strokeStyle = '#2a1050'; c.lineWidth = 2.5;
+      c.beginPath(); c.arc(dir * 3, -7, 5, Math.PI + 0.5, -0.5); c.stroke();
+    } else {                              // Espinho
+      c.fillStyle = '#a45cf0'; c.strokeStyle = '#4a1f8a'; c.lineWidth = 3;
+      c.beginPath();
+      var n = 11, cy = -24;
+      for (i = 0; i <= n * 2; i++) {
+        var a = Math.PI + (i / (n * 2)) * Math.PI * 2;
+        var ponta = i % 2 === 1, baixo = Math.sin(a) > 0.55;
+        var r = ponta && !baixo ? 33 + bal : 24;
+        var px = Math.cos(a) * r * 1.08, py = cy + Math.sin(a) * r * (baixo ? 1 : 0.95);
+        if (i === 0) c.moveTo(px, py); else c.lineTo(px, py);
+      }
+      c.closePath(); c.fill(); c.stroke();
+      c.fillStyle = 'rgba(214,170,255,0.7)';
+      c.beginPath(); c.ellipse(-dir * 8, -36, 9, 5, -0.4 * dir, 0, 7); c.fill();
+      olhosBravos(c, dir, 0, -25, 1);
+      c.strokeStyle = '#2a1050'; c.lineWidth = 2.5;
+      c.beginPath(); c.arc(dir * 4, -8, 6, Math.PI + 0.5, -0.5); c.stroke();
     }
-    c.closePath(); c.fill(); c.stroke();
-    c.fillStyle = 'rgba(214,170,255,0.7)';
-    c.beginPath(); c.ellipse(-dir * 8, -36, 9, 5, -0.4 * dir, 0, 7); c.fill();
-    // olhos bravos
-    [-1, 1].forEach(function (s) {
-      var ex = dir * 4 + s * 9;
-      c.fillStyle = '#fff'; c.strokeStyle = '#2a1050'; c.lineWidth = 2;
-      c.beginPath(); c.ellipse(ex, -25, 7, 7.5, 0, 0, 7); c.fill(); c.stroke();
-      c.fillStyle = '#2a1050';
-      c.beginPath(); c.arc(ex + dir * 2 - s * 1.5, -24, 3, 0, 7); c.fill();
-      c.lineWidth = 4; c.lineCap = 'round';
-      c.beginPath(); c.moveTo(ex + s * 9, -37); c.lineTo(ex - s * 5, -30); c.stroke();
-    });
-    c.strokeStyle = '#2a1050'; c.lineWidth = 2.5;
-    c.beginPath(); c.arc(dir * 4, -8, 6, Math.PI + 0.5, -0.5); c.stroke();
-    // faca: só aparece quando Concreto está perto (I04)
+    // percebeu o Concreto: sinal de alerta, e a faca aparece (I04)
+    if (m.estado === 'preparando' && m.tempo < 0.35) {
+      c.strokeStyle = '#ffd84a'; c.lineWidth = 4;
+      [-0.5, 0, 0.5].forEach(function (g) {
+        c.beginPath(); c.moveTo(Math.sin(g) * 40, -62 - Math.cos(g) * 6); c.lineTo(Math.sin(g) * 54, -62 - Math.cos(g) * 20); c.stroke();
+      });
+    }
     if (m.estado !== 'calmo') {
       var av = 0;
       if (m.estado === 'preparando') av = -8 * Math.min(1, m.tempo / 0.3);
@@ -326,6 +387,36 @@ var Arte = (function () {
       c.restore();
     }
     c.restore();
+  }
+
+  // Coletável (PROVISÓRIO): gotinha brilhante.
+  function gotinha(c, x, y, t) {
+    c.save(); c.translate(x, y); c.scale(Math.cos(t * 3) * 0.25 + 0.85, 1);
+    c.fillStyle = 'rgba(234,255,160,0.35)'; c.beginPath(); c.arc(0, 0, 15, 0, 7); c.fill();
+    gota(c, 0, 3, 8);
+    c.restore();
+  }
+
+  function coracao(c, x, y, r, cheio) {
+    c.beginPath();
+    c.moveTo(x, y + r * 0.9);
+    c.bezierCurveTo(x - r * 1.5, y - r * 0.1, x - r * 0.9, y - r * 1.2, x, y - r * 0.45);
+    c.bezierCurveTo(x + r * 0.9, y - r * 1.2, x + r * 1.5, y - r * 0.1, x, y + r * 0.9);
+    c.closePath();
+    c.fillStyle = cheio ? '#ff4f7b' : 'rgba(40,20,60,0.35)'; c.fill();
+    c.strokeStyle = cheio ? '#a3123c' : 'rgba(255,255,255,0.5)'; c.lineWidth = Math.max(2, r * 0.2); c.lineJoin = 'round'; c.stroke();
+    if (cheio) { c.fillStyle = 'rgba(255,255,255,0.75)'; c.beginPath(); c.ellipse(x - r * 0.4, y - r * 0.35, r * 0.22, r * 0.14, -0.6, 0, 7); c.fill(); }
+  }
+
+  // Placa de madeira com dica.
+  function placa(c, x, y, s) {
+    c.font = '700 15px "Trebuchet MS", "Segoe UI", system-ui, sans-serif';
+    var w = c.measureText(s).width + 26;
+    c.fillStyle = '#8a5a2a'; c.fillRect(x - 5, y - 44, 10, 44);
+    c.fillStyle = '#c98a4a'; c.strokeStyle = '#6b3f18'; c.lineWidth = 3;
+    retArred(c, x - w / 2, y - 84, w, 42, 8); c.fill(); c.stroke();
+    c.fillStyle = '#3d2109'; c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.fillText(s, x, y - 62);
   }
 
   // Raio de geleca: jato comprido com respingos, como na prancha.
@@ -406,39 +497,27 @@ var Arte = (function () {
     c.fillText(s, x, y);
   }
 
-  // Vidas (gotinhas) e, se o ciclo estiver ligado, relógio de dia/noite.
-  function painel(c, vidas, relogio) {
-    for (var i = 0; i < CFG.vidas; i++) {
-      c.globalAlpha = i < vidas ? 1 : 0.22;
-      gota(c, 34 + i * 36, 42, 12);
-      c.globalAlpha = 1;
-    }
+  // Painel: corações de vida à esquerda, gotinhas coletadas à direita.
+  function painel(c, vidas, relogio, gotinhas, total) {
+    for (var i = 0; i < CFG.vidas; i++) coracao(c, 36 + i * 40, 40, 15, i < vidas);
+    c.fillStyle = 'rgba(8,20,16,0.4)';
+    retArred(c, W - 142, 18, 126, 42, 21); c.fill();
+    gota(c, W - 120, 42, 9);
+    texto(c, gotinhas + '/' + total, W - 62, 40, 19, '#f2fbf4');
     if (relogio.desligado) return;
-    var x = W - 44, y = 38;
+    var x = W - 44, y = 88;
     c.fillStyle = 'rgba(8,20,16,0.35)';
-    retArred(c, W - 150, 16, 134, 44, 22); c.fill();
-    if (relogio.noite) {
-      c.fillStyle = '#f4f1c9';
-      c.beginPath(); c.arc(x, y, 13, 0, 7); c.fill();
-      c.fillStyle = '#26324f';
-      c.beginPath(); c.arc(x + 6, y - 4, 11, 0, 7); c.fill();
-    } else {
-      c.fillStyle = '#ffd84a';
-      c.beginPath(); c.arc(x, y, 11, 0, 7); c.fill();
-      c.strokeStyle = '#ffd84a'; c.lineWidth = 3;
-      for (var k = 0; k < 8; k++) {
-        var a = k * Math.PI / 4;
-        c.beginPath(); c.moveTo(x + Math.cos(a) * 14, y + Math.sin(a) * 14);
-        c.lineTo(x + Math.cos(a) * 18, y + Math.sin(a) * 18); c.stroke();
-      }
-    }
+    retArred(c, W - 142, 66, 126, 44, 22); c.fill();
+    c.fillStyle = relogio.noite ? '#f4f1c9' : '#ffd84a';
+    c.beginPath(); c.arc(x, y, 11, 0, 7); c.fill();
     var m = Math.floor(relogio.falta / 60), s = Math.floor(relogio.falta % 60);
-    texto(c, (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s, W - 104, 39, 18, '#f2fbf4');
+    texto(c, (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s, W - 96, 89, 18, '#f2fbf4');
   }
 
   return {
     mistura: mistura, acaso: acaso, retArred: retArred, ceu: ceu, fundoPlantas: fundoPlantas,
     plataforma: plataforma, concreto: concreto, gota: gota, poca: poca, monstro: monstro, raio: raio,
-    portal: portal, texto: texto, painel: painel, flor: flor, CONTORNO: CONTORNO
+    portal: portal, texto: texto, painel: painel, flor: flor, CONTORNO: CONTORNO,
+    gotinha: gotinha, coracao: coracao, placa: placa, corMonstro: corMonstro
   };
 })();

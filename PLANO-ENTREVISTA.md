@@ -32,7 +32,7 @@ Perguntar uma por vez, ajustando conforme respostas:
 
 Atualizado após a rodada 010 (respondidas: dano por contato e faca, invulnerabilidade, queda, reinício, Cthulhu na fase 1; retirado o ciclo de dia e noite).
 
-1. "Agora que não tem mais noite, o boss aparece sempre no portal?"
+1. Respondida na rodada 011: entrar no portal leva ao boss. Revisar com o criador as escolhas delegadas (seção 13 da especificação), uma por vez, depois de ele jogar.
 2. "Você falou de uma espada e de um escudo. É para o Concreto ter no jogo? Como ele usaria?" Não presumir; a decisão vigente é A02 (sem espada).
 3. "Se o boss aparecer, precisa derrotá-lo para entrar no portal?"
 4. "A tela muda para primeira pessoa em todas as lutas de boss ou só na do Cthulhu? E todos têm a barrinha de vida grande?" Dividir em duas perguntas no diálogo.

@@ -14,8 +14,9 @@
 
   var T = CFG.tempo, cicloTotal = T.duracaoDia + T.duracaoNoite;
   var Jogo = {
-    estado: 'titulo',          // titulo | fase | boss | morrendo | derrota | vitoria
+    estado: 'titulo',          // titulo | fase | entrando | boss | morrendo | derrota | vitoria
     vidas: CFG.vidas,
+    gotinhas: 0,
     relogio: T.comecaDeDia ? 0 : T.duracaoDia,
     fase: Fase.criar(FASE1),
     boss: null,
@@ -32,7 +33,7 @@
   }
 
   function novaFase() {
-    Jogo.vidas = CFG.vidas;
+    Jogo.vidas = CFG.vidas; Jogo.gotinhas = 0;
     Jogo.fase = Fase.criar(FASE1);
     Jogo.boss = null; Jogo.teveBoss = false; Jogo.morreuNoBoss = false;
     Jogo.estado = 'fase';
@@ -61,11 +62,16 @@
     } else if (Jogo.estado === 'fase') {
       var r = Fase.atualizar(Jogo.fase, dt, Jogo);
       if (r === 'morreu') { Fase.espalhar(Jogo.fase); Jogo.estado = 'morrendo'; Jogo.espera = 2.4; Jogo.morreuNoBoss = false; }
-      if (r === 'portal') {
-        // Encontro no portal. Sem o ciclo de dia e noite, vale CFG.portal.chanceBoss.
+      if (r === 'portal') { Som.portal(); Jogo.estado = 'entrando'; Jogo.espera = 0.9; }
+    } else if (Jogo.estado === 'entrando') {
+      // Concreto é puxado para dentro do portal e vai enfrentar o boss (F05).
+      Fase.soParticulas(Jogo.fase, dt);
+      Jogo.espera -= dt;
+      Jogo.fase.j.entrando = Math.min(1, 1 - Jogo.espera / 0.9);
+      if (Jogo.espera <= 0) {
         var chance = !T.ativo ? CFG.portal.chanceBoss : (relogio().noite ? CFG.portal.chanceBossNoite : CFG.portal.chanceBossDia);
         if (Math.random() < chance) novoBoss();
-        else { Som.portal(); Jogo.estado = 'vitoria'; Jogo.espera = 0.8; }
+        else { Jogo.estado = 'vitoria'; Jogo.espera = 0.8; }
       }
     } else if (Jogo.estado === 'boss') {
       var rb = Boss.atualizar(Jogo.boss, dt, Jogo);
@@ -110,8 +116,10 @@
     } else {
       Fase.desenhar(c, Jogo.fase, rel.brilho, e === 'morrendo' || e === 'derrota' || e === 'vitoria');
     }
-    if (e !== 'titulo') Arte.painel(c, Jogo.vidas, rel);
+    if (e !== 'titulo') Arte.painel(c, Jogo.vidas, rel, Jogo.gotinhas, FASE1.gotinhas.length);
     if (e === 'fase' && Jogo.fase.t < 4) Arte.texto(c, 'Fase 1 — ' + FASE1.nome, W / 2, 110, 30, '#f2fbf4');
+    else if (e === 'fase' && Jogo.fase.avisoTrecho > 0) Arte.texto(c, FASE1.trechos[Jogo.fase.trecho].nome, W / 2, 110, 28, '#f2fbf4');
+    if (e === 'entrando') { c.fillStyle = 'rgba(244,226,255,' + (Jogo.fase.j.entrando * 0.9) + ')'; c.fillRect(0, 0, W, H); }
 
     if (e === 'titulo') {
       c.fillStyle = 'rgba(40,20,80,0.35)'; c.fillRect(0, 0, W, H);
@@ -126,6 +134,7 @@
     } else if (e === 'vitoria') {
       faixa('Você atravessou o portal!', [
         Jogo.teveBoss ? 'O ' + CFG.boss.nome + ' foi derrotado!' : (rel.desligado ? 'O portal estava livre.' : rel.noite ? 'Desta vez não tinha boss no portal.' : 'De dia o portal estava livre.'),
+        'Gotinhas: ' + Jogo.gotinhas + ' de ' + FASE1.gotinhas.length,
         'O Mundo 2 ainda está sendo inventado.'
       ], 'Toque ou aperte Enter para jogar de novo');
     }

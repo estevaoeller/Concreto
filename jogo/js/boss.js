@@ -9,7 +9,7 @@ var Boss = (function () {
       vida: B.vida, t: 0,
       lado: 0, visao: 0,            // lado do Concreto: -1, 0, 1 (visao segue o lado com suavidade)
       bossLado: 0, bossX: 0,
-      fase: 'entrada', tempo: 0, ataques: 0, alvo: 0, golpeou: false, trocou: 0,
+      fase: 'entrada', tempo: 0, ataques: 0, alvos: [], golpeou: false, trocou: 0, flash: 0,
       recarga: 0, tiros: [], avisos: [], particulas: [], invul: 0, tremor: 0, vencido: 0
     };
   }
@@ -22,6 +22,7 @@ var Boss = (function () {
     if (b.invul > 0) b.invul -= dt;
     if (b.recarga > 0) b.recarga -= dt;
     if (b.tremor > 0) b.tremor -= dt;
+    if (b.flash > 0) b.flash -= dt;
 
     if (Entrada.esqApertou && b.lado > -1) b.lado--;
     if (Entrada.dirApertou && b.lado < 1) b.lado++;
@@ -40,7 +41,7 @@ var Boss = (function () {
     } else if (b.fase === 'golpe') {
       if (!b.golpeou && b.tempo >= B.golpe * 0.5) {
         b.golpeou = true;
-        if (b.lado === b.alvo && b.invul <= 0) {
+        if (b.alvos.indexOf(b.lado) >= 0 && b.invul <= 0) {
           jogo.vidas--; b.invul = CFG.invencivelAposDano; b.tremor = 0.4; Som.dano();
         }
       }
@@ -72,7 +73,7 @@ var Boss = (function () {
       if (tiro.p < 1) return true;
       if (tiro.lado === b.bossLado && Math.abs(b.bossX - b.bossLado) < 0.35) {
         if (b.fase === 'pausa' || !B.danoSoNaPausa) {
-          b.vida -= CFG.raio.dano; Som.acerto();
+          b.vida -= CFG.raio.dano; b.flash = 0.12; Som.acerto();
           respingo(b, tiro.lado);
           if (b.vida <= 0) { b.vida = 0; b.fase = 'vencido'; b.vencido = 0; Som.vitoria(); }
         } else { recado(b, 'Bloqueou!', '#ffd0d0'); Som.bloqueio(); }
@@ -89,7 +90,12 @@ var Boss = (function () {
   }
 
   function iniciarAviso(b) {
-    b.fase = 'aviso'; b.tempo = 0; b.alvo = b.lado; // mira onde o Concreto está agora
+    b.fase = 'aviso'; b.tempo = 0;
+    b.alvos = [b.lado];                             // mira onde o Concreto está agora
+    if (b.vida / B.vida <= B.ondaAbaixoDe) {        // onda de papel: cobre dois lados, sobra um seguro
+      var outros = [-1, 0, 1].filter(function (l) { return l !== b.lado; });
+      b.alvos.push(outros[Math.floor(Math.random() * 2)]);
+    }
     Som.aviso();
   }
   function respingo(b, lado) {
@@ -122,6 +128,20 @@ var Boss = (function () {
     c.translate(x, y + (cansado ? 30 : 0) + Math.sin(t * 2) * 6);
     c.globalAlpha = some;
     if (vencido) c.rotate(b.vencido * 0.25);
+    if (b.flash > 0) c.scale(1.05, 1.05);
+    // manto cósmico roxo com barra dourada (prancha B01)
+    c.fillStyle = '#4a1f9a'; c.strokeStyle = '#2a0f5e'; c.lineWidth = 4; c.lineJoin = 'round';
+    c.beginPath(); c.moveTo(-84, 10);
+    c.quadraticCurveTo(-170, 90, -196, 215); c.quadraticCurveTo(0, 250, 196, 215);
+    c.quadraticCurveTo(170, 90, 84, 10); c.closePath(); c.fill(); c.stroke();
+    c.strokeStyle = '#f2b824'; c.lineWidth = 9;
+    c.beginPath(); c.moveTo(-190, 205); c.quadraticCurveTo(0, 240, 190, 205); c.stroke();
+    c.fillStyle = '#ffe9a0';
+    [[-120, 150], [-70, 190], [96, 130], [140, 185], [-150, 195], [40, 205]].forEach(function (e, n) {
+      c.globalAlpha = some * (0.5 + 0.5 * Math.sin(t * 3 + n));
+      c.beginPath(); c.arc(e[0], e[1], 2.5, 0, 7); c.fill();
+    });
+    c.globalAlpha = some;
     // tiras compridas voando dos lados
     [-1, 1].forEach(function (s) {
       for (var k = 0; k < 2; k++) {
@@ -135,6 +155,12 @@ var Boss = (function () {
       var abre = cansado ? 0.5 : 1;
       tira(c, [[i * 20, 40], [i * 34 * abre + w1, 40 + comp * 0.45], [i * 52 * abre - w1, 40 + comp * 0.8], [i * 62 * abre + w1 * 0.6, 40 + comp + (cansado ? 20 : 0)]], 17);
     }
+    // medalhão dourado com um rolinho
+    c.fillStyle = '#f2b824'; c.strokeStyle = '#8a5a08'; c.lineWidth = 4;
+    c.beginPath(); c.arc(0, 104, 24, 0, 7); c.fill(); c.stroke();
+    c.fillStyle = '#fff'; c.strokeStyle = '#8f86b8'; c.lineWidth = 2;
+    Arte.retArred(c, -11, 94, 22, 22, 5); c.fill(); c.stroke();
+    c.fillStyle = '#8a5a34'; c.beginPath(); c.ellipse(0, 96, 6, 2.5, 0, 0, 7); c.fill();
     // corpo = rolo de papel
     var g = c.createLinearGradient(-90, 0, 90, 0);
     g.addColorStop(0, '#d9d4ee'); g.addColorStop(0.35, '#ffffff'); g.addColorStop(1, '#cfc9e6');
@@ -175,6 +201,15 @@ var Boss = (function () {
     c.restore();
   }
 
+  function roloEmPe(c, x, y, e) { // rolo visto de lado, para empilhar na arena
+    c.fillStyle = '#f4f1ff'; c.strokeStyle = '#8f86b8'; c.lineWidth = 2.5;
+    Arte.retArred(c, x - 22 * e, y - 34 * e, 44 * e, 36 * e, 7 * e); c.fill(); c.stroke();
+    c.fillStyle = '#ffffff';
+    c.beginPath(); c.ellipse(x, y - 34 * e, 22 * e, 7 * e, 0, 0, 7); c.fill(); c.stroke();
+    c.fillStyle = '#8a5a34';
+    c.beginPath(); c.ellipse(x, y - 34 * e, 8 * e, 2.6 * e, 0, 0, 7); c.fill();
+  }
+
   function rolo(c, x, y, r) {
     c.fillStyle = '#ffffff'; c.strokeStyle = '#9aa2b3'; c.lineWidth = 3;
     c.beginPath(); c.arc(x, y, r, 0, 7); c.fill(); c.stroke();
@@ -189,40 +224,45 @@ var Boss = (function () {
   function desenhar(c, b, noite, vidas) {
     c.save();
     if (b.tremor > 0) c.translate((Math.random() - 0.5) * 16, (Math.random() - 0.5) * 12);
-    Arte.ceu(c, noite, b.t);
-    Arte.fundoPlantas(c, 4800 + b.visao * 120, noite);
-    // chão em perspectiva
+    // arena da prancha B01: salão roxo cósmico, com chão de pedra
+    var ceu = c.createLinearGradient(0, 0, 0, 340);
+    ceu.addColorStop(0, '#231048'); ceu.addColorStop(1, '#6b3bb0');
+    c.fillStyle = ceu; c.fillRect(-20, -20, W + 40, 372);
+    c.fillStyle = 'rgba(255,240,255,0.8)';
+    for (var e = 0; e < 40; e++) {
+      var ex = ((Arte.acaso(e) * (W + 200) - b.visao * 40) % (W + 40) + W + 40) % (W + 40) - 20;
+      c.beginPath(); c.arc(ex, Arte.acaso(e + 50) * 300, 1 + Arte.acaso(e + 9) * 1.6 + Math.sin(b.t * 2 + e) * 0.4, 0, 7); c.fill();
+    }
+    var luz = c.createRadialGradient(W / 2, 210, 20, W / 2, 210, 430);
+    luz.addColorStop(0, 'rgba(255,214,250,0.4)'); luz.addColorStop(1, 'rgba(255,214,250,0)');
+    c.fillStyle = luz; c.fillRect(-20, -20, W + 40, 372);
     var g = c.createLinearGradient(0, 330, 0, H);
-    g.addColorStop(0, Arte.mistura([84, 170, 92], [30, 70, 66], noite));
-    g.addColorStop(1, Arte.mistura([58, 128, 70], [20, 48, 50], noite));
+    g.addColorStop(0, '#7a5ab8'); g.addColorStop(1, '#3c2670');
     c.fillStyle = g; c.fillRect(-20, 330, W + 40, H);
-    c.strokeStyle = 'rgba(255,255,255,0.14)'; c.lineWidth = 3;
+    c.strokeStyle = 'rgba(255,255,255,0.16)'; c.lineWidth = 3;
     [-1.5, -0.5, 0.5, 1.5].forEach(function (l) {
       c.beginPath(); c.moveTo(W / 2 + (l - b.visao) * PASSO * 0.45, 330);
       c.lineTo(W / 2 + (l - b.visao) * PASSO * 1.9, H); c.stroke();
     });
-    // arena do storyboard: clima roxo, colunas de pedra com cipó e rolinhos no chão
-    c.fillStyle = 'rgba(72,30,120,0.42)'; c.fillRect(-20, -20, W + 40, 352);
-    var luz = c.createRadialGradient(W / 2, 200, 20, W / 2, 200, 420);
-    luz.addColorStop(0, 'rgba(255,236,170,0.35)'); luz.addColorStop(1, 'rgba(255,236,170,0)');
-    c.fillStyle = luz; c.fillRect(-20, -20, W + 40, 352);
+    [372, 430, 500].forEach(function (yy) { c.beginPath(); c.moveTo(-20, yy); c.lineTo(W + 20, yy); c.stroke(); });
     [-2.1, -1.35, 1.35, 2.1].forEach(function (l, i) {
       var px = W / 2 + (l - b.visao * 0.6) * PASSO, larg = 46 + (i % 2) * 14;
-      c.fillStyle = '#a99a84'; c.strokeStyle = '#5e5346'; c.lineWidth = 3;
+      c.fillStyle = '#b9a6d8'; c.strokeStyle = '#4a3578'; c.lineWidth = 3;
       c.fillRect(px - larg / 2, -10, larg, 346); c.strokeRect(px - larg / 2, -10, larg, 346);
       c.fillRect(px - larg / 2 - 8, 316, larg + 16, 22); c.strokeRect(px - larg / 2 - 8, 316, larg + 16, 22);
       c.strokeStyle = '#3f9a3a'; c.lineWidth = 5;
       c.beginPath(); c.moveTo(px - larg / 2, 20);
       c.bezierCurveTo(px + larg, 90, px - larg, 170, px + larg / 2, 250); c.stroke();
     });
-    Arte.portal(c, xTela(b, 0) * 0.3 + W * 0.35, 344, b.t);
-    [-1.7, -0.8, 0.9, 1.75].forEach(function (l) { rolo(c, W / 2 + (l - b.visao * 0.8) * PASSO, 356, 17); });
+    [[-1.75, 0, 1], [-1.55, 0, 1], [-1.65, 1, 1], [-0.85, 0, 0.8], [0.95, 0, 0.8], [1.6, 0, 1], [1.8, 0, 1], [1.7, 1, 1]].forEach(function (r) {
+      roloEmPe(c, W / 2 + (r[0] - b.visao * 0.8) * PASSO, 372 - r[1] * 34 * r[2], r[2]);
+    });
 
     desenharBoss(c, b, xTela(b, b.bossX), 220);
 
     // aviso e golpe de papel higiênico
-    if (b.fase === 'aviso' || b.fase === 'golpe') {
-      var ax = xTela(b, b.alvo);
+    if (b.fase === 'aviso' || b.fase === 'golpe') b.alvos.forEach(function (alvoLado) {
+      var ax = xTela(b, alvoLado);
       if (b.fase === 'aviso') {
         var k = b.tempo / B.aviso, pisca = Math.floor(b.t * 10) % 2;
         c.fillStyle = 'rgba(255,80,60,' + (0.12 + 0.2 * k) + ')';
@@ -244,7 +284,7 @@ var Boss = (function () {
         c.setLineDash([]);
         rolo(c, ax, 90, 42);
       }
-    }
+    });
 
     // tiros de geleca indo para longe
     b.tiros.forEach(function (tiro) {
@@ -291,7 +331,7 @@ var Boss = (function () {
       var falta = Math.ceil(B.pausa - b.tempo);
       Arte.texto(c, 'Ele cansou! Atire o raio!  ' + falta, W / 2, 92, 24, '#fff27a');
     } else if (b.fase === 'aviso' || b.fase === 'golpe') {
-      Arte.texto(c, 'Cuidado! Vá para o lado!', W / 2, 92, 22, '#ffb0a6');
+      Arte.texto(c, b.alvos.length > 1 ? 'Onda de papel! Ache o lado livre!' : 'Cuidado! Vá para o lado!', W / 2, 92, 22, '#ffb0a6');
     } else if (b.fase === 'entrada') {
       Arte.texto(c, 'O ' + B.nome + ' apareceu!', W / 2, 300, 34, '#f2fbf4');
     } else if (b.fase === 'vencido') {
