@@ -128,3 +128,12 @@ Respostas recebidas por transcrição de voz, com trechos truncados. Registrado 
 - Protótipo ampliado: fase em três trechos; 62 gotinhas coletáveis com contador; dois corações que devolvem vida; vidas mostradas como corações; quatro aparências de monstro da prancha P02 com sinal de alerta; pulo mais tolerante; placas de dica; entrada animada no portal; Cthulhu com manto e medalhão em salão roxo, com a onda de papel abaixo de metade da vida.
 - Mantido sem alteração: Concreto sem espada (A02), monstros parados (I02), dois ataques e pausa de 10 s (B01), luta em primeira pessoa (B04), aviso de papel higiênico (B05).
 - Testes: criado `testes/percurso.js`, com 21 verificações no navegador identificadas pelos IDs da especificação. Resultado nesta rodada: todas passaram. Limitação: é um robô; dificuldade e diversão para uma criança de 9 anos não foram testadas.
+
+## 2026-11-16 — Rodada 012 — Cinco mundos jogáveis
+
+- Pedido do responsável: fazer todos os mundos, seguindo boas práticas e as referências. Corresponde à etapa D6 do plano, antecipada em relação à validação da Fase 1 pelo criador; o risco é retrabalho se ele mudar regras básicas.
+- Implementados os cinco mundos na ordem de F01, cada um com fase em três trechos, quatro aparências de monstro, portal e boss próprio (C04, F02, F03). A regra B01 é a mesma para os cinco bosses.
+- Mundos 2 e 5 construídos com as versões originais das pranchas: Mundo Vulcânico com a Rainha de Lava e Mundo dos Blocos com o Guardião de Blocos. Malgosha, Nether e Lego não foram reproduzidos, por serem personagens e marcas de terceiros. Fica como ponto a conversar com o criador.
+- Escolhas novas, todas provisórias e listadas na seção 13 da especificação v0.8: formato de luta comum aos bosses, identidade de cada boss, mecânicas de cenário (lava, plataformas móveis, almofadas), progressão com escolha de mundo e progresso salvo, tela final e pausa.
+- Removido do código o ciclo de dia e noite, já retirado pelo criador na rodada 010.
+- Testes: `testes/percurso.js` passou a jogar os cinco mundos (travessia, portal, boss e liberação do seguinte) além das regras por ID. Resultado: todas as verificações passaram. Limitação: o robô não mede dificuldade nem diversão; os mundos 2 a 5 nunca foram jogados por uma pessoa.

@@ -3,7 +3,7 @@ var Entrada = (function () {
   var e = {
     esq: false, dir: false, pulo: false, ataque: false,
     esqApertou: false, dirApertou: false, puloApertou: false, ataqueApertou: false,
-    confirmou: false, pulouTempo: false, toque: null
+    confirmou: false, pausou: false, toque: null
   };
   var teclas = {
     ArrowLeft: 'esq', a: 'esq', A: 'esq',
@@ -21,7 +21,7 @@ var Entrada = (function () {
     var nome = teclas[ev.key];
     if (nome) { baixar(nome); ev.preventDefault(); }
     if (ev.key === 'Enter') { e.confirmou = true; ev.preventDefault(); }
-    if (ev.key === 'n' || ev.key === 'N') e.pulouTempo = true;
+    if (ev.key === 'p' || ev.key === 'P' || ev.key === 'Escape') e.pausou = true;
     Som.acordar();
   });
   window.addEventListener('keyup', function (ev) {
@@ -64,7 +64,7 @@ var Entrada = (function () {
 
   e.limparQuadro = function () {
     e.esqApertou = e.dirApertou = e.puloApertou = e.ataqueApertou = false;
-    e.confirmou = false; e.pulouTempo = false; e.toque = null;
+    e.confirmou = false; e.pausou = false; e.toque = null;
   };
   return e;
 })();
@@ -100,6 +100,7 @@ var Som = (function () {
     acerto: function () { bip(520, 0.08, 'square', 760, 0.07); },
     bloqueio: function () { bip(180, 0.08, 'square', 160, 0.06); },
     aviso: function () { bip(880, 0.12, 'square', 880, 0.06); },
+    mola: function () { bip(260, 0.25, 'sine', 900, 0.12); },
     gotinha: function () { bip(900, 0.07, 'sine', 1400, 0.07); },
     vida: function () { bip(500, 0.12, 'triangle', 900); setTimeout(function () { bip(900, 0.2, 'triangle', 1300); }, 110); },
     percebeu: function () { bip(1100, 0.07, 'square', 1100, 0.04); },

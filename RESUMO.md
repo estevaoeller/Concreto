@@ -1,4 +1,4 @@
-# O jogo do Concreto — versão 0.7
+# O jogo do Concreto — versão 0.8
 
 ## O que já inventamos
 
@@ -28,9 +28,15 @@ Todos os bosses atacam duas vezes. Depois do segundo ataque, ficam 10 segundos s
 
 O Cthulhu Higiênico parece um Cthulhu de papel higiênico. Quando você luta contra ele, a visão fica em primeira pessoa (como se estivesse olhando pelos olhos do Concreto). Quando ele vai atacar, aparece um papel higiênico. Ele tem uma barrinha de vida bem grande, como a dos bosses do Minecraft.
 
-## Já dá para jogar um pedacinho!
+## Já dá para jogar os cinco mundos!
 
-Fizemos uma versão de teste do Mundo das Plantas, com três trechos, quatro monstros diferentes e a luta contra o Cthulhu Higiênico depois do portal. Algumas coisas que você ainda não decidiu, nós inventamos para o jogo ficar divertido: gotinhas para pegar, corações que devolvem vida e uma onda de papel quando o Cthulhu está quase perdendo. Jogue e conte o que fica, o que muda e o que sai!
+Fizemos uma versão de teste com os cinco mundos, cada um com seus monstros e seu boss. Quando você vence um boss, o próximo mundo abre.
+
+Algumas coisas que você ainda não decidiu, nós inventamos para o jogo ficar divertido: gotinhas para pegar, corações que devolvem vida, plataformas que se mexem no céu, almofadas que jogam para o alto no mundo de pelúcia e um jeito de cada boss atacar.
+
+Duas coisas ficaram diferentes do que você pediu, porque a Malgosha e o Lego são de outras pessoas: o boss do mundo 2 é a Rainha de Lava e o mundo 5 é de blocos de montar, com o Guardião de Blocos. Dá para conversar sobre isso!
+
+Jogue e conte o que fica, o que muda e o que sai.
 
 ## O que vamos descobrir depois
 

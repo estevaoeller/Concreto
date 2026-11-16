@@ -4,9 +4,9 @@ Jogo de plataforma em fase de descoberta e preparação para desenvolvimento. Co
 
 ## Estado atual
 
-Especificação v0.7 (2026-11-15): personagem, controles básicos, três vidas, portais, cinco mundos temáticos e padrão de combate contra bosses. Pacote de preparação para desenvolvimento e produção visual publicado. Ainda existem regras a validar.
+Especificação v0.8 (2026-11-16). Existe um protótipo jogável dos cinco mundos em [`jogo/`](jogo/), autorizado pelo responsável como instrumento de validação do design. Cada mundo tem fase em três trechos, monstros próprios, portal e boss.
 
-Existe um protótipo jogável da Fase 1 em [`jogo/`](jogo/), autorizado pelo responsável como instrumento de validação do design. As regras ainda não decididas pelo criador foram preenchidas com valores provisórios, todos identificados em [`jogo/js/config.js`](jogo/js/config.js) e na seção 13 da especificação. Valor provisório não é requisito.
+As regras ainda não decididas pelo criador foram preenchidas com escolhas provisórias, identificadas em [`jogo/js/config.js`](jogo/js/config.js), em [`jogo/js/mundos.js`](jogo/js/mundos.js) e na seção 13 da especificação. Escolha provisória não é requisito. Os mundos 2 e 5 usam as versões originais das pranchas, sem personagens ou marcas de terceiros.
 
 ## Como jogar o protótipo
 
@@ -15,6 +15,7 @@ Abrir `jogo/index.html` no navegador (não precisa instalar nada nem de internet
 - Teclado: setas ou A/D andam, espaço pula, X solta o raio de geleca, Enter confirma.
 - Celular ou tablet: botões na tela.
 - Na luta contra o boss: esquerda/direita mudam de lado, X (ou RAIO) atira.
+- Tela inicial: escolha o mundo com as setas ou tocando nele. Tecla P ou o botão de pausa pausam o jogo.
 - Gotinhas contam pontos; corações devolvem uma vida. Entrar no portal leva à luta contra o boss.
 
 Para gerar um arquivo HTML único (fácil de enviar): `node ferramentas/empacotar.js`.
@@ -41,7 +42,7 @@ Para rodar os testes (precisa de Node e do Playwright com Chromium): `node teste
 - [Plano de desenvolvimento](DESENVOLVIMENTO.md): etapas, MVP proposto, bloqueios, arquitetura preliminar e critérios de aceitação.
 - [AGENTS.md](AGENTS.md): instruções e prompt inicial para o agente de desenvolvimento.
 - Desenvolvimento na nuvem. A ferramenta mencionada como Fable Five ainda precisa ser identificada e avaliada.
-- Situação: protótipo da Fase 1 cobre D1 a D4 com arte provisória desenhada por código. Próximo passo: validar stack e premissas com o responsável e o criador, e alinhar a arte às pranchas quando os PNGs forem enviados.
+- Situação: protótipo cobre D1 a D6 com arte provisória desenhada por código a partir das pranchas. Próximo passo: o criador jogar e revisar as escolhas provisórias; depois, D7 (acabamento).
 
 ## Processo
 

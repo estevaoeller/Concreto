@@ -1,7 +1,7 @@
 # Concreto — Especificação do jogo
 
-Versão: 0.7 — 2026-11-15
-Estado: descoberta e design, com protótipo jogável da Fase 1 autorizado pelo responsável (ver seções 11 e 13). O protótipo não encerra a descoberta nem converte premissas provisórias em requisitos.
+Versão: 0.8 — 2026-11-16
+Estado: descoberta e design, com protótipo jogável dos cinco mundos autorizado pelo responsável (ver seções 11 e 13). O protótipo não encerra a descoberta nem converte premissas provisórias em requisitos.
 Convenção: requisitos numerados são decisões confirmadas, salvo indicação explícita de interpretação, proposta ou pendência. Referências visuais não são assets aprovados.
 
 ## 1. Conceito e ciclo principal
@@ -145,9 +145,13 @@ Não há desenhos, sprites ou áudio aprovados. O estilo e o formato técnico pe
 
 ## 11. Implementação
 
-Protótipo da Fase 1 em `jogo/`: HTML, CSS e JavaScript puros, Canvas 2D, resolução lógica 960×540, teclado e botões de toque, gráficos desenhados por código e sons sintetizados. Sem dependências, sem build, sem assets de terceiros. A escolha visa a iteração rápida com o criador e não é decisão definitiva de motor ou arquitetura. A primeira pessoa é resolvida em 2D (três posições laterais), sem renderização 3D.
+Protótipo dos cinco mundos em `jogo/`: HTML, CSS e JavaScript puros, Canvas 2D, resolução lógica 960×540, teclado e botões de toque, gráficos desenhados por código e sons sintetizados. Sem dependências, sem build, sem assets de terceiros. A escolha visa a iteração rápida com o criador e não é decisão definitiva de motor ou arquitetura. A primeira pessoa é resolvida em 2D (três posições laterais), sem renderização 3D.
 
-Fora do protótipo: fases 2 a 5 e seus bosses, persistência, itens, pontuação, história e arte/áudio definitivos. Distribuição e direitos de uso das referências continuam em aberto. Não presumir que botões na tela restringem o jogo a dispositivos móveis. A ferramenta mencionada como Fable Five ainda precisa ser identificada e avaliada. A combinação de exploração lateral e combate em primeira pessoa deve ser tratada como requisito funcional de perspectiva, sem impor motor 2D/3D ou arquitetura antes da avaliação.
+Organização do código: `config.js` (números e regras), `entrada.js` (teclado, toque e sons), `arte.js` e `temas.js` (desenho), `mundos.js` (dados dos cinco mundos e construtor de fases), `fase.js` (exploração lateral), `boss.js` (lutas), `principal.js` (telas e progressão). A regra de dois ataques e pausa de 10 s está em um único lugar e vale para os cinco bosses.
+
+Mundos 2 e 5: o protótipo usa as versões originais das pranchas (mundo vulcânico com a Rainha de Lava; mundo de blocos de montar com o Guardião de Blocos). Não reproduz a Malgosha, o Nether nem a marca Lego. A intenção criativa do criador continua registrada na seção 7; a troca vale para o que é construído e publicado.
+
+Fora do protótipo: história, final narrativo, itens além de gotinhas e corações, e arte e áudio definitivos. Distribuição pública continua dependendo de autorização. Não presumir que botões na tela restringem o jogo a dispositivos móveis. A ferramenta mencionada como Fable Five ainda precisa ser identificada e avaliada.
 
 ## 12. Próxima rodada
 
@@ -182,3 +186,10 @@ Valores adotados para tornar o protótipo jogável e, desde a rodada 011, escolh
 | Portal | Transição não definida | Concreto é puxado para dentro do portal e a tela clareia antes da luta. |
 | Boss — onda de papel | Variedade de ataques não definida | Com menos da metade da vida, cada golpe cobre dois dos três lados; sobra um lado seguro. A regra de dois ataques e pausa de 10 s (B01) não muda. |
 | Boss — aparência e arena | Arte não aprovada | Manto roxo, medalhão dourado e salão roxo com colunas e rolos, conforme a prancha B01. |
+| Bosses 2 a 5 — formato da luta | Primeira pessoa e barra grande valem para todos? | Sim para todos, com o mesmo formato do Cthulhu: três lados, aviso temático antes de cada golpe, raio só na pausa. |
+| Bosses 2 a 5 — identidade | Ataques e avisos personalizados | Rainha de Lava (cubo de lava; o lado atingido fica em brasa por 1,2 s), Anjo (estrela de luz), Coelho de Pelúcia (bola de algodão; troca de lado mais rápido), Guardião de Blocos (peça; golpe sempre em dois lados). Vida crescente: 24, 28, 30, 32 e 40. |
+| Mundos 2 a 5 — fases | Desenho das fases e mecânicas de cenário | Três trechos por mundo. Mundo 2: lava nos buracos. Mundo 3: plataformas que se mexem. Mundo 4: almofadas que jogam para o alto. Mundo 5: as duas coisas. Cair continua valendo V06 em todos. |
+| Mundos 2 a 5 — monstros | Tipos por mundo | Quatro aparências por mundo, da prancha P02; todos parados e com faca. |
+| Progressão | Desbloqueio, persistência e vidas entre mundos | Vencer o boss libera o mundo seguinte; tela de escolha de mundo; progresso e recorde de gotinhas guardados no aparelho; três vidas ao começar cada mundo. |
+| Final | O que acontece depois do último boss | Tela de comemoração com o total de gotinhas. O final da história continua em aberto. |
+| Pausa | Não definida | Botão na tela e tecla P; permite voltar à escolha de mundos. |

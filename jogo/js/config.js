@@ -22,6 +22,8 @@ var CFG = {
   empurrao: { vx: 320, vy: 380 }, // confirmado que existe (V03); força PROVISÓRIA
   quedaTiraVida: true,         // confirmado (V06): cair no buraco tira 1 vida e volta para a última plataforma
 
+  mola: { forca: 1.45 },       // PROVISÓRIO: a almofada joga 1,45 vez mais alto que o pulo
+
   raio: {
     velocidade: 700,           // PROVISÓRIO
     alcance: 380,              // PROVISÓRIO
@@ -39,33 +41,15 @@ var CFG = {
     alcanceFaca: 62            // PROVISÓRIO
   },
 
-  tempo: {
-    ativo: false,              // DESLIGADO na rodada 010: o criador retirou a noite (T01/T02 substituídas). Reversível.
-    duracaoDia: 30 * 60,       // confirmado (T01), em segundos
-    duracaoNoite: 30 * 60,     // confirmado (T01)
-    comecaDeDia: true,         // PROVISÓRIO
-    contaSoJogando: true,      // PROVISÓRIO (relógio do jogo, não o relógio de verdade)
-    atalhoDeTeste: true        // FERRAMENTA DE TESTE: tocar no sol/lua (ou tecla N) pula para o outro período
-  },
-
-  portal: {
-    chanceBoss: 1,             // confirmado (F05, rodada 011): entrou no portal, enfrenta o boss
-    chanceBossNoite: 0.5,      // só vale com tempo.ativo = true (regra antiga T02)
-    chanceBossDia: 0,          // só vale com tempo.ativo = true
-    precisaVencerBoss: true    // PROVISÓRIO
-  },
+  // Ciclo de dia e noite: retirado pelo criador na rodada 010 (código removido na rodada 012; ver histórico do git).
 
   boss: {
-    nome: 'Cthulhu Higiênico', // confirmado (B03); boss da fase 1 confirmado (F04)
-    vida: 24,                  // PROVISÓRIO
+    // Valores padrão. Nome, vida e tempos de cada boss ficam em mundos.js.
     ataquesPorCiclo: 2,        // confirmado (B01)
     pausa: 10,                 // confirmado (B01), segundos
-    aviso: 1.1,                // PROVISÓRIO (tempo do papel higiênico de aviso — B05)
     golpe: 0.4,                // PROVISÓRIO
     entreAtaques: 0.6,         // PROVISÓRIO
     danoSoNaPausa: true,       // PROVISÓRIO (pendente: dano fora da janela)
-    ondaAbaixoDe: 0.5,         // PROVISÓRIO: com menos da metade da vida, o golpe cobre dois lados (sobra um seguro)
-    trocaDeLado: 2.5,          // PROVISÓRIO (na pausa o boss muda de lado a cada X s)
     desviarPelosLados: true,   // PROVISÓRIO (interpretação de "bater nos lados": andar para o lado para escapar)
     recomecaNoBoss: true       // confirmado (V07): perdeu no boss, recomeça a luta
   },

@@ -17,8 +17,9 @@ function confere(nome, ok, detalhe) {
   p.on('pageerror', e => erros.push(String(e)));
   p.on('console', m => { if (m.type() === 'error') erros.push(m.text()); });
   const foto = async nome => { if (capturas) await p.screenshot({ path: path.join(capturas, nome + '.png') }); };
-  const novaFase = async () => { await p.goto(pagina); await p.waitForTimeout(300); await p.keyboard.press('Enter'); await p.waitForTimeout(300); };
+  const novaFase = async (m) => { await p.goto(pagina); await p.waitForTimeout(300); await p.evaluate(m => Jogo.novaFase(m || 0), m); await p.waitForTimeout(200); };
 
+  await p.goto(pagina); await p.evaluate(() => { try { localStorage.clear(); } catch (e) {} });
   await p.goto(pagina); await p.waitForTimeout(400); await foto('1-titulo');
   await p.keyboard.press('Enter'); await p.waitForTimeout(500); await foto('2-fase');
 
@@ -84,31 +85,64 @@ function confere(nome, ok, detalhe) {
   confere('V04 sem vidas, o vento espalha a geleca', r.estado === 'morrendo' && r.particulas > 30, r);
   confere('V07 sem vidas recomeça a fase do início', r.depois === 'fase' && r.vidas === 3 && r.x === 90, r);
 
-  // C01–C03, M01–M03: robô atravessa a fase inteira andando, pulando e atirando
-  await novaFase();
-  r = await p.evaluate(() => {
-    const J = Jogo, d = FASE1; let n = 0;
-    const apoio = (x, y) => d.plataformas.some(pl => x > pl.x && x < pl.x + pl.w && pl.y >= y - 2);
-    while (J.estado === 'fase' && n < 60 * 240) {
-      const j = J.fase.j;
-      const m = J.fase.monstros.find(m => m.vida > 0 && m.x > j.x && m.x - j.x < 190 && Math.abs(m.y - j.y) < 60);
-      Entrada.dir = !m || !j.noChao;
-      if (n % 25 === 0) Entrada.ataqueApertou = true;
-      if (j.noChao && !m && !apoio(j.x + 36, j.y)) { Entrada.puloApertou = true; Entrada.pulo = true; }
-      else if (j.noChao) Entrada.pulo = false;
-      J.passo(1 / 60); n++;
-    }
-    Entrada.dir = Entrada.pulo = false;
-    return { estado: J.estado, x: Math.round(J.fase.j.x), seg: Math.round(n / 60), vidas: J.vidas, gotinhas: J.gotinhas, total: d.gotinhas.length };
-  });
-  confere('C01–C03 a fase pode ser atravessada até o portal', r.estado === 'entrando', r);
-  await p.waitForTimeout(250); await foto('3-portal');
+  // C01–C04, M01–M03, F01–F03: em cada um dos cinco mundos, o robô atravessa a fase, entra no portal e vence o boss
+  const robos = () => {
+    window.roboFase = () => {
+      const J = Jogo, d = MUNDOS[J.mundo].fase; let n = 0;
+      const apoio = (x, y) => d.plataformas.some(pl => x > pl.x && x < pl.x + pl.w && pl.y >= y - 4);
+      while (J.estado === 'fase' && n < 60 * 300) {
+        const j = J.fase.j;
+        const m = J.fase.monstros.find(m => m.vida > 0 && m.x > j.x && m.x - j.x < 190 && Math.abs(m.y - j.y) < 60);
+        Entrada.dir = !m || !j.noChao;
+        if (!j.noChao && j.vy > 0 && apoio(j.x, j.y) && !apoio(j.x + 40, j.y)) Entrada.dir = false; // pousa em vez de passar do ponto
+        if (n % 25 === 0) Entrada.ataqueApertou = true;
+        const naMola = J.fase.molas.some(mo => j.x > mo.x - 80 && j.x < mo.x + mo.w + 10);
+        if (j.noChao && !m && !naMola && !apoio(j.x + 36, j.y)) { Entrada.puloApertou = true; Entrada.pulo = true; }
+        else if (j.noChao) Entrada.pulo = false;
+        J.passo(1 / 60); n++;
+      }
+      Entrada.dir = Entrada.pulo = false;
+      return { estado: J.estado, x: Math.round(J.fase.j.x), de: d.portalX, seg: Math.round(n / 60), vidas: J.vidas, gotinhas: J.gotinhas + '/' + d.gotinhas.length };
+    };
+    window.roboBoss = () => {
+      const J = Jogo; let n = 0;
+      while (J.estado === 'entrando' && n < 200) { J.passo(1 / 60); n++; }
+      const b = J.boss; n = 0;
+      const perigo = l => b.alvos.indexOf(l) >= 0 || b.brasas.some(q => q.lado === l);
+      const ir = l => { if (l > b.lado) Entrada.dirApertou = true; else if (l < b.lado) Entrada.esqApertou = true; };
+      while (J.estado === 'boss' && n < 60 * 400) {
+        const emAtaque = b.fase === 'aviso' || b.fase === 'golpe';
+        if (perigo(b.lado)) { const livre = [-1, 0, 1].filter(l => !perigo(l)).sort((x, y) => Math.abs(x - b.lado) - Math.abs(y - b.lado))[0]; if (livre !== undefined) ir(livre); }
+        else if (b.fase === 'pausa') { if (b.lado !== b.bossLado) { if (!perigo(b.bossLado) && !perigo(b.lado + Math.sign(b.bossLado - b.lado))) ir(b.bossLado); } else if (n % 24 === 0) Entrada.ataqueApertou = true; }
+        J.passo(1 / 60); n++;
+      }
+      return { estado: J.estado, seg: Math.round(n / 60), vidas: J.vidas, vidaBoss: b.vida };
+    };
+  };
+  for (let m = 0; m < 5; m++) {
+    await novaFase(m); await p.evaluate(robos);
+    await p.waitForTimeout(300); await foto('m' + (m + 1) + '-inicio');
+    const nome = await p.evaluate(() => MUNDOS[Jogo.mundo].nome);
+    r = await p.evaluate(() => roboFase());
+    confere('Mundo ' + (m + 1) + ' (' + nome + '): a fase pode ser atravessada até o portal', r.estado === 'entrando', r);
+    await p.evaluate(() => { for (let i = 0; i < 60 && Jogo.estado === 'entrando'; i++) Jogo.passo(1 / 60); });
+    await p.waitForTimeout(2300); await foto('m' + (m + 1) + '-boss');
+    r = await p.evaluate(() => roboBoss());
+    confere('Mundo ' + (m + 1) + ': entrar no portal leva ao boss, e ele pode ser vencido', r.estado === 'vitoria' && r.vidaBoss === 0, r);
+    r = await p.evaluate(() => { Entrada.confirmou = true; for (let i = 0; i < 80; i++) { Jogo.passo(1 / 60); Entrada.confirmou = true; } return { estado: Jogo.estado, mundo: Jogo.mundo, liberado: Jogo.progresso.liberado, zerou: Jogo.progresso.zerou }; });
+    if (m < 4) confere('Mundo ' + (m + 1) + ': vencer libera e abre o mundo seguinte (F01)', r.estado === 'fase' && r.mundo === m + 1 && r.liberado >= m + 1, r);
+    else confere('Mundo 5: vencer o último boss leva à tela final', r.estado === 'final' && r.zerou, r);
+  }
+  await p.waitForTimeout(300); await foto('final');
+  await p.evaluate(() => { try { localStorage.clear(); } catch (e) {} });
+  await novaFase(0);
+  await p.evaluate(() => { const J = Jogo; J.fase.j.x = MUNDOS[0].fase.portalX - 100; });
 
   // F05: entrou no portal, enfrenta o boss (20 chegadas seguidas)
   r = await p.evaluate(() => {
     const J = Jogo; let boss = 0;
     for (let k = 0; k < 20; k++) {
-      J.estado = 'fase'; J.fase.chegouPortal = false; J.fase.j.entrando = 0; J.fase.j.x = FASE1.portalX; J.fase.j.y = 460; J.fase.j.vy = 0;
+      J.estado = 'fase'; J.fase.chegouPortal = false; J.fase.j.entrando = 0; J.fase.j.x = MUNDOS[J.mundo].fase.portalX; J.fase.j.y = 460; J.fase.j.vy = 0;
       for (let i = 0; i < 120 && J.estado !== 'boss' && J.estado !== 'vitoria'; i++) J.passo(1 / 60);
       if (J.estado === 'boss') boss++;
     }
@@ -120,7 +154,7 @@ function confere(nome, ok, detalhe) {
   // B01/B02/B05/B06: dois ataques, depois dez segundos sem atacar; aviso antes de cada golpe
   r = await p.evaluate(() => {
     const J = Jogo; J.vidas = 3; J.boss = null; J.estado = 'fase';
-    J.fase.chegouPortal = false; J.fase.j.entrando = 0; J.fase.j.x = FASE1.portalX;
+    J.fase.chegouPortal = false; J.fase.j.entrando = 0; J.fase.j.x = MUNDOS[J.mundo].fase.portalX; J.fase.j.y = 460; J.fase.j.vy = 0;
     for (let i = 0; i < 120 && J.estado !== 'boss'; i++) J.passo(1 / 60);
     const b = J.boss, linha = []; let ant = '', tPausa = 0, golpesNaPausa = 0, n = 0;
     while (linha.filter(f => f === 'pausa').length < 2 && n < 60 * 60) {
@@ -158,11 +192,10 @@ function confere(nome, ok, detalhe) {
   });
   confere('fora da pausa o raio é bloqueado (premissa provisória)', r.bloqueado, r);
   confere('boss pode ser vencido e a fase termina', r.estado === 'vitoria' && r.vidaBoss === 0, r);
-  await p.waitForTimeout(400); await foto('5-vitoria');
 
   // V07: derrota no boss recomeça a luta
   r = await p.evaluate(() => {
-    const J = Jogo; J.estado = 'fase'; J.vidas = 1; J.fase.chegouPortal = false; J.fase.j.entrando = 0; J.fase.j.x = FASE1.portalX;
+    const J = Jogo; J.estado = 'fase'; J.vidas = 1; J.fase.chegouPortal = false; J.fase.j.entrando = 0; J.fase.j.x = MUNDOS[J.mundo].fase.portalX;
     for (let i = 0; i < 120 && J.estado !== 'boss'; i++) J.passo(1 / 60);
     for (let i = 0; i < 60 * 20 && J.estado === 'boss'; i++) J.passo(1 / 60);
     for (let i = 0; i < 60 * 4; i++) J.passo(1 / 60);

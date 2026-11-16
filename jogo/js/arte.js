@@ -131,42 +131,65 @@ var Arte = (function () {
     }
   }
 
-  // Plataforma: terra com tijolinhos e grama por cima, como no storyboard.
-  function plataforma(c, p, camX, noite) {
-    var x = Math.round(p.x - camX);
+  // Plataforma: corpo com tijolinhos e cobertura com franja. As cores vêm do tema do mundo.
+  var PALETA_PLANTAS = { terra: '#ba6834', terraEsc: '#783e1e', topo: '#78d628', topoEsc: '#2c841c', topoLuz: '#bef460' };
+  var CORES_BLOCO = ['#e8364a', '#2f7de0', '#f5c62a', '#3fb24a'], CORES_BLOCO_ESC = ['#8a1226', '#143f86', '#a06a08', '#1c6426'];
+  function plataforma(c, p, camX, pal) {
+    pal = pal || PALETA_PLANTAS;
+    var x = Math.round(p.x - camX), y = Math.round(p.y);
     if (x > W || x + p.w < 0) return;
-    var alt = p.chao ? H - p.y + 10 : p.h + 8;
-    var terra = mistura([186, 104, 52], [70, 52, 64], noite);
-    var terraEsc = mistura([120, 62, 30], [42, 32, 46], noite);
-    c.fillStyle = terra; c.strokeStyle = terraEsc; c.lineWidth = 3;
-    retArred(c, x, p.y, p.w, alt, p.chao ? 4 : 10); c.fill(); c.stroke();
+    var alt = p.chao ? H - y + 10 : p.h + 8, k;
+    if (pal.blocos) { // mundo dos blocos: peças coloridas com pinos
+      var nb = Math.max(1, Math.round(p.w / 46)), lb = p.w / nb;
+      for (var by = 0, lin = 0; by < alt; by += 34, lin++) {
+        for (k = 0; k < nb; k++) {
+          var ci = (Math.floor(p.x / 46) + k + lin * 2) % 4;
+          c.fillStyle = CORES_BLOCO[ci]; c.strokeStyle = CORES_BLOCO_ESC[ci]; c.lineWidth = 2.5;
+          c.fillRect(x + k * lb, y + by, lb, Math.min(34, alt - by)); c.strokeRect(x + k * lb, y + by, lb, Math.min(34, alt - by));
+          if (lin === 0) { retArred(c, x + k * lb + lb * 0.2, y - 8, lb * 0.6, 9, 3); c.fill(); c.stroke(); }
+        }
+      }
+      return;
+    }
+    c.fillStyle = pal.terra; c.strokeStyle = pal.terraEsc; c.lineWidth = 3;
+    retArred(c, x, y, p.w, alt, p.chao ? 4 : 10); c.fill(); c.stroke();
     c.save();
-    retArred(c, x, p.y, p.w, alt, p.chao ? 4 : 10); c.clip();
-    c.strokeStyle = terraEsc; c.globalAlpha = 0.55; c.lineWidth = 2;
-    for (var ly = p.y + 30, n = 0; ly < p.y + alt; ly += 24, n++) {
+    retArred(c, x, y, p.w, alt, p.chao ? 4 : 10); c.clip();
+    c.strokeStyle = pal.terraEsc; c.globalAlpha = 0.55; c.lineWidth = 2;
+    if (pal.costura) c.setLineDash([6, 5]);
+    for (var ly = y + 30, n = 0; ly < y + alt; ly += 24, n++) {
       c.beginPath(); c.moveTo(x, ly); c.lineTo(x + p.w, ly); c.stroke();
       for (var lx = (n % 2) * 24 + 12; lx < p.w; lx += 48) {
         c.beginPath(); c.moveTo(x + lx, ly - 24); c.lineTo(x + lx, ly); c.stroke();
       }
     }
     c.restore();
-    // grama: faixa com franja arredondada
-    var grama = mistura([120, 214, 40], [40, 104, 74], noite);
-    var gramaEsc = mistura([44, 132, 28], [22, 62, 52], noite);
-    c.fillStyle = grama; c.strokeStyle = gramaEsc; c.lineWidth = 3;
+    c.fillStyle = pal.topo; c.strokeStyle = pal.topoEsc; c.lineWidth = 3;
     c.beginPath();
-    c.moveTo(x - 5, p.y + 8);
-    c.lineTo(x - 5, p.y - 4); c.quadraticCurveTo(x - 5, p.y - 10, x + 3, p.y - 10);
-    c.lineTo(x + p.w - 3, p.y - 10); c.quadraticCurveTo(x + p.w + 5, p.y - 10, x + p.w + 5, p.y - 4);
-    c.lineTo(x + p.w + 5, p.y + 8);
+    c.moveTo(x - 5, y + 8);
+    c.lineTo(x - 5, y - 4); c.quadraticCurveTo(x - 5, y - 10, x + 3, y - 10);
+    c.lineTo(x + p.w - 3, y - 10); c.quadraticCurveTo(x + p.w + 5, y - 10, x + p.w + 5, y - 4);
+    c.lineTo(x + p.w + 5, y + 8);
     var nf = Math.max(2, Math.round((p.w + 10) / 22)), lf = (p.w + 10) / nf;
-    for (var k = 0; k < nf; k++) {
+    for (k = 0; k < nf; k++) {
       var x0 = x + p.w + 5 - k * lf;
-      c.quadraticCurveTo(x0 - lf / 2, p.y + 20 + acaso(p.x + k) * 6, x0 - lf, p.y + 8);
+      c.quadraticCurveTo(x0 - lf / 2, y + 20 + acaso(p.w + k) * 6, x0 - lf, y + 8);
     }
     c.closePath(); c.fill(); c.stroke();
-    c.strokeStyle = mistura([190, 244, 96], [62, 132, 90], noite); c.lineWidth = 3;
-    c.beginPath(); c.moveTo(x + 4, p.y - 5); c.lineTo(x + p.w - 4, p.y - 5); c.stroke();
+    c.strokeStyle = pal.topoLuz; c.lineWidth = 3;
+    c.beginPath(); c.moveTo(x + 4, y - 5); c.lineTo(x + p.w - 4, y - 5); c.stroke();
+  }
+
+  // Almofada/mola: pisar nela joga o Concreto para o alto.
+  function mola(c, x, y, w, aperto, cor, corEsc) {
+    var a = 14 * (1 - aperto * 0.6);
+    c.fillStyle = cor || '#ff7ab8'; c.strokeStyle = corEsc || '#a3246a'; c.lineWidth = 3;
+    retArred(c, x, y - a, w, a + 2, 7); c.fill(); c.stroke();
+    c.strokeStyle = 'rgba(255,255,255,0.8)'; c.lineWidth = 3;
+    c.beginPath(); c.moveTo(x + 8, y - a + 4); c.lineTo(x + w - 8, y - a + 4); c.stroke();
+    c.fillStyle = '#fff27a';
+    c.beginPath(); c.moveTo(x + w / 2, y - a - 22 - Math.sin(Date.now() / 150) * 3);
+    c.lineTo(x + w / 2 - 9, y - a - 10); c.lineTo(x + w / 2 + 9, y - a - 10); c.closePath(); c.fill();
   }
 
   // Concreto visto de lado. (x, y) = meio dos pés.
@@ -277,6 +300,7 @@ var Arte = (function () {
   }
 
   // Monstros do Mundo 1 (prancha P02): quatro aparências, mesmo comportamento. (x, y) = meio dos pés.
+  var formas = {};
   var CORES_MONSTRO = { espinho: '#a45cf0', planta: '#e8364a', cogumelo: '#e8364a', semente: '#f5c62a' };
   function corMonstro(tipo) { return CORES_MONSTRO[tipo] || CORES_MONSTRO.espinho; }
 
@@ -300,7 +324,9 @@ var Arte = (function () {
     c.fillStyle = 'rgba(60,40,110,0.2)';
     c.beginPath(); c.ellipse(0, 2, 28, 5, 0, 0, 7); c.fill();
     c.lineJoin = 'round'; c.lineCap = 'round';
-    if (m.tipo === 'planta') {            // Planta Mordedora
+    if (formas[m.tipo]) {                // monstros dos outros mundos (temas.js)
+      formas[m.tipo](c, dir, bal, t, m);
+    } else if (m.tipo === 'planta') {            // Planta Mordedora
       c.strokeStyle = '#2c7a1b'; c.lineWidth = 6;
       c.beginPath(); c.moveTo(0, 0); c.quadraticCurveTo(-dir * 8, -14, 0, -24); c.stroke();
       c.fillStyle = '#58c02e'; c.lineWidth = 2.5;
@@ -498,26 +524,19 @@ var Arte = (function () {
   }
 
   // Painel: corações de vida à esquerda, gotinhas coletadas à direita.
-  function painel(c, vidas, relogio, gotinhas, total) {
+  function painel(c, vidas, gotinhas, total) {
     for (var i = 0; i < CFG.vidas; i++) coracao(c, 36 + i * 40, 40, 15, i < vidas);
     c.fillStyle = 'rgba(8,20,16,0.4)';
     retArred(c, W - 142, 18, 126, 42, 21); c.fill();
     gota(c, W - 120, 42, 9);
     texto(c, gotinhas + '/' + total, W - 62, 40, 19, '#f2fbf4');
-    if (relogio.desligado) return;
-    var x = W - 44, y = 88;
-    c.fillStyle = 'rgba(8,20,16,0.35)';
-    retArred(c, W - 142, 66, 126, 44, 22); c.fill();
-    c.fillStyle = relogio.noite ? '#f4f1c9' : '#ffd84a';
-    c.beginPath(); c.arc(x, y, 11, 0, 7); c.fill();
-    var m = Math.floor(relogio.falta / 60), s = Math.floor(relogio.falta % 60);
-    texto(c, (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s, W - 96, 89, 18, '#f2fbf4');
   }
 
   return {
     mistura: mistura, acaso: acaso, retArred: retArred, ceu: ceu, fundoPlantas: fundoPlantas,
     plataforma: plataforma, concreto: concreto, gota: gota, poca: poca, monstro: monstro, raio: raio,
     portal: portal, texto: texto, painel: painel, flor: flor, CONTORNO: CONTORNO,
-    gotinha: gotinha, coracao: coracao, placa: placa, corMonstro: corMonstro
+    gotinha: gotinha, coracao: coracao, placa: placa, corMonstro: corMonstro,
+    mola: mola, formas: formas, coresMonstro: CORES_MONSTRO, olhosBravos: olhosBravos, PALETA_PLANTAS: PALETA_PLANTAS
   };
 })();
