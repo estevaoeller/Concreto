@@ -1,206 +1,176 @@
 # Concreto — Especificação do jogo
 
-Versão: 0.10 — 2026-11-16
-Estado: descoberta e design, com protótipo jogável dos cinco mundos autorizado pelo responsável (ver seções 11 e 13). O protótipo não encerra a descoberta nem converte premissas provisórias em requisitos.
-Convenção: requisitos numerados são decisões confirmadas, salvo indicação explícita de interpretação, proposta ou pendência. Referências visuais não são assets aprovados.
+Versão: 1.0 — 2026-11-16
+Estado: jogo completo em protótipo (cinco mundos), em validação com o criador. Esta versão reorganiza o documento; nenhuma regra foi alterada na reorganização. O percurso das decisões está em [HISTORICO.md](HISTORICO.md).
 
-## 1. Conceito e ciclo principal
+## 1. Como ler
 
-- C01: gênero plataforma 2D, com visão lateral como nos jogos Mario durante a exploração.
-- C02: o personagem principal anda, pula entre plataformas e enfrenta monstros.
-- C03: o jogador atravessa as plataformas até chegar ao portal localizado sempre no final da fase; o portal leva à fase seguinte.
-- C04: o jogo possui cinco fases com cenários diferentes e cada fase tem um boss personalizado.
-- Interpretação de fluxo, a validar: entrar na fase → atravessar plataformas e enfrentar/evitar monstros → chegar à área do portal → enfrentar o boss quando presente → acessar a próxima fase.
-- Concreto é o nome do protagonista e o título de trabalho do repositório. Nome definitivo do jogo e história/missão narrativa ainda em aberto.
-- Pendente: se todas as plataformas devem ser efetivamente visitadas ou se podem ser puladas; se derrotar os monstros normais é obrigatório; se o portal depende da derrota do boss; vitória após o último portal.
+Cada regra tem um identificador e uma origem. A origem diz quem decidiu e quanto a regra é firme.
 
-## 2. Personagem principal — Concreto
-
-- P01: é uma geleca, não um fantasma. Sua silhueta lembra o formato de um fantasma.
-- P02: o topo apresenta uma curvatura, não uma ponta.
-- P03: uma pequena porção de geleca cai no chão. Frequência, duração e eventual efeito nas regras não definidos.
-- P04: cor, rosto, olhos, tamanho, proporções, textura e estilo gráfico em aberto.
-
-## 3. Movimentação e controles
-
-- M01: o personagem pode andar e pular entre plataformas.
-- M02: existe um botão de pulo.
-- M03: existe um botão de ataque separado do botão de pulo.
-- Pendente: controle de deslocamento, direção, velocidade, altura do salto, pulo duplo ou não, física, colisões, câmera e dispositivos suportados. Um único botão não implica necessariamente um único salto no ar.
-- Pendente: controles específicos e transição de câmera nas lutas contra bosses.
-
-## 4. Combate normal e inimigos
-
-- A01: ao acionar o ataque, Concreto faz uma animação e dispara um raio de geleca.
-- A02: Concreto não empunha espada nem faca. Correção explícita da rodada anterior: a arma pertence ao monstro. O raio de geleca do Concreto permanece confirmado.
-- I01: existem monstros nas plataformas.
-- I02: os monstros têm animações simples; foi mencionada uma representação parada. Deslocamento ainda não definido.
-- I03: contato com um monstro causa dano ao personagem. Reconfirmado na rodada 010.
-- I05: o golpe de faca também tira vida (rodada 010). Contato e faca são, portanto, duas fontes de dano.
-- I04: se Concreto estiver muito perto de um monstro, surge uma faca e o monstro ataca. Se estiver longe, a faca não aparece.
-- Pendente: distância que ativa a faca, tempo de preparação, área de dano, intervalo entre ataques, se a faca desaparece imediatamente ao afastar, tipos de monstros, dano do raio, alcance, recarga e condições de derrota de inimigos.
-
-## 5. Vida, dano e derrota
-
-- V01: Concreto começa com três vidas, conforme descrição confirmada. A distinção entre vidas e pontos de vida é uma decisão de design a confirmar antes da implementação.
-- V02: ao encostar em um monstro, perde uma das três vidas.
-- V03: ao sofrer dano, é jogado para trás (knockback).
-- V04: quando as três vidas acabam, ocorre uma animação na qual um vento espalha os pedaços de geleca do Concreto.
-- V05: depois de levar um golpe, Concreto fica um tempo sem poder levar outro (rodada 010). Duração não definida.
-- V06: ao cair num buraco, Concreto perde uma vida e volta para a última plataforma (rodada 010). Registro da fala: "ele morre" e, em seguida, "vai para a última plataforma quando ele cai"; lido como perda de uma vida, não de todas.
-- V07: sem vidas, recomeça a fase desde o início; se a derrota foi contra o boss, recomeça a luta (rodada 010). Variação autorizada pelo responsável na rodada 014: no protótipo, o recomeço é na bandeira do trecho (ver seção 13). A decisão original do criador continua registrada e pode ser restaurada em `retornoPorTrecho`.
-- Pendente: duração da invulnerabilidade, contato contínuo, direção e intensidade do knockback, armadilhas, recuperação de vida, quantas vidas tem ao recomeçar, persistência de vidas entre fases e interface pós-derrota. A tela de game over foi sugerida, mas não confirmada.
-
-### Estados funcionais preliminares
-
-Parado, deslocando-se, pulando, atacando, recebendo dano e derrotado. Trata-se de um inventário de estados derivados das ações confirmadas, não de uma máquina de estados de implementação aprovada. Prioridades e transições ainda precisam ser definidas.
-
-## 6. Ciclo temporal e encontros no portal
-
-Decisão da rodada 010: o criador retirou o ciclo de dia e noite ("esse negócio de noite não deu certo", "vamos fazer normal, sem ser de noite"). T01 e T02 ficam substituídas e permanecem abaixo apenas como registro. F05 (rodada 011): ao entrar no portal, Concreto vai enfrentar o boss; não há sorteio. Confirmado a partir da experiência com o protótipo ("do jeito que aconteceu: entrei no portal e fui enfrentar o boss").
-
-Regras anteriores (substituídas, exceto T03):
-
-- T01 (substituída na rodada 010): o jogo possui um ciclo de dia e noite; cada período dura 30 minutos.
-- T02 (substituída na rodada 010): durante a noite, quando Concreto chega ao final, há 50% de chance de haver um monstro. A formulação aprovada foi "monstro"; confirmar se se refere ao boss do portal ou a outro inimigo.
-- T03: o último boss, na quinta fase, tem 100% de chance de aparecer. A exceção é explícita; não aplicar o sorteio a este boss.
-- Pendente: o que acontece depois de vencer o boss (ver seção 7).
-
-## 7. Mundo e progressão
-
-| Fase | Cenário | Boss | Estado |
-|---|---|---|---|
-| 1 | Plantas/vegetação (descrita como "em planta") | Cthulhu Higiênico | Cenário e boss confirmados. F04: Cthulhu Higiênico é o boss da fase 1 (confirmado expressamente na rodada 010). |
-| 2 | Lugar tipo Nether | Malgosha do filme de Minecraft | Referência de cenário e boss confirmadas como intenção criativa. |
-| 3 | Céu | Anjo | Tema e tipo de boss confirmados. |
-| 4 | Mundo de bichinhos de pelúcia | Coelho de pelúcia | Tema e boss confirmados. |
-| 5 | Mundo de Lego | Peça de Lego | Tema, boss e presença garantida confirmados. |
-
-- F01: as cinco fases seguem a ordem acima.
-- F02: cada fase tem seu próprio boss personalizado.
-- F03: os portais ficam no final das fases. A função do portal da última fase e o desfecho do jogo permanecem em aberto.
-- Referências a Minecraft, Nether, Malgosha, Mario e Lego descrevem inspirações ou intenções do criador, não autorização de uso de marcas, assets ou personagens licenciados. Para publicação/distribuição, avaliar direitos e eventual criação de equivalentes originais, a validar com o criador. Não substituir automaticamente as ideias.
-- Pendente: formato de plataformas, obstáculos, duração, tamanho, dificuldade, pontos de retorno, caminhos alternativos, transições e cenários específicos de cada mundo.
-
-## 8. Combate contra bosses
-
-### 8.1 Regras comuns confirmadas
-
-- B01: todos os bosses atacam duas vezes e, após o segundo ataque, ficam 10 segundos sem atacar. Durante essa janela, Concreto pode atacar.
-- B02: a janela começa após o segundo ataque; não presumir que os dois golpes são simultâneos ou que cada ataque dura um tempo específico.
-- Pendente: intervalo entre os dois golpes, se o ciclo se repete até a derrota (interpretação natural, ainda não confirmada), se o jogador pode causar dano fora da janela, reação defensiva, dano por golpe, quantidade de vida e forma de ataque do jogador.
-- A extensão da regra a todos os bosses foi confirmada expressamente para dois ataques + 10 segundos. Confirmar se primeira pessoa, barra grande e aviso temático também se aplicam a todos.
-
-### 8.2 Cthulhu Higiênico
-
-- B03: boss do portal chamado Cthulhu Higiênico, com aparência de um Cthulhu de papel higiênico.
-- B04: na luta contra ele, a perspectiva muda de lateral para primeira pessoa.
-- B05: quando o boss vai atacar, aparece um papel higiênico. É um indicador associado ao ataque do boss, não ao ataque de Concreto. O formato circular/posição/tempo do aviso não estão definidos.
-- B06: segue a sequência de dois ataques e pausa de 10 segundos.
-- B07: possui uma barra de vida grande, com referência às barras de bosses Wither e Ender Dragon de Minecraft.
-- Pendente: como o jogador evita golpes, significado de "bater nos lados" mencionado na fala inicial, como usa o raio em primeira pessoa, se existe outro controle, aparência da arena e condição para retorno à perspectiva lateral.
-
-### 8.3 Demais bosses
-
-Cada boss é personalizado conforme o tema. O padrão B01 é comum; ataques concretos, avisos, aparência, barra de vida e câmera precisam de validação. O boss final é obrigatório no sentido de presença garantida (T03); ainda confirmar se é obrigatório derrotá-lo para vencer o jogo.
-
-### 8.4 Modelo funcional preliminar (proposta para discussão)
-
-Entrada na luta → preparação/aviso do ataque → ataque 1 → preparação/aviso → ataque 2 → janela de contra-ataque de 10 segundos → repetir, se o boss estiver vivo e se o padrão de repetição for confirmado. A derrota do boss e o retorno ao portal precisam ser especificados. Não constitui máquina de estados de implementação aprovada.
-
-## 9. Inventário preliminar de recursos gráficos e sonoros
-
-- G01: conceito visual e silhueta do Concreto.
-- G02: efeito de gota de geleca caindo no chão.
-- G03: estados visuais de andar e pular.
-- G04: preparação do ataque e efeito do raio de geleca.
-- G05: representação da faca dos monstros (corrige a espada atribuída à geleca).
-- G06: botões de pulo e ataque.
-- G07: feedback de dano e deslocamento para trás.
-- G08: animação de derrota com vento espalhando geleca.
-- G09: representação e animações simples dos monstros, incluindo aparição da faca e ataque.
-- G10: indicação de vidas do protagonista (proposta a validar).
-- G11: portal de fim de fase e transição de mundo.
-- G12: cinco famílias temáticas de cenários e plataformas.
-- G13: aparência de dia e noite (tratamento visual a definir).
-- G14: conceitos e animações dos cinco bosses.
-- G15: arena/tela de combate em primeira pessoa para Cthulhu; extensão aos demais pendente.
-- G16: aviso de papel higiênico para ataque do Cthulhu.
-- G17: barra de vida grande do Cthulhu; extensão aos demais pendente.
-- G18: animações de ataque dos bosses e feedback da janela de 10 segundos (forma de feedback a definir).
-- G19: sons de movimentação, ataque, dano, portais, chefes e ambientes; trilhas e estilo são propostas a discutir.
-
-Não há desenhos, sprites ou áudio aprovados. O estilo e o formato técnico permanecem em aberto.
-
-## 10. Decisões pendentes prioritárias
-
-1. Validar com o criador as escolhas delegadas nas rodadas 011 a 013 (seção 13), jogando o protótipo.
-2. Espada: não implementada; vale A02 até decisão expressa do criador em contrário. O escudo entrou como item provisório.
-3. Confirmar se a câmera em primeira pessoa e a barra de vida grande valem para todos os bosses.
-4. Definir como o jogador se defende dos dois ataques, como ataca durante a janela e se o boss pode receber dano fora dela.
-5. Definir relação portal/derrota do boss, repetição de ciclos, vitória final e continuidade de vidas.
-6. Definir controles de deslocamento, física, inimigos normais, dano, itens, pontuação e progressão.
-7. Validar conceitos de arte, interface, áudio e acessibilidade.
-8. Definir primeira versão jogável, direitos de uso das referências e critérios de aceitação.
-
-## 11. Implementação
-
-Protótipo dos cinco mundos em `jogo/`: HTML, CSS e JavaScript puros, Canvas 2D, resolução lógica 960×540, teclado e botões de toque, gráficos desenhados por código e sons sintetizados. Sem dependências, sem build, sem assets de terceiros. A escolha visa a iteração rápida com o criador e não é decisão definitiva de motor ou arquitetura. A primeira pessoa é resolvida em 2D (três posições laterais), sem renderização 3D.
-
-Organização do código: `config.js` (números e regras), `entrada.js` (teclado, toque e sons), `arte.js` e `temas.js` (desenho), `mundos.js` (dados dos cinco mundos e construtor de fases), `fase.js` (exploração lateral), `boss.js` (lutas), `principal.js` (telas e progressão). A regra de dois ataques e pausa de 10 s está em um único lugar e vale para os cinco bosses.
-
-Mundos 2 e 5: o protótipo usa as versões originais das pranchas (mundo vulcânico com a Rainha de Lava; mundo de blocos de montar com o Guardião de Blocos). Não reproduz a Malgosha, o Nether nem a marca Lego. A intenção criativa do criador continua registrada na seção 7; a troca vale para o que é construído e publicado.
-
-Fora do protótipo: história, final narrativo, itens além de gotinhas e corações, e arte e áudio definitivos. Distribuição pública continua dependendo de autorização. Não presumir que botões na tela restringem o jogo a dispositivos móveis. A ferramenta mencionada como Fable Five ainda precisa ser identificada e avaliada.
-
-## 12. Próxima rodada
-
-O protótipo pode ser usado como apoio à entrevista: o criador joga, e cada premissa provisória da seção 13 vira uma pergunta concreta ("ficou como você imaginou?").
-
-O responsável delegou ao desenvolvimento as decisões pendentes, com revisão posterior (rodadas 011 e 013). A próxima rodada é de revisão: o criador joga e diz o que manter, mudar ou tirar entre os itens da seção 13. Continuam sendo dele, e podem substituir qualquer escolha delegada: a história e o final, a espada, a cor definitiva do Concreto e o jeito de cada monstro e de cada boss. Ver [plano de entrevista](PLANO-ENTREVISTA.md).
-
-## 13. Premissas provisórias do protótipo
-
-Valores adotados para tornar o protótipo jogável e, desde a rodada 011, escolhas delegadas pelo responsável ("assume a melhor coisa, depois a gente revê"). Nenhum foi confirmado pelo criador. Todos ficam em `jogo/js/config.js`, marcados como PROVISÓRIO, e podem ser alterados sem mexer no restante do código.
-
-| Tema | Pendência na especificação | Premissa adotada no protótipo |
+| Marca | Origem | O que significa |
 |---|---|---|
-| Portal e boss | O portal depende da derrota do boss? | Se o boss aparece, é preciso vencê-lo para concluir a fase. |
-| Movimento | Velocidade, altura do salto, pulo duplo | Um salto simples, com altura variável conforme o tempo de pressão do botão. |
-| Dano (V05) | Duração da invulnerabilidade, intensidade do knockback | 1,2 s de invulnerabilidade com o personagem piscando. |
-| Raio (A01) | Alcance, recarga, dano | Projétil horizontal, alcance de 380 px, recarga de 0,35 s, dano 1. |
-| Monstros (I02/I04) | Tipos, movimento, vida, distância e tempo da faca | Um tipo, parado, 2 pontos de vida. A faca aparece a menos de 130 px, golpeia após 0,7 s e some se Concreto se afasta. Faca e contato tiram uma vida cada. |
-| Derrota (V07) | Vidas ao recomeçar; tela de derrota | Tela de derrota; três vidas ao recomeçar a fase ou a luta. |
-| Boss — defesa (8.2) | Como evitar os golpes; sentido de "bater nos lados" | Três posições (esquerda, meio, direita). O aviso de papel higiênico indica a posição atacada; mudar de posição evita o golpe. Interpretação não validada. |
-| Boss — ataque (B01) | Dano fora da janela; forma do ataque | O raio só causa dano na janela de 10 s; fora dela é bloqueado. O boss troca de posição a cada 2,5 s durante a janela. 24 pontos de vida. |
-| Boss — ciclo (B02) | Repetição do ciclo; intervalo entre golpes | Ciclo repete até a derrota; aviso de 1,1 s e 0,6 s entre os dois golpes. |
-| Arte e som (P04, G01–G19) | Cor, rosto, estilo, sons | Visual desenhado por código a partir da alternativa A dos estudos de personagem e do storyboard do Mundo 1 (rodada 009); monstro roxo com espinhos; cenário e sons de teste. Nada aprovado. |
-| Gota (P03) | Frequência e efeito | Uma gota a cada 2,2 s; apenas decorativa. |
-| Coletáveis | Itens e pontuação (árvore G) não definidos | 62 gotinhas de geleca espalhadas pela fase, com contador na tela e total no fim. Não afetam vidas nem progresso. |
-| Recuperar vida | Recuperação de vida não definida | Dois corações na fase; cada um devolve uma vida, só quando falta alguma. |
-| Indicador de vidas (G10) | Forma do indicador | Três corações no canto da tela. |
-| Tolerância do pulo | Física não definida | Ainda dá para pular 0,1 s depois de sair da beirada, e o pulo apertado 0,12 s antes de pousar também vale. |
-| Tamanho da fase | Duração e desenho não definidos | Três trechos de dificuldade crescente, como no storyboard S01; cerca de 35 s em linha reta. |
-| Monstros — movimento (I02) | Deslocamento não definido | Decisão delegada na rodada 013: cada tipo tem um jeito. Parado, anda (vai e volta na própria plataforma), pula (no lugar) ou flutua (sobe e desce). A faca por proximidade (I04) vale para todos, e todos param para atacar. |
-| Dicas | Tutorial não definido | Três placas de madeira no começo da fase. |
-| Portal | Transição não definida | Concreto é puxado para dentro do portal e a tela clareia antes da luta. |
-| Boss — onda de papel | Variedade de ataques não definida | Com menos da metade da vida, cada golpe cobre dois dos três lados; sobra um lado seguro. A regra de dois ataques e pausa de 10 s (B01) não muda. |
-| Boss — aparência e arena | Arte não aprovada | Manto roxo, medalhão dourado e salão roxo com colunas e rolos, conforme a prancha B01. |
-| Bosses 2 a 5 — formato da luta | Primeira pessoa e barra grande valem para todos? | Sim para todos, com o mesmo formato do Cthulhu: três lados, aviso temático antes de cada golpe, raio só na pausa. |
-| Bosses — ataque próprio | Ataques personalizados | Decisão delegada na rodada 013, sempre dentro de B01 (dois ataques e pausa de 10 s). Cthulhu: onda de papel em dois lados com menos de metade da vida. Rainha de Lava: o lado atingido fica em brasa por 1,2 s. Anjo: o aviso muda de lado uma vez antes do golpe. Coelho de Pelúcia: o segundo ataque é um golpe no chão, que só se evita pulando. Guardião de Blocos: golpes sempre em dois lados e segundo ataque no chão. Vida: 24, 28, 30, 32 e 40. |
-| Mundos 2 a 5 — fases | Desenho das fases e mecânicas de cenário | Três trechos por mundo. Mundo 2: lava nos buracos. Mundo 3: plataformas que se mexem. Mundo 4: almofadas que jogam para o alto. Mundo 5: as duas coisas. Cair continua valendo V06 em todos. |
-| Mundos 2 a 5 — monstros | Tipos por mundo | Quatro aparências por mundo, da prancha P02; todos parados e com faca. |
-| Progressão | Desbloqueio, persistência e vidas entre mundos | Vencer o boss libera o mundo seguinte; tela de escolha de mundo; progresso e recorde de gotinhas guardados no aparelho; três vidas ao começar cada mundo. |
-| História e final | História, missão e desfecho em aberto | Decisão delegada na rodada 013: abertura de quatro linhas (cinco chefes bagunçaram os mundos; Concreto atravessa os portais para enfrentá-los) e frase de encerramento. Texto provisório; a história é do criador. |
-| Pausa | Não definida | Botão na tela e tecla P; permite voltar à escolha de mundos. |
-| Gotinhas — utilidade | Itens e progressão (árvore G) | Decisão delegada na rodada 013: as gotinhas liberam cores do Concreto (azul com 100, roxo com 200, laranja com 300) e contam para as estrelas de cada mundo (1 por vencer, 2 com 60% das gotinhas, 3 com 90%). |
-| Cor do Concreto (P04) | Qual das quatro alternativas | Decisão delegada na rodada 013: as quatro ficam no jogo. Verde é a inicial; as outras são liberadas com gotinhas e escolhidas na tela inicial. |
-| Espada e escudo | Pedido não esclarecido na rodada 010 | Decisão delegada na rodada 013: sem espada, porque A02 é decisão expressa do criador. O escudo entra como bolha de geleca: um por mundo, aguenta um golpe e vale também na luta contra o boss. Não protege de queda. |
-| Dispositivos (Q01) | Teclado, toque ou ambos | Decisão delegada na rodada 013: ambos. |
-| Música e sons (G19) | Trilhas e estilo | Uma música por mundo e uma para as lutas, mais efeitos, todos sintetizados pelo navegador e compostos para o protótipo. Botão para ligar e desligar o som. |
-| Expressões do Concreto | Animações (G03, G07) | Olhos apertados ao levar um golpe, além de piscar e abrir a boca ao atirar. |
-| Ponto de retorno (V07) | Criador definiu recomeço no início da fase; responsável autorizou variar | Uma bandeira no começo de cada trecho. Sem vidas, Concreto volta à última bandeira com três vidas; monstros derrotados e gotinhas pegas continuam como estavam. |
-| Segredo por mundo | Não definido | Uma gotinha dourada escondida em cada mundo, marcada na tela inicial. A do Mundo 5 exige o pulo duplo. |
-| Poderes | Habilidades e melhorias (árvore G) | Vencer um mundo libera um poder permanente: raio longo (após o Mundo 1), pulo duplo (2), raio rápido (3) e raio forte contra monstros comuns (4). As fases continuam vencíveis sem eles. As três vidas (V01) não mudam. |
-| Bosses — entrada e derrota | Não definido | Uma fala curta na entrada de cada boss e um estouro de pedaços do tema na derrota. Textos provisórios. |
-| Impacto | Não definido | Pausa de um instante ao acertar ou levar um golpe, tremor e mais partículas. |
+| **Criador** | Decisão do criador do jogo | Regra do jogo. Só muda se ele mudar. |
+| **Responsável** | Decisão do responsável pelo projeto | Vale para o protótipo. Pode divergir do que o criador disse; quando diverge, está indicado. |
+| **Delegada** | Escolha do desenvolvimento, por delegação do responsável | Provisória. O criador pode manter, mudar ou tirar. |
+| **Aberta** | Ainda sem decisão | Não implementar como regra. |
+
+Os números (velocidades, tempos, vida dos bosses) ficam em `jogo/js/config.js` e `jogo/js/mundos.js`. Todos são delegados, salvo os citados aqui como do criador.
+
+Identificadores: C conceito, P personagem, M movimento, A ataque, I inimigos, V vida, T tempo, F fases, B bosses, G recursos gráficos e sonoros, H história, X extras.
+
+## 2. Conceito
+
+- C01 (Criador): jogo de plataforma 2D em visão lateral durante a exploração.
+- C02 (Criador): o personagem anda, pula entre plataformas e enfrenta monstros.
+- C03 (Criador): o jogador atravessa as plataformas até o portal, que fica sempre no final da fase e leva adiante.
+- C04 (Criador): cinco fases com cenários diferentes; cada fase tem um boss próprio.
+- Nome: Concreto é o protagonista e o título de trabalho. Nome definitivo do jogo: aberto.
+
+## 3. Personagem — Concreto
+
+- P01 (Criador): é uma geleca, não um fantasma. A silhueta lembra a de um fantasma.
+- P02 (Criador): o topo é curvado, não pontudo.
+- P03 (Criador): uma pequena porção de geleca cai no chão. No protótipo é só enfeite (Delegada).
+- P04 (Aberta): cor definitiva. No protótipo as quatro alternativas da prancha de estudos estão disponíveis; verde é a inicial e as outras são liberadas com gotinhas (Delegada).
+- H01 (Responsável): o Concreto é um alienígena.
+
+## 4. Controles e movimento
+
+- M01 (Criador): anda e pula entre plataformas.
+- M02 (Criador): existe um botão de pulo.
+- M03 (Criador): existe um botão de ataque, separado do de pulo.
+- X01 (Delegada): teclado e botões de toque, os dois sempre disponíveis.
+- X02 (Delegada): um pulo simples, mais alto quanto mais tempo o botão fica apertado; pequena tolerância ao sair da beirada e ao apertar o pulo antes de pousar.
+- X03 (Delegada): nas lutas contra bosses, esquerda e direita trocam de lado, o ataque atira e o pulo escapa do golpe no chão.
+
+## 5. Combate comum e monstros
+
+- A01 (Criador): ao atacar, o Concreto faz uma animação e dispara um raio de geleca.
+- A02 (Criador): o Concreto não usa espada nem faca. A arma é dos monstros. Um pedido posterior de espada não foi esclarecido; vale A02 até decisão expressa em contrário.
+- I01 (Criador): existem monstros nas plataformas.
+- I02 (Criador): os monstros têm animações simples; foi mencionada uma representação parada. O deslocamento ficou em aberto.
+- I03 (Criador): encostar em um monstro tira vida.
+- I04 (Criador): se o Concreto chega muito perto, aparece uma faca e o monstro ataca. De longe, a faca não aparece.
+- I05 (Criador): o golpe de faca também tira vida.
+- X04 (Delegada): cada tipo de monstro se mexe de um jeito — parado, anda (vai e volta na própria plataforma), pula (no lugar) ou flutua (sobe e desce). Todos param para atacar com a faca.
+- X05 (Delegada): quatro aparências por mundo, tiradas da prancha de monstros; dois raios derrotam um monstro comum.
+- Aberto: se derrotar os monstros é obrigatório (no protótipo não é).
+
+## 6. Vida, dano e derrota
+
+- V01 (Criador): o Concreto começa com três vidas.
+- V02 (Criador): ao encostar em um monstro, perde uma vida.
+- V03 (Criador): ao sofrer dano, é jogado para trás.
+- V04 (Criador): quando as vidas acabam, um vento espalha os pedaços de geleca.
+- V05 (Criador): depois de um golpe, fica um tempo sem poder levar outro. Duração: Delegada (1,2 s).
+- V06 (Criador): ao cair num buraco, perde uma vida e volta para a última plataforma.
+- V07 (Criador): sem vidas, recomeça a fase desde o início; se a derrota foi contra o boss, recomeça a luta.
+- V07-b (Responsável, diverge de V07): no protótipo, sem vidas o Concreto volta à bandeira do trecho em que estava, com três vidas; o que já foi derrotado ou coletado continua assim. A regra original pode ser restaurada em `retornoPorTrecho`.
+- X06 (Delegada): três vidas ao começar cada mundo e ao recomeçar.
+
+## 7. Mundos e progressão
+
+| Fase | Tema (Criador) | Boss pedido (Criador) | Boss no protótipo |
+|---|---|---|---|
+| 1 | Plantas | Cthulhu Higiênico | Cthulhu Higiênico |
+| 2 | Lugar tipo Nether | Malgosha, do filme de Minecraft | Bruxa Vulcânica (original) |
+| 3 | Céu | Anjo | Anjo |
+| 4 | Bichinhos de pelúcia | Coelho de pelúcia | Coelho de Pelúcia |
+| 5 | Lego | Peça de Lego | Guardião de Blocos (original) |
+
+- F01 (Criador): as cinco fases seguem a ordem acima.
+- F02 (Criador): cada fase tem seu próprio boss.
+- F03 (Criador): os portais ficam no final das fases.
+- F04 (Criador): o Cthulhu Higiênico é o boss da fase 1.
+- F05 (Criador): ao entrar no portal, o Concreto vai enfrentar o boss. Não há sorteio.
+- T03 (Criador): o boss final sempre aparece. Com F05, isso vale para todos.
+- X07 (Responsável): os mundos 2 e 5 usam versões originais (mundo vulcânico; mundo de blocos de montar). Malgosha, Nether e Lego são personagem e marcas de terceiros e não são reproduzidos. A intenção do criador continua registrada na tabela.
+- X08 (Delegada): cada fase tem três trechos de dificuldade crescente. Particularidade por mundo: lava nos buracos (2), plataformas que se mexem (3), almofadas que jogam para o alto (4), as duas coisas (5).
+- X09 (Delegada): vencer o boss libera o mundo seguinte; há tela de escolha de mundo; o progresso fica salvo no aparelho.
+- Aberto: se é preciso visitar todas as plataformas (no protótipo não é).
+
+## 8. Bosses
+
+- B01 (Criador): todos os bosses atacam duas vezes e depois ficam 10 segundos sem atacar. Nessa janela o Concreto pode atacar.
+- B02 (Criador): a janela começa depois do segundo ataque.
+- B03 (Criador): o Cthulhu Higiênico parece um Cthulhu de papel higiênico: um rolo com olhos e tentáculos de tiras desenroladas.
+- B04 (Criador): na luta contra o Cthulhu, a visão muda para primeira pessoa.
+- B05 (Criador): quando o Cthulhu vai atacar, aparece um papel higiênico.
+- B06 (Criador): o Cthulhu segue a sequência de dois ataques e pausa de 10 segundos.
+- B07 (Criador): o Cthulhu tem uma barra de vida grande.
+- X10 (Delegada): primeira pessoa, barra grande e aviso temático valem para todos os bosses.
+- X11 (Delegada): a arena tem três lados (esquerda, meio, direita). O aviso mostra onde o golpe vai cair; mudar de lado evita o golpe. É a leitura adotada para a fala "bater nos lados", ainda não validada.
+- X12 (Delegada): o raio só causa dano na janela de 10 segundos e quando o Concreto está no mesmo lado do boss; fora dela é bloqueado. O ciclo se repete até a derrota.
+- X13 (Delegada): um golpe próprio por boss, sempre dentro de B01.
+
+| Boss | Vida | Golpe próprio |
+|---|---|---|
+| Cthulhu Higiênico | 24 | Com menos de metade da vida, a onda de papel cobre dois lados. |
+| Bruxa Vulcânica | 28 | O lado atingido fica em brasa por 1,2 s. |
+| Anjo | 30 | O aviso muda de lado uma vez antes do golpe. |
+| Coelho de Pelúcia | 32 | O segundo ataque é um golpe no chão; só se escapa pulando. |
+| Guardião de Blocos | 40 | Golpes sempre em dois lados; o segundo ataque é no chão. |
+
+- X14 (Delegada): cada boss diz uma frase ao aparecer e estoura em pedaços do seu tema ao perder.
+- Aberto: se o criador quer outro jeito de escapar e de atacar; se algum boss está difícil ou fácil demais.
+
+## 9. Itens, poderes e segredos
+
+Tudo nesta seção é Delegado.
+
+- X15: gotinhas de geleca espalhadas pelas fases. Liberam cores do Concreto (azul com 100, roxo com 200, laranja com 300) e contam para as estrelas do mundo (1 por vencer, 2 com 60% das gotinhas, 3 com 90%).
+- X16: corações devolvem uma vida, só quando falta alguma.
+- X17: escudo de geleca, um por mundo; aguenta um golpe, vale também contra o boss e não protege de queda. Foi a forma de atender ao pedido de escudo sem contrariar A02.
+- X18: uma gotinha dourada escondida em cada mundo.
+- X19: vencer um mundo libera um poder permanente — raio longo (após o mundo 1), pulo duplo (2), raio rápido (3), raio forte contra monstros comuns (4). As fases continuam vencíveis sem eles.
+
+## 10. História
+
+- H01 (Responsável): o Concreto é um alienígena.
+- H02 (Delegada, a pedido do responsável): a nave dele caiu e se quebrou em cinco peças. Cada peça foi parar em um mundo, e o chefe de cada mundo guardou uma. O Concreto atravessa os portais para recuperar as peças, consertar a nave e voltar para casa.
+- H03 (Delegada): cada boss vencido devolve uma peça (casco, cúpula, antena, motor, luzes). Com as cinco, a nave decola.
+- A história foi inventada para o protótipo. A versão definitiva é do criador.
+
+## 11. Interface, pistas e som
+
+Tudo nesta seção é Delegado.
+
+- X20: vidas em corações, contador de gotinhas, botão de pausa, botão de som.
+- X21: tela inicial com escolha de mundo, de cor e de tipo de desenho; tela de progresso; abertura em três páginas; tela final.
+- X22: pistas visuais — seta de direção no começo, seta do portal no fim, área vermelha mostrando o alcance da faca, setas nas plataformas que se mexem, bandeira nos pontos de retorno, borda vermelha e coração pulsando na última vida.
+- X23: pistas nas lutas — radar dos três lados (onde você está, onde o golpe cai, onde está o boss), barra do tempo da pausa, mira quando o raio vai acertar, seta para o lado do boss, botões de toque que piscam na hora de usar.
+- X24: uma música por mundo e uma para as lutas, mais efeitos, todos sintetizados e compostos para o protótipo.
+
+## 12. Arte e recursos
+
+- O Concreto e quatro bosses (Cthulhu, Bruxa Vulcânica, Anjo, Coelho) usam folhas de sprites enviadas pelo responsável, recortadas por `ferramentas/recortar_sprites.py`. Estado: em avaliação.
+- O Guardião de Blocos, os monstros, os cenários, os itens e a interface são desenhados por código, tendo as pranchas de concept art como referência (Responsável: o restante segue em código).
+- A opção "Desenho" na tela inicial troca entre as folhas de sprites e o desenho por código. A branch `desenho-por-codigo-v1` guarda a versão anterior aos sprites.
+- Catálogo e origem de cada imagem: [assets/concept-art/README.md](assets/concept-art/README.md) e [assets/game/README.md](assets/game/README.md).
+- Inventário de recursos G01 a G19 (personagem, efeitos, monstros, portal, cenários, bosses, interface, sons): todos têm versão no protótipo; nenhum está aprovado como final.
+
+## 13. Regras substituídas
+
+Mantidas só como registro.
+
+- T01 (Criador, retirada pelo criador): ciclo de dia e noite de 30 minutos cada.
+- T02 (Criador, retirada pelo criador): à noite, 50% de chance de encontrar um monstro no final. Substituída por F05.
+- Espada no protagonista: apareceu em um estudo visual e foi corrigida pelo criador (A02).
+
+## 14. Implementação e testes
+
+- HTML, CSS e JavaScript puros com Canvas 2D, resolução lógica de 960×540, sem dependências e sem etapa de build. O jogo abre direto de `jogo/index.html`. Não é decisão definitiva de motor.
+- Arquivos: `config.js` (regras e números), `entrada.js` (teclado, toque, som e música), `sprites.js` (imagens recortadas, gerado), `arte.js` e `temas.js` (desenho), `mundos.js` (os cinco mundos), `fase.js` (exploração), `boss.js` (lutas), `principal.js` (telas e progressão).
+- A primeira pessoa é feita em 2D, com três posições laterais.
+- Testes: `node testes/percurso.js` roda o jogo num navegador e confere as regras pelos identificadores, além de atravessar os cinco mundos e vencer os cinco bosses com um robô. O robô não mede dificuldade nem diversão.
+- Publicação: página inicial na raiz para GitHub Pages a partir de `main`.
+
+## 15. O que falta decidir com o criador
+
+1. O que achou de cada mundo e de cada boss depois de jogar: qual é o mais divertido, qual é chato, o que está difícil ou fácil demais.
+2. A história: se o Concreto alienígena e a nave quebrada ficam, mudam ou saem.
+3. Os bosses dos mundos 2 e 5 no lugar da Malgosha e do Lego.
+4. A espada: se ele quer mesmo, contra o que disse antes.
+5. A cor definitiva do Concreto e o nome definitivo do jogo.
+6. Voltar à bandeira do trecho ou ao começo da fase.
+7. O que manter, mudar ou tirar entre as escolhas delegadas (itens X).

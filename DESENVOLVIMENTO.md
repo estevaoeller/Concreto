@@ -1,6 +1,6 @@
 # Concreto — Plano de desenvolvimento e entrega ao agente
 
-Estado: preparação para início do desenvolvimento (2026-11-15). Especificação funcional v0.4 como referência. Não há código nem motor escolhido nesta entrega. Ambiente previsto: nuvem; ferramenta referida como Fable Five ainda precisa ser identificada e validada.
+Estado em 2026-11-16: as etapas D1 a D6 estão implementadas em protótipo (cinco mundos jogáveis em `jogo/`, HTML e JavaScript puros) e parte de D7 foi feita (som, pistas visuais, pausa, publicação preparada). A etapa D0 não foi apresentada formalmente antes da implementação; a stack entrou por autorização direta do responsável e continua revisável. Falta a validação com o criador. Especificação de referência: v1.0. O texto abaixo é o plano original, mantido como registro.
 
 ## Objetivo
 

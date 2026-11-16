@@ -65,7 +65,7 @@ var MUNDOS = (function () {
   return [
     {
       nome: 'Mundo das Plantas', tema: 'plantas',
-      boss: { tipo: 'cthulhu', fala: 'Ninguém passa pelo meu portal sem se enrolar!', nome: 'Cthulhu Higiênico', vida: 24, aviso: 1.1, ondaAbaixoDe: 0.5, trocaDeLado: 2.5 },
+      boss: { tipo: 'cthulhu', peca: 'Casco', fala: 'Essa peça brilhante é minha! Vou embrulhar ela!', nome: 'Cthulhu Higiênico', vida: 24, aviso: 1.1, ondaAbaixoDe: 0.5, trocaDeLado: 2.5 },
       fase: construir(['planta', 'espinho', 'cogumelo', 'semente'], function (b) {
         b.trecho('Trecho 1');
         b.placa(190, 'Ande para a direita'); b.placa(410, 'PULO para subir'); b.placa(745, 'RAIO de longe!');
@@ -87,7 +87,7 @@ var MUNDOS = (function () {
     },
     {
       nome: 'Mundo Vulcânico', tema: 'vulcao', poder: 'Raio longo',
-      boss: { tipo: 'rainha', fala: 'Meu vulcão vai derreter você, geleca!', nome: 'Bruxa Vulcânica', vida: 28, aviso: 1.0, ondaAbaixoDe: 0.4, trocaDeLado: 2.3, brasa: 1.2 },
+      boss: { tipo: 'rainha', peca: 'Cúpula', fala: 'A peça da sua nave esquenta meu vulcão. Não devolvo!', nome: 'Bruxa Vulcânica', vida: 28, aviso: 1.0, ondaAbaixoDe: 0.4, trocaDeLado: 2.3, brasa: 1.2 },
       fase: construir(['lava', 'rocha', 'brasa', 'fumaca'], function (b) {
         b.trecho('Trecho 1');
         b.placa(200, 'Cuidado com a lava!');
@@ -109,7 +109,7 @@ var MUNDOS = (function () {
     },
     {
       nome: 'Mundo do Céu', tema: 'ceu', poder: 'Pulo duplo',
-      boss: { tipo: 'anjo', fala: 'Aqui em cima quem manda sou eu!', nome: 'Anjo', vida: 30, aviso: 1.2, ondaAbaixoDe: 0.4, trocaDeLado: 2.0, persegue: true },
+      boss: { tipo: 'anjo', peca: 'Antena', fala: 'Caiu do céu, então é minha!', nome: 'Anjo', vida: 30, aviso: 1.2, ondaAbaixoDe: 0.4, trocaDeLado: 2.0, persegue: true },
       fase: construir(['nuvem', 'estrela', 'passaro', 'vento'], function (b) {
         b.trecho('Trecho 1');
         b.placa(200, 'Algumas plataformas se mexem!');
@@ -133,7 +133,7 @@ var MUNDOS = (function () {
     },
     {
       nome: 'Mundo de Pelúcia', tema: 'pelucia', poder: 'Raio rápido',
-      boss: { tipo: 'coelho', fala: 'Quer brincar? Eu brinco pesado!', nome: 'Coelho de Pelúcia', vida: 32, aviso: 1.0, ondaAbaixoDe: 0.4, trocaDeLado: 1.7, chao: true },
+      boss: { tipo: 'coelho', peca: 'Motor', fala: 'É o meu brinquedo novo! Não empresto!', nome: 'Coelho de Pelúcia', vida: 32, aviso: 1.0, ondaAbaixoDe: 0.4, trocaDeLado: 1.7, chao: true },
       fase: construir(['urso', 'coelhinho', 'novelo', 'almofada'], function (b) {
         b.trecho('Trecho 1');
         b.placa(200, 'Pise na almofada rosa!');
@@ -156,7 +156,7 @@ var MUNDOS = (function () {
     },
     {
       nome: 'Mundo dos Blocos', tema: 'blocos', poder: 'Raio forte',
-      boss: { tipo: 'guardiao', fala: 'Eu sou a última peça. Tente me desmontar!', nome: 'Guardião de Blocos', vida: 40, aviso: 1.0, ondaAbaixoDe: 1, trocaDeLado: 1.8, chao: true },
+      boss: { tipo: 'guardiao', peca: 'Luzes', fala: 'A última peça segura a minha torre. Vem buscar!', nome: 'Guardião de Blocos', vida: 40, aviso: 1.0, ondaAbaixoDe: 1, trocaDeLado: 1.8, chao: true },
       fase: construir(['bloco', 'arco', 'pilha', 'piramide'], function (b) {
         b.trecho('Trecho 1');
         b.dourada(335, 165);

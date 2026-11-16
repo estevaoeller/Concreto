@@ -67,6 +67,10 @@ body {
 #controles button.acao { font-size: 13px; letter-spacing: 0.06em; }
 #controles button.pulo { width: 80px; height: 80px; border-color: var(--geleca); }
 #controles button.ativo { background: var(--geleca); color: var(--fundo); }
+/* pista: o botão certo pisca quando é hora de usá-lo */
+#controles button.chama { animation: chama 0.35s ease-in-out infinite alternate; border-color: #fff27a; }
+@keyframes chama { from { transform: scale(1); background: var(--botao); } to { transform: scale(1.14); background: rgba(255, 242, 122, 0.55); } }
+@media (prefers-reduced-motion: reduce) { #controles button.chama { animation: none; background: rgba(255, 242, 122, 0.55); } }
 #controles button:focus-visible { outline: 3px solid var(--geleca); outline-offset: 3px; }
 
 /* Botões na tela só em aparelhos de toque; o teclado funciona sempre. */

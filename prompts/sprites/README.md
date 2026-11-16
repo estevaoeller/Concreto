@@ -12,9 +12,9 @@ Uma folha de sprites é uma imagem feita só para o recorte. Regras que valem pa
 - Contorno escuro, grosso e fechado em toda a volta.
 - Anexar sempre a referência já existente do personagem e pedir para manter exatamente o mesmo desenho.
 
-Ordem sugerida: Concreto, depois os monstros do Mundo 1, depois o Cthulhu Higiênico. Gerar um de cada vez e conferir antes de seguir.
+Situação em 16/11/2026: recebidas e integradas as folhas do Concreto, do Cthulhu, da Bruxa Vulcânica, do Anjo e do Coelho. Faltaria a do Guardião de Blocos; os monstros seguem em código por decisão do responsável.
 
-Salvar em `assets/concept-art/sprites/` com nome e versão (por exemplo `concreto-sprites-v01.png`) e registrar no catálogo. Upload não equivale a aprovação. O recorte é feito por `ferramentas/recortar_concreto.py`, que precisa ser ajustado para as posições da folha nova.
+Salvar em `assets/concept-art/sprites/` com nome e versão (por exemplo `concreto-sprites-v01.png`) e registrar no catálogo. Upload não equivale a aprovação. O recorte é feito por `ferramentas/recortar_sprites.py`: basta acrescentar a folha nova à lista `FOLHAS`.
 
 ## 1. Concreto
 

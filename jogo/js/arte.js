@@ -605,7 +605,7 @@ var Arte = (function () {
 
   // Painel: corações de vida à esquerda, gotinhas coletadas à direita.
   function painel(c, vidas, gotinhas, total, escudo, t) {
-    for (var i = 0; i < CFG.vidas; i++) coracao(c, 36 + i * 40, 40, 15, i < vidas);
+    for (var i = 0; i < CFG.vidas; i++) coracao(c, 36 + i * 40, 40, vidas === 1 && i === 0 ? 15 + Math.abs(Math.sin((t || 0) * 7)) * 5 : 15, i < vidas);
     if (escudo) bolha(c, 36 + (vidas - 1) * 40, 40, 21, t || 0);
     c.fillStyle = 'rgba(8,20,16,0.4)';
     retArred(c, W - 142, 18, 126, 42, 21); c.fill();

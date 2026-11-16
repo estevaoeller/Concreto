@@ -46,6 +46,20 @@
           c.fillRect(x - 8, 470 - a - 10, 62, 12);
         });
         c.fillStyle = '#2a1226'; c.fillRect(0, 468, W, H);
+        fileira(cam, 0.5, 620, function (x, i) {              // cachoeiras de lava e cristais
+          var lx = x + 200 + ac(i + 11) * 200;
+          var gl = c.createLinearGradient(0, 180, 0, 480); gl.addColorStop(0, '#ffd23a'); gl.addColorStop(1, '#e8421a');
+          c.fillStyle = '#2a1226'; c.fillRect(lx - 34, 170, 108, 26);
+          c.fillStyle = gl; c.fillRect(lx, 190, 40, 290);
+          c.fillStyle = 'rgba(255,240,170,0.6)'; c.fillRect(lx + 6 + Math.sin(t * 3 + i) * 3, 190, 7, 290);
+          [[-90, 26, '#e8428a'], [-64, 40, '#ff6ab0'], [-116, 18, '#b82a6a']].forEach(function (k) {
+            c.fillStyle = k[2]; c.beginPath(); c.moveTo(lx + k[0] - 12, 470); c.lineTo(lx + k[0], 470 - k[1] * 1.6); c.lineTo(lx + k[0] + 12, 470); c.fill();
+          });
+        });
+        fileira(cam, 0.85, 130, function (x, i) {             // estalactites no teto
+          var a = 30 + ac(i + 30) * 60;
+          c.fillStyle = '#1c0e1c'; c.beginPath(); c.moveTo(x - 40, -5); c.lineTo(x, a); c.lineTo(x + 40, -5); c.fill();
+        });
         for (var e = 0; e < 34; e++) {                         // brasas subindo
           var ex = (ac(e) * W * 1.3 - cam * 0.5 % W + W * 2) % W, ey = H - ((t * (30 + ac(e + 7) * 50) + ac(e + 20) * H) % H);
           c.fillStyle = 'rgba(255,' + Math.round(140 + ac(e) * 100) + ',40,0.8)';
@@ -78,7 +92,25 @@
           [-40, 0, 40].forEach(function (d) { c.fillRect(x + d - 7, y - 62, 14, 50); c.strokeRect(x + d - 7, y - 62, 14, 50); });
           c.fillRect(x - 54, y - 72, 108, 12); c.strokeRect(x - 54, y - 72, 108, 12);
         });
+        c.lineWidth = 16;                                      // arco-íris ao fundo
+        ['#ff6a6a', '#ffb04a', '#fff27a', '#7ade7a', '#6ab8ff', '#b68af2'].forEach(function (cor, k) {
+          c.strokeStyle = cor; c.globalAlpha = 0.5;
+          c.beginPath(); c.arc(520 - (cam * 0.06) % 300, 520, 380 - k * 16, Math.PI, 0); c.stroke();
+        });
+        c.globalAlpha = 1;
+        fileira(cam, 0.45, 520, function (x, i) {              // arcos de pedra com bandeiras
+          c.fillStyle = '#f6f2ff'; c.strokeStyle = '#a8b0e0'; c.lineWidth = 3;
+          var bx = x + 120, by = 470;
+          c.fillRect(bx, by - 150, 22, 150); c.strokeRect(bx, by - 150, 22, 150); c.fillRect(bx + 110, by - 150, 22, 150); c.strokeRect(bx + 110, by - 150, 22, 150);
+          c.beginPath(); c.arc(bx + 66, by - 150, 66, Math.PI, 0); c.lineTo(bx + 110, by - 150); c.arc(bx + 66, by - 150, 44, 0, Math.PI, true); c.closePath(); c.fill(); c.stroke();
+          c.fillStyle = '#7a4ac8'; c.beginPath(); c.moveTo(bx + 52, by - 140); c.lineTo(bx + 80, by - 140); c.lineTo(bx + 80, by - 96 + Math.sin(t * 3 + i) * 3); c.lineTo(bx + 66, by - 108); c.lineTo(bx + 52, by - 96 + Math.sin(t * 3 + i) * 3); c.fill();
+          estrela(c, bx + 66, by - 124, 8, '#ffd84a', '#a06a08');
+        });
         fileira(cam, 0.6, 210, function (x, i) { nuvem(c, x, 470 + ac(i + 8) * 40, 2 + ac(i) * 0.8, '#ffffff'); });
+        for (var br = 0; br < 16; br++) {                      // brilhos no ar
+          var bx2 = (ac(br) * W * 1.5 - cam * 0.4 % W + W * 2) % W, by2 = 60 + ac(br + 40) * 360, bs = 2 + Math.abs(Math.sin(t * 2 + br)) * 4;
+          c.fillStyle = 'rgba(255,255,255,0.9)'; c.beginPath(); c.moveTo(bx2, by2 - bs * 2); c.lineTo(bx2 + bs * 0.5, by2); c.lineTo(bx2, by2 + bs * 2); c.lineTo(bx2 - bs * 0.5, by2); c.fill();
+        }
       },
       liquido: function (c, t) { for (var i = 0; i < 9; i++) nuvem(c, i * 130 - 60 + Math.sin(t + i) * 10, 520, 2.2, 'rgba(255,255,255,0.95)'); }
     },
@@ -100,6 +132,22 @@
           c.beginPath(); c.arc(x + 60, 452, 34, 0, 7); c.fill(); c.stroke();
           c.fillStyle = 'rgba(40,20,80,0.5)';
           [[-10, -10], [10, -10], [-10, 10], [10, 10]].forEach(function (d) { c.beginPath(); c.arc(x + 60 + d[0], 452 + d[1], 5, 0, 7); c.fill(); });
+        });
+        fileira(cam, 0.45, 560, function (x, i) {              // ursinho gigante e castelo de pano ao fundo
+          var ux = x + 180, cor = i % 2 ? '#c98a5a' : '#e0a8d0', esc = i % 2 ? '#8a5a34' : '#a06a98';
+          c.fillStyle = cor; c.strokeStyle = esc; c.lineWidth = 4;
+          c.beginPath(); c.arc(ux - 40, 300, 22, 0, 7); c.arc(ux + 40, 300, 22, 0, 7); c.fill(); c.stroke();
+          c.beginPath(); c.ellipse(ux, 430, 80, 70, 0, 0, 7); c.fill(); c.stroke();
+          c.beginPath(); c.arc(ux, 340, 56, 0, 7); c.fill(); c.stroke();
+          c.fillStyle = '#fff3e0'; c.beginPath(); c.ellipse(ux, 356, 24, 18, 0, 0, 7); c.fill();
+          c.fillStyle = esc; c.beginPath(); c.arc(ux - 20, 330, 6, 0, 7); c.arc(ux + 20, 330, 6, 0, 7); c.arc(ux, 350, 6, 0, 7); c.fill();
+          c.fillStyle = '#e8364a'; c.strokeStyle = '#8a1226'; c.lineWidth = 3;
+          c.beginPath(); c.moveTo(ux, 396); c.lineTo(ux - 34, 380); c.lineTo(ux - 34, 412); c.closePath(); c.fill(); c.stroke();
+          c.beginPath(); c.moveTo(ux, 396); c.lineTo(ux + 34, 380); c.lineTo(ux + 34, 412); c.closePath(); c.fill(); c.stroke();
+        });
+        fileira(cam, 0.9, 64, function (x, i) {                // bandeirinhas no alto
+          c.fillStyle = cores[((i % 4) + 4) % 4]; c.strokeStyle = 'rgba(120,70,160,0.6)'; c.lineWidth = 2;
+          c.beginPath(); c.moveTo(x, 4 + Math.sin(i) * 3); c.lineTo(x + 50, 4 + Math.sin(i + 1) * 3); c.lineTo(x + 25, 46); c.closePath(); c.fill(); c.stroke();
         });
         fileira(cam, 0.75, 230, function (x, i) {              // estrelas penduradas
           var comp = 50 + ac(i + 5) * 90, bal = Math.sin(t * 1.5 + i) * 6;
@@ -128,9 +176,58 @@
           });
         }
         torres(0.3, 150, claras, 46, 480);
+        fileira(cam, 0.45, 700, function (x, i) {              // guindaste carregando uma peça
+          var gx = x + 260;
+          c.fillStyle = '#f5c62a'; c.strokeStyle = '#a06a08'; c.lineWidth = 3;
+          c.fillRect(gx, 150, 20, 340); c.strokeRect(gx, 150, 20, 340);
+          c.fillRect(gx - 60, 150, 240, 18); c.strokeRect(gx - 60, 150, 240, 18);
+          var by = 250 + Math.sin(t * 1.5 + i) * 40;
+          c.strokeStyle = '#5a5a6a'; c.lineWidth = 3; c.beginPath(); c.moveTo(gx + 150, 168); c.lineTo(gx + 150, by); c.stroke();
+          c.fillStyle = '#e8364a'; c.strokeStyle = '#8a1226'; c.fillRect(gx + 122, by, 56, 34); c.strokeRect(gx + 122, by, 56, 34);
+          c.fillRect(gx + 130, by - 7, 14, 7); c.fillRect(gx + 156, by - 7, 14, 7);
+        });
         torres(0.6, 260, vivas, 60, 500);
+        fileira(cam, 0.6, 260, function (x, i) {               // bandeiras no topo das torres
+          if (i % 2) return;
+          c.strokeStyle = '#5a5a6a'; c.lineWidth = 3; c.beginPath(); c.moveTo(x + 30, 300); c.lineTo(x + 30, 250); c.stroke();
+          c.fillStyle = '#e8364a'; c.beginPath(); c.moveTo(x + 30, 250); c.lineTo(x + 62, 260 + Math.sin(t * 4 + i) * 3); c.lineTo(x + 30, 272); c.fill();
+        });
       }
     }
+  };
+
+  // Nave do Concreto (história PROVISÓRIA): disco voador em cinco peças. pecas[i] diz se a peça i já foi recuperada.
+  // 0 casco, 1 cúpula, 2 antena, 3 motor, 4 luzes.
+  Arte.nave = function (c, x, y, e, pecas, t, voando) {
+    c.save(); c.translate(x, y); c.scale(e, e); c.lineJoin = 'round'; c.lineCap = 'round';
+    function peca(i, cor, borda, desenho) {
+      if (pecas[i]) { c.setLineDash([]); c.fillStyle = cor; c.strokeStyle = borda; c.lineWidth = 4; desenho(); c.fill(); c.stroke(); }
+      else { c.setLineDash([7, 7]); c.strokeStyle = 'rgba(255,255,255,0.6)'; c.lineWidth = 3; desenho(); c.stroke(); c.setLineDash([]); }
+    }
+    if (voando && pecas[3]) { // fogo do motor
+      c.fillStyle = '#ffd23a'; c.beginPath(); c.moveTo(-18, 34); c.quadraticCurveTo(0, 90 + Math.sin(t * 30) * 14, 18, 34); c.fill();
+      c.fillStyle = '#ff7a1e'; c.beginPath(); c.moveTo(-10, 34); c.quadraticCurveTo(0, 66 + Math.sin(t * 24) * 10, 10, 34); c.fill();
+    }
+    peca(3, '#8f86b8', '#3a2f6a', function () { c.beginPath(); c.moveTo(-26, 22); c.lineTo(26, 22); c.lineTo(18, 42); c.lineTo(-18, 42); c.closePath(); });
+    peca(1, 'rgba(160,230,255,0.85)', '#2f7de0', function () { c.beginPath(); c.arc(0, -8, 40, Math.PI, 0); c.closePath(); });
+    peca(0, '#b673f2', '#4a1f8a', function () { c.beginPath(); c.ellipse(0, 6, 92, 24, 0, 0, 7); });
+    peca(2, '#ffd84a', '#a06a08', function () { c.beginPath(); c.moveTo(-3, -48); c.lineTo(-3, -72); c.arc(0, -78, 8, Math.PI * 0.5, Math.PI * 2.5); c.lineTo(3, -72); c.lineTo(3, -48); c.closePath(); });
+    if (pecas[4]) for (var i = -3; i <= 3; i++) {
+      c.fillStyle = Math.floor(t * 4 + i) % 2 ? '#fff27a' : '#7affc8'; c.strokeStyle = '#4a1f8a'; c.lineWidth = 2;
+      c.beginPath(); c.arc(i * 24, 8 + Math.abs(i) * 1.5, 6, 0, 7); c.fill(); c.stroke();
+    } else for (var k = -3; k <= 3; k++) {
+      c.setLineDash([3, 4]); c.strokeStyle = 'rgba(255,255,255,0.6)'; c.lineWidth = 2;
+      c.beginPath(); c.arc(k * 24, 8 + Math.abs(k) * 1.5, 6, 0, 7); c.stroke(); c.setLineDash([]);
+    }
+    c.restore();
+  };
+  // seta que balança, para mostrar para onde ir
+  Arte.seta = function (c, x, y, ang, tam, cor, t) {
+    c.save(); c.translate(x, y); c.rotate(ang); c.translate(Math.sin((t || 0) * 6) * tam * 0.25, 0);
+    c.fillStyle = cor || '#fff27a'; c.strokeStyle = 'rgba(8,20,16,0.85)'; c.lineWidth = Math.max(3, tam * 0.14); c.lineJoin = 'round';
+    c.beginPath(); c.moveTo(tam, 0); c.lineTo(0, -tam * 0.8); c.lineTo(0, -tam * 0.32); c.lineTo(-tam, -tam * 0.32);
+    c.lineTo(-tam, tam * 0.32); c.lineTo(0, tam * 0.32); c.lineTo(0, tam * 0.8); c.closePath(); c.stroke(); c.fill();
+    c.restore();
   };
 
   function estrela(c, x, y, r, cor, borda) {

@@ -1,57 +1,52 @@
 # Concreto
 
-Jogo de plataforma em fase de descoberta e preparação para desenvolvimento. Concreto é uma geleca com formato de fantasma que atravessa plataformas e enfrenta monstros. A visão é lateral durante a exploração; o combate contra o Cthulhu Higiênico muda para primeira pessoa.
+Jogo de plataforma 2D em que o Concreto, um alienígena de geleca com formato de fantasma, atravessa cinco mundos para recuperar as peças da sua nave. A exploração é vista de lado; as lutas contra os bosses são em primeira pessoa.
 
 ## Estado atual
 
-Especificação v0.10 (2026-11-16). Existe um protótipo jogável dos cinco mundos em [`jogo/`](jogo/), autorizado pelo responsável como instrumento de validação do design. Cada mundo tem fase em três trechos, monstros próprios, portal e boss.
+Especificação v1.0 (2026-11-16). O jogo está completo em protótipo: cinco mundos, cada um com fase em três trechos, monstros próprios, portal e boss. Está em validação com o criador.
 
-As regras ainda não decididas pelo criador foram preenchidas com escolhas provisórias, identificadas em [`jogo/js/config.js`](jogo/js/config.js), em [`jogo/js/mundos.js`](jogo/js/mundos.js) e na seção 13 da especificação. Escolha provisória não é requisito. Os mundos 2 e 5 usam as versões originais das pranchas, sem personagens ou marcas de terceiros.
+Parte das regras é decisão do criador e parte foi escolhida pelo desenvolvimento, por delegação do responsável, para o jogo ficar jogável. A especificação marca a origem de cada regra. Escolha delegada não é requisito.
 
-## Como jogar o protótipo
+## Como jogar
 
-Com o GitHub Pages ativado em `main`, o jogo abre em https://estevaoeller.github.io/Concreto/ em qualquer navegador.
+Abrir `jogo/index.html` no navegador. Não precisa instalar nada nem de internet. Com o GitHub Pages ativado em `main`, o jogo também abre em https://estevaoeller.github.io/Concreto/.
 
-A branch `desenho-por-codigo-v1` guarda a versão em que todo o visual é desenhado por código, anterior ao uso das pranchas.
+| Ação | Teclado | Toque |
+|---|---|---|
+| Andar | Setas ou A/D | ◀ ▶ |
+| Pular | Espaço, seta para cima ou W | PULO |
+| Raio de geleca | X, Z ou J | RAIO |
+| Pausar | P ou Esc | Botão de pausa |
+| Confirmar | Enter | Toque na tela |
 
-Abrir `jogo/index.html` no navegador (não precisa instalar nada nem de internet).
+Na tela inicial: escolha o mundo com as setas ou tocando nele; C troca a cor do Concreto; V troca entre as folhas de sprites e o desenho por código; G abre o progresso; S liga e desliga o som.
 
-- Teclado: setas ou A/D andam, espaço pula, X solta o raio de geleca, Enter confirma.
-- Celular ou tablet: botões na tela.
-- Na luta contra o boss: esquerda/direita mudam de lado, X (ou RAIO) atira.
-- Tela inicial: escolha o mundo com as setas ou tocando nele. Tecla P ou o botão de pausa pausam o jogo.
-- Gotinhas liberam cores do Concreto e valem estrelas; corações devolvem uma vida; a bolha de escudo aguenta um golpe. Entrar no portal leva à luta contra o boss.
-- Em algumas lutas o boss dá um golpe no chão: aperte o pulo para escapar.
-- Tecla C troca a cor do Concreto na tela inicial; tecla S liga e desliga o som.
-
-Para gerar um arquivo HTML único (fácil de enviar): `node ferramentas/empacotar.js`.
-
-Para rodar os testes (precisa de Node e do Playwright com Chromium): `node testes/percurso.js`. Cada verificação cita o ID da regra na especificação.
+Nas lutas contra os bosses: esquerda e direita trocam de lado para fugir do golpe; o raio só machuca quando o boss cansa; em algumas lutas é preciso pular para escapar de um golpe no chão.
 
 ## Documentação
 
-- [Especificação do jogo](ESPECIFICACAO.md): decisões de design e requisitos.
-- [Resumo para o criador](RESUMO.md): versão em linguagem simples.
-- [Histórico](HISTORICO.md): decisões e alterações por rodada.
-- [Plano de entrevista](PLANO-ENTREVISTA.md): questões, dependências e checkpoints.
+- [Especificação](ESPECIFICACAO.md): as regras do jogo e a origem de cada uma.
+- [Resumo para o criador](RESUMO.md): o mesmo conteúdo em linguagem simples.
+- [Histórico](HISTORICO.md): decisões e alterações, rodada a rodada.
+- [Plano de entrevista](PLANO-ENTREVISTA.md): o que ainda perguntar ao criador.
+- [Plano de desenvolvimento](DESENVOLVIMENTO.md) e [instruções para agentes](AGENTS.md).
 
-## Produção visual
+## Arte
 
-- [Índice de prompts GPT Images](prompts/README.md): cinco storyboards, Concreto, monstros comuns e cinco bosses.
-- [Catálogo de concept art](assets/concept-art/README.md): estudos anteriores, nomes previstos, status e instruções de upload.
-- [Storyboards](assets/concept-art/storyboards/), [personagens](assets/concept-art/personagens/) e [bosses](assets/concept-art/bosses/): pastas para imagens.
-- [Assets do jogo](assets/game/README.md): recursos integráveis após aprovação, separados de estudos.
-- Inventário visual: 12 de 12 pranchas recebidas e organizadas; inventário preliminar completo. O estudo do protagonista permanece preliminar e contém ressalva sobre a espada incorreta.
+- [Catálogo de concept art e sprites](assets/concept-art/README.md): pranchas, folhas de sprites e estado de aprovação.
+- [Recursos integrados ao jogo](assets/game/README.md): o que está no jogo, de onde veio e como foi preparado.
+- [Prompts](prompts/README.md): textos usados para gerar pranchas e folhas de sprites.
 
-## Desenvolvimento
+O Concreto e quatro bosses usam folhas de sprites. O quinto boss, os monstros, os cenários e a interface são desenhados por código. A branch `desenho-por-codigo-v1` guarda a versão em que tudo era desenhado por código.
 
-- [Plano de desenvolvimento](DESENVOLVIMENTO.md): etapas, MVP proposto, bloqueios, arquitetura preliminar e critérios de aceitação.
-- [AGENTS.md](AGENTS.md): instruções e prompt inicial para o agente de desenvolvimento.
-- Desenvolvimento na nuvem. A ferramenta mencionada como Fable Five ainda precisa ser identificada e avaliada.
-- Situação: protótipo cobre D1 a D6 com arte provisória desenhada por código a partir das pranchas. Próximo passo: o criador jogar e revisar as escolhas provisórias; depois, D7 (acabamento).
+## Para quem desenvolve
 
-## Processo
+- Código em `jogo/js/`: `config.js` (regras e números), `mundos.js` (os cinco mundos), `fase.js` (exploração), `boss.js` (lutas), `arte.js` e `temas.js` (desenho), `entrada.js` (controles e som), `principal.js` (telas e progressão). `sprites.js` é gerado.
+- Testes: `node testes/percurso.js` (precisa de Node e do Playwright com Chromium). Cada verificação cita o identificador da regra na especificação.
+- Recortar as folhas de sprites: `python3 ferramentas/recortar_sprites.py` (precisa de Pillow, numpy e scipy).
+- Gerar um arquivo HTML único: `node ferramentas/empacotar.js`.
 
-Entrevista adaptada de Grill Me / Grill with Docs: uma pergunta por vez, aprofundamento das consequências e consolidações periódicas. Sugestões não são requisitos até confirmação. Manter os documentos sincronizados e versionados no GitHub. Referências a jogos e marcas são referências criativas, não licenças de uso. Não publicar jogo ou incluir dados pessoais sem autorização.
+## Cuidados
 
-Tecnologia do protótipo: HTML, CSS e JavaScript puros com Canvas 2D, sem dependências nem etapa de build. A escolha vale para o protótipo, não passou pela etapa D0 e pode ser revista.
+Referências a jogos e marcas na documentação registram a intenção criativa do criador; não são licenças de uso. O jogo não reproduz personagens nem marcas de terceiros. As imagens foram geradas por modelo de imagem; avaliar direitos antes de qualquer distribuição comercial. Não incluir dados pessoais no repositório, que é público.

@@ -30,13 +30,13 @@ Adaptação de Grill Me e Grill with Docs, de Matt Pocock (https://github.com/ma
 
 Perguntar uma por vez, ajustando conforme respostas:
 
-Atualizado após a rodada 013. As perguntas de regra foram decididas por delegação e estão na seção 13 da especificação. A entrevista passa a ser de revisão, com o criador jogando:
+Atualizado após a rodada 018. As perguntas de regra foram decididas por delegação e estão marcadas como "Delegada" na especificação v1.0 (itens X e H). A entrevista passa a ser de revisão, com o criador jogando:
 
 1. "Qual mundo você mais gostou? Qual foi o mais chato?"
 2. "Algum boss ficou difícil demais ou fácil demais?"
 3. "Os monstros se mexendo ficaram como você queria?"
 4. "O golpe de cada boss ficou legal? Você mudaria algum?"
-5. "Por que o Concreto atravessa os mundos? Como a história termina?"
+5. "Inventamos que o Concreto é um alienígena e que a nave dele quebrou em cinco peças. Você gosta? Como é a história de verdade?"
 6. "Você quer a espada no jogo? Antes você disse que a arma é só dos monstros." Não presumir.
 7. "O boss do mundo 2 e o mundo 5 ficaram diferentes do que você pediu. O que achou?"
 

@@ -183,3 +183,27 @@ Próximo passo combinado: substituir o desenho por código pelas pranchas, com a
 - Causa: o método partia do verde do corpo e depois anexava o contorno escuro; onde a prancha tem um brilho claro entre o corpo e o traço, o contorno não era alcançado.
 - Correção: o recorte passou a remover o fundo (branco, lilás e sombras) de fora para dentro e a manter o personagem inteiro. Riscos finos grudados no corpo são retirados e o raio da pose de disparo é cortado rente ao corpo.
 - Conferido visualmente, pose a pose, em fundo claro e escuro: contorno completo nas onze imagens. Restam um resto pequeno de risco na pose de carregar e uma emenda na pose de disparo.
+
+## 2026-11-16 — Rodada 017 — Folhas de sprites
+
+- O responsável enviou seis folhas de sprites em fundo magenta: Concreto (12 poses), Cthulhu Higiênico, Bruxa Vulcânica, Anjo, Coelho de Pelúcia e um urso de pelúcia (quatro estados cada, de frente).
+- Os arquivos foram reorganizados em `assets/concept-art/sprites/` com nome e versão, sem alterar o conteúdo, e registrados no catálogo.
+- Nova ferramenta `ferramentas/recortar_sprites.py`, que substitui o recorte anterior a partir da prancha de estudos.
+- Integrados ao jogo: Concreto e quatro bosses. O boss do mundo 2 passa a se chamar Bruxa Vulcânica, acompanhando a folha enviada. O urso não é usado, porque o boss do mundo 4 é o coelho.
+
+## 2026-11-16 — Rodada 018 — História, pistas visuais, cenários e documentação
+
+Decisões do responsável:
+
+- O restante do visual segue em código. Imagens para cenário podem ser consideradas depois.
+- Aprovados: cenários mais ricos, entrada e saída de fase, tela de progresso e revisão da documentação.
+- História: o Concreto é um alienígena; inventar o motivo de ele fazer o que faz.
+- Mais pistas visuais.
+
+Implementado:
+
+- História (H01 a H03): a nave do Concreto caiu e se quebrou em cinco peças; cada chefe guardou uma; vencer um boss devolve uma peça; com as cinco, a nave decola. Abertura em três páginas, falas dos bosses ajustadas, nave caída no começo do mundo 1 e tela final com a decolagem. O motivo e as peças são invenção do desenvolvimento, a pedido; a história definitiva é do criador.
+- Pistas visuais na fase e nas lutas (X22 e X23 da especificação).
+- Cenários dos mundos 2 a 5 com mais elementos; chegada do Concreto por portal no começo de cada mundo; tela de progresso.
+- Documentação: especificação reescrita como v1.0, com a origem de cada regra (criador, responsável, delegada, aberta) e identificadores X para as escolhas delegadas, no lugar da antiga "seção 13". README, catálogo e registro de recursos refeitos. Nenhuma regra mudou na reorganização.
+- Testes: bateria completa executada após as mudanças; todas as verificações passaram.

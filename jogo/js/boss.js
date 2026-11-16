@@ -542,9 +542,34 @@ var Boss = (function () {
     c.fillStyle = '#c14fd6'; R(c, bx0, 46, Math.max(0.01, bw * b.vida / B.vida), 14, 5); c.fill();
     c.fillStyle = 'rgba(255,255,255,0.25)'; c.fillRect(bx0, 47, bw * b.vida / B.vida, 4);
 
+    // pista: radar dos três lados. Verde = onde você está; vermelho = onde o golpe vai cair; a bolinha de cima é o boss.
+    var perigoso = (b.fase === 'aviso' || b.fase === 'golpe') ? b.alvos : [];
+    [-1, 0, 1].forEach(function (l) {
+      var rx = W / 2 + l * 46, ry = 150, ruim = perigoso.indexOf(l) >= 0 || b.brasas.some(function (q) { return q.lado === l; });
+      c.fillStyle = ruim ? 'rgba(255,70,60,' + (0.55 + 0.35 * Math.abs(Math.sin(b.t * 12))) + ')' : 'rgba(8,20,16,0.5)';
+      c.strokeStyle = l === b.lado ? '#7aff8a' : 'rgba(255,255,255,0.55)'; c.lineWidth = l === b.lado ? 5 : 2;
+      R(c, rx - 18, ry - 14, 36, 28, 8); c.fill(); c.stroke();
+      if (l === b.lado) Arte.gota(c, rx, ry + 4, 7);
+      if (l === b.bossLado && b.fase !== 'vencido') { c.fillStyle = '#c14fd6'; c.strokeStyle = '#fff'; c.lineWidth = 2; c.beginPath(); c.arc(rx, ry - 26, 8, 0, 7); c.fill(); c.stroke(); }
+    });
+    if (b.fase === 'pausa') { // pista: barra do tempo que resta e mira
+      var resta = 1 - b.tempo / B.pausa;
+      c.fillStyle = 'rgba(8,20,16,0.7)'; R(c, bx0 - 4, 70, bw + 8, 14, 6); c.fill();
+      c.fillStyle = resta > 0.3 ? '#fff27a' : '#ff8a4a'; R(c, bx0, 73, Math.max(0.01, bw * resta), 8, 4); c.fill();
+      var alinhado = b.lado === b.bossLado && Math.abs(b.bossX - b.bossLado) < 0.35, mx = xTela(b, b.bossX);
+      if (alinhado) {
+        c.strokeStyle = '#7aff8a'; c.lineWidth = 5;
+        var rr = 70 + Math.sin(b.t * 10) * 6;
+        c.beginPath(); c.arc(mx, 250, rr, 0, 7); c.moveTo(mx - rr - 14, 250); c.lineTo(mx - rr + 16, 250); c.moveTo(mx + rr - 16, 250); c.lineTo(mx + rr + 14, 250);
+        c.moveTo(mx, 250 - rr - 14); c.lineTo(mx, 250 - rr + 16); c.moveTo(mx, 250 + rr - 16); c.lineTo(mx, 250 + rr + 14); c.stroke();
+      } else if (b.lado !== b.bossLado) {
+        var sd = b.bossLado > b.lado ? 1 : -1;
+        Arte.seta(c, W / 2 + sd * 380, 300, sd > 0 ? 0 : Math.PI, 30, '#fff27a', b.t);
+      }
+    }
     // recados
-    if (b.fase === 'pausa') Arte.texto(c, 'Cansou! Atire o raio!  ' + Math.ceil(B.pausa - b.tempo), W / 2, 92, 24, '#fff27a');
-    else if (b.fase === 'aviso' || b.fase === 'golpe') Arte.texto(c, b.tipoAtaque === 'chao' ? 'Golpe no chão! Aperte PULO!' : b.alvos.length > 1 ? 'Ache o lado livre!' : 'Cuidado! Vá para o lado!', W / 2, 92, 22, '#ffb0a6');
+    if (b.fase === 'pausa') Arte.texto(c, 'Cansou! Atire o raio!', W / 2, 108, 24, '#fff27a');
+    else if (b.fase === 'aviso' || b.fase === 'golpe') Arte.texto(c, b.tipoAtaque === 'chao' ? 'Golpe no chão! Aperte PULO!' : b.alvos.length > 1 ? 'Ache o lado livre!' : 'Cuidado! Vá para o lado!', W / 2, 100, 22, '#ffb0a6');
     else if (b.fase === 'entrada') {
       if (b.tempo < 1 || !B.fala) Arte.texto(c, B.nome + ' apareceu!', W / 2, 92, 30, '#f2fbf4');
       else { // fala do boss (texto PROVISÓRIO)

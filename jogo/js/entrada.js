@@ -24,6 +24,7 @@ var Entrada = (function () {
     if (ev.key === 'p' || ev.key === 'P' || ev.key === 'Escape') e.pausou = true;
     if (ev.key === 'c' || ev.key === 'C') e.corApertou = true;
     if (ev.key === 'v' || ev.key === 'V') e.visualApertou = true;
+    if (ev.key === 'g' || ev.key === 'G') e.progressoApertou = true;
     if (ev.key === 's' || ev.key === 'S') e.somApertou = true;
     Som.acordar();
   });
@@ -67,7 +68,7 @@ var Entrada = (function () {
 
   e.limparQuadro = function () {
     e.esqApertou = e.dirApertou = e.puloApertou = e.ataqueApertou = false;
-    e.confirmou = false; e.pausou = false; e.corApertou = false; e.visualApertou = false; e.somApertou = false; e.toque = null;
+    e.confirmou = false; e.pausou = false; e.corApertou = false; e.visualApertou = false; e.progressoApertou = false; e.somApertou = false; e.toque = null;
   };
   return e;
 })();

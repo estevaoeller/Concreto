@@ -8,16 +8,26 @@ Cada recurso deve registrar origem, licença/direitos, versão, arquivo conceitu
 
 ## Recursos integrados
 
-| Recurso | Arquivo | Origem | Versão | Estado |
-|---|---|---|---|---|
-| Concreto — 10 poses de jogo e 1 desenho grande | `jogo/img/concreto.png` (embutido em `jogo/js/sprites.js`) | Recorte de `assets/concept-art/personagens/concreto-v01.png`, alternativa A (verde), feito por `ferramentas/recortar_concreto.py` | v01 | Em avaliação pelo responsável e pelo criador; não aprovado como arte final |
+Todos em avaliação pelo responsável e pelo criador; nenhum aprovado como arte final.
 
-Características: folha única de 1501×232 px, fundo transparente, pés alinhados na base, todas as poses viradas para a direita. Quadros: parado, anda1, anda2, anda3, agacha, sobe, desce, pousa, carrega, dispara e grande. As posições ficam em `SPRITES.concreto.quadros`.
+| Recurso | Origem | Quadros |
+|---|---|---|
+| Concreto | `assets/concept-art/sprites/concreto-sprites-v01.png` | parado, anda1, anda2, anda3, agacha, sobe, desce, pousa, carrega, dispara, susto, feliz |
+| Cthulhu Higiênico | `assets/concept-art/sprites/cthulhu-sprites-v01.png` | neutro, prepara, ataca, cansado |
+| Bruxa Vulcânica | `assets/concept-art/sprites/bruxa-vulcanica-sprites-v01.png` | neutro, prepara, ataca, cansado |
+| Anjo | `assets/concept-art/sprites/anjo-sprites-v01.png` | neutro, prepara, ataca, cansado |
+| Coelho de Pelúcia | `assets/concept-art/sprites/coelho-sprites-v01.png` | neutro, prepara, ataca, cansado |
 
-Preparação aplicada (v02 do recorte): o fundo branco e lilás e as sombras são removidos de fora para dentro, a partir da beira de cada recorte, e o personagem fica inteiro, com o contorno preto. Faíscas, gotas soltas e riscos de movimento são descartados. Na pose de disparo, o raio é cortado rente ao corpo e o traço é refeito nesse ponto. As cores azul, roxa e laranja são obtidas no jogo girando o matiz do verde, não das alternativas B, C e D da prancha.
+Formato: as folhas recortadas ficam embutidas em `jogo/js/sprites.js` (WebP com transparência), para o jogo abrir sem servidor. O arquivo é gerado por `ferramentas/recortar_sprites.py`; não editar à mão. As posições de cada quadro ficam em `SPRITES.<nome>.quadros`. Pés alinhados na base; Concreto virado para a direita; bosses de frente.
 
-Histórico do recorte: a v01 partia do verde do corpo e perdia trechos do contorno onde há um brilho claro entre o corpo e o traço. Foi reprovada pelo responsável e substituída pela v02.
+Preparação: o fundo magenta é removido; cada personagem é um pedaço separado; ficam os maiores pedaços, o que descarta faíscas e rabiscos soltos; a beirada misturada com o magenta é aparada. O Concreto fica na resolução original (cerca de 200 px de altura) e os bosses são reduzidos a 380 px.
 
-Limitações conhecidas: um resto pequeno de risco amarelo na lateral da pose de carregar; uma emenda visível no ponto em que o raio foi cortado na pose de disparo; as poses têm cerca de 110 px de altura, suficientes para o tamanho de jogo, mas o desenho grande perde nitidez em telas muito grandes. Origem em imagem gerada: avaliar direitos antes de distribuição comercial.
+Cores: azul, roxo e laranja do Concreto são obtidos no jogo girando o matiz do verde da folha.
 
-O desenho por código continua disponível: opção "Desenho" na tela inicial (tecla V) ou `visual: 'codigo'` em `jogo/js/config.js`. A branch `desenho-por-codigo-v1` guarda o estado anterior a esta integração.
+Uso dos estados dos bosses: neutro na entrada e entre os ataques, prepara durante o aviso, ataca no golpe, cansado na pausa de 10 segundos e na derrota.
+
+Histórico: antes das folhas, o Concreto foi recortado da prancha de estudos `personagens/concreto-v01.png`. A primeira versão desse recorte perdia trechos do contorno e foi reprovada pelo responsável; a segunda foi substituída pelas folhas de sprites, que são feitas para recorte.
+
+Limitações: não há folha do Guardião de Blocos nem dos monstros; as faíscas e o rabisco de tontura das folhas dos bosses são descartados no recorte. Origem em imagem gerada: avaliar direitos antes de distribuição comercial.
+
+O desenho por código continua disponível: opção "Desenho" na tela inicial (tecla V) ou `visual: 'codigo'` em `jogo/js/config.js`.

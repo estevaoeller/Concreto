@@ -22,7 +22,9 @@ function confere(nome, ok, detalhe) {
   await p.goto(pagina); await p.evaluate(() => { try { localStorage.clear(); } catch (e) {} });
   await p.goto(pagina); await p.waitForTimeout(400); await foto('1-titulo');
   await p.keyboard.press('Enter'); await p.waitForTimeout(1300); await foto('2-historia');
-  await p.keyboard.press('Enter'); await p.waitForTimeout(500); await foto('3-fase');
+  for (let k = 0; k < 3; k++) { await p.keyboard.press('Enter'); await p.waitForTimeout(800); if (k < 2) await foto('2-historia-' + (k + 2)); }
+  await p.waitForTimeout(1200); await foto('3-fase');
+  confere('história: três páginas e depois a fase começa', await p.evaluate(() => Jogo.estado) === 'fase');
 
   // V01: começa com três vidas
   confere('V01 começa com três vidas', await p.evaluate(() => Jogo.vidas) === 3);

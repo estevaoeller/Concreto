@@ -4,11 +4,11 @@ var Fase = (function () {
   var W = CFG.largura, H = CFG.altura;
   var JW = 40, JH = 50, MW = 44, MH = 50;
 
-  function criar(mundo) {
+  function criar(mundo, comEntrada) {
     var dados = mundo.fase;
     dados.plataformas.forEach(function (p) { if (p.mov) { p.x = p.bx; p.y = p.by; } });
     return {
-      dados: dados, tema: Arte.temas[mundo.tema],
+      dados: dados, tema: Arte.temas[mundo.tema], primeiro: mundo === MUNDOS[0], saindo: comEntrada ? 1 : 0,
       molas: dados.molas.map(function (m) { return { x: m.x, y: m.y, w: m.w, aperto: 0 }; }),
       j: {
         x: dados.inicio.x, y: dados.inicio.y, vx: 0, vy: 0, dir: 1, noChao: true,
@@ -79,6 +79,8 @@ var Fase = (function () {
       p.x = nx; p.y = ny;
     });
     f.molas.forEach(function (m) { if (m.aperto > 0) m.aperto -= dt * 3; });
+
+    if (f.saindo > 0) { f.saindo -= dt / 0.9; j.trava = 0.05; } // chegando: sai da nave (mundo 1) ou do portal
 
     // --- Concreto ---
     j.coiote = j.noChao ? C.toleranciaBorda : j.coiote - dt;
@@ -309,8 +311,25 @@ var Fase = (function () {
     if (f.tremor > 0) c.translate((Math.random() - 0.5) * 10, (Math.random() - 0.5) * 8);
     f.tema.fundo(c, cam, f.t);
     if (f.tema.liquido) f.tema.liquido(c, f.t);
+    // de onde o Concreto vem: a nave caída no mundo 1, um portal nos outros (história PROVISÓRIA)
+    if (d.inicio.x - cam > -200) {
+      if (f.primeiro) { c.save(); c.translate(d.inicio.x - 30 - cam, 440); c.rotate(-0.22); Arte.nave(c, 0, 0, 0.75, [true, false, false, false, false], f.t); c.restore(); }
+      else { c.save(); c.translate(d.inicio.x - 34 - cam, 452); c.scale(0.8, 0.8); Arte.portal(c, 0, 0, f.t); c.restore(); }
+    }
     d.placas.forEach(function (p) { if (p.x - cam > -200 && p.x - cam < W + 200) Arte.placa(c, p.x - cam, 452, p.texto); });
-    d.plataformas.forEach(function (p) { Arte.plataforma(c, p, cam, f.tema.pal); });
+    d.plataformas.forEach(function (p) {
+      Arte.plataforma(c, p, cam, f.tema.pal);
+      if (p.mov && p.x - cam > -150 && p.x - cam < W + 20) { // pista: setinhas mostram para onde a plataforma se mexe
+        var mx = p.x + p.w / 2 - cam, my = p.y + 16, vert = !!p.mov.dy;
+        c.fillStyle = 'rgba(255,255,255,0.95)'; c.strokeStyle = 'rgba(8,20,16,0.6)'; c.lineWidth = 2;
+        [-1, 1].forEach(function (s) {
+          c.beginPath();
+          if (vert) { c.moveTo(mx + s * 16 - 6, my + s * 2); c.lineTo(mx + s * 16 + 6, my + s * 2); c.lineTo(mx + s * 16, my + s * 9); }
+          else { c.moveTo(mx + s * 14, my - 6); c.lineTo(mx + s * 14, my + 6); c.lineTo(mx + s * 22, my); }
+          c.closePath(); c.stroke(); c.fill();
+        });
+      }
+    });
     d.retornos.forEach(function (r, i) { // bandeira do ponto de retorno
       var x = r.x - 46 - cam;
       if (i > 0 && x > -40 && x < W + 40) Arte.bandeira(c, x, 452, i <= f.trecho, f.t);
@@ -333,14 +352,26 @@ var Fase = (function () {
     });
     f.monstros.forEach(function (m) {
       var x = m.x - cam;
-      if (m.vida > 0 && x > -80 && x < W + 80) Arte.monstro(c, x, m.y, m, f.t);
+      if (!(m.vida > 0 && x > -80 && x < W + 80)) return;
+      if (m.estado === 'preparando' || m.estado === 'golpe') { // pista: a área vermelha mostra até onde a faca alcança
+        var al = CFG.monstro.alcanceFaca + MW / 2, forte = m.estado === 'golpe' ? 0.5 : 0.18 + 0.22 * Math.abs(Math.sin(f.t * 14));
+        c.fillStyle = 'rgba(255,60,50,' + forte + ')';
+        Arte.retArred(c, m.olha > 0 ? x : x - al, m.y - 42, al, 38, 12); c.fill();
+        Arte.texto(c, '!', x, m.y - 78 - Math.abs(Math.sin(f.t * 10)) * 6, 30, '#ff5a4a');
+      }
+      Arte.monstro(c, x, m.y, m, f.t);
     });
     f.gotas.forEach(function (g) { Arte.gota(c, g.x - cam, g.y, 6); });
     f.raios.forEach(function (r) { Arte.raio(c, r.x - cam, r.y, r.dir, f.t); });
     if (!esconderJogador && !(j.invul > 0 && Math.floor(f.t * 14) % 2 === 0)) {
       var esp = j.pouso > 0 ? -0.5 * (j.pouso / 0.14)
         : j.noChao ? Math.sin(f.t * (j.vx ? 12 : 3)) * 0.12 : Math.max(-0.5, Math.min(0.9, -j.vy / 700));
-      if (j.entrando > 0) { // sendo puxado para dentro do portal
+      if (f.saindo > 0) { // chegando ao mundo
+        var ks = 1 - f.saindo;
+        c.save(); c.translate(j.x - cam - 40 * f.saindo, j.y - 50 * f.saindo); c.rotate(-f.saindo * 6); c.scale(ks, ks);
+        Arte.concreto(c, 0, 26 * f.saindo, { w: JW + 8, h: JH + 8, dir: 1, t: f.t, semSombra: true, pose: 'sobe' });
+        c.restore();
+      } else if (j.entrando > 0) { // sendo puxado para dentro do portal
         var k = 1 - j.entrando;
         c.save();
         c.translate(j.x - cam + (d.portalX - j.x) * j.entrando, j.y - 60 * j.entrando);
@@ -360,6 +391,11 @@ var Fase = (function () {
       c.beginPath(); c.arc(p.x - cam, p.y, p.r, 0, 7); c.fill();
       c.globalAlpha = 1;
     });
+    // pistas: seta de "vá para lá" no começo do mundo 1 e seta do portal no fim da fase
+    if (f.primeiro && f.t < 8 && j.x < 320 && f.saindo <= 0 && !esconderJogador) Arte.seta(c, j.x - cam + 90, j.y - 30, 0, 22, '#fff27a', f.t);
+    if (f.trecho === d.trechos.length - 1 && d.portalX - cam > W - 40 && !esconderJogador) {
+      Arte.seta(c, W - 56, 230, 0, 22, '#d8a8ff', f.t); Arte.texto(c, 'Portal', W - 62, 270, 16, '#f2fbf4');
+    }
     c.restore();
   }
 
