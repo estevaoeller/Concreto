@@ -84,7 +84,7 @@ function confere(nome, ok, detalhe) {
     return o;
   });
   confere('V04 sem vidas, o vento espalha a geleca', r.estado === 'morrendo' && r.particulas > 30, r);
-  confere('V07 sem vidas recomeça a fase do início', r.depois === 'fase' && r.vidas === 3 && r.x === 90, r);
+  confere('V07 sem vidas no primeiro trecho recomeça do início da fase', r.depois === 'fase' && r.vidas === 3 && r.x === 90, r);
 
   // C01–C04, M01–M03, F01–F03: em cada um dos cinco mundos, o robô atravessa a fase, entra no portal e vence o boss
   const robos = () => {
@@ -245,6 +245,36 @@ function confere(nome, ok, detalhe) {
     return { antes, c1, c2, cor: CFG.concreto.cor };
   });
   confere('cores: com 110 gotinhas só verde e azul estão liberadas', r.antes === 'verde' && r.c1 === 'azul' && r.c2 === 'verde', r);
+  await p.evaluate(() => { try { localStorage.clear(); } catch (e) {} });
+
+  // Escolhas provisórias da rodada 014
+  await novaFase(0);
+  r = await p.evaluate(() => {
+    const J = Jogo, d = MUNDOS[0].fase, j = J.fase.j, o = {};
+    const chao = d.plataformas.filter(q => q.chao && q.x >= d.trechos[1].x).sort((a, b) => a.x - b.x)[0];
+    j.x = chao.x + 200; j.y = 460; for (let i = 0; i < 5; i++) J.passo(1 / 60);
+    o.trecho = J.fase.trecho; const pegas = J.gotinhas;
+    J.vidas = 1; j.invul = 0; j.y = 900; for (let i = 0; i < 60 * 5; i++) J.passo(1 / 60);
+    o.tela = J.estado; Entrada.confirmou = true; J.passo(1 / 60);
+    o.estado = J.estado; o.vidas = J.vidas; o.noRetorno = Math.abs(j.x - d.retornos[1].x) < 2; o.gotinhasMantidas = J.gotinhas === pegas;
+    return o;
+  });
+  confere('ponto de retorno: sem vidas no trecho 2, volta à bandeira do trecho 2', r.trecho === 1 && r.tela === 'derrota' && r.estado === 'fase' && r.vidas === 3 && r.noRetorno && r.gotinhasMantidas, r);
+  r = await p.evaluate(() => {
+    const J = Jogo, o = {};
+    J.novaFase(0); o.sem = JSON.stringify(J.poder);
+    J.progresso.liberado = 4; J.novaFase(4); o.com = J.poder;
+    const j = J.fase.j; Entrada.puloApertou = true; Entrada.pulo = true; J.passo(1 / 60);
+    for (let i = 0; i < 12; i++) J.passo(1 / 60);
+    const vy1 = j.vy; Entrada.puloApertou = true; J.passo(1 / 60); o.puloDuplo = j.vy < vy1 - 200;
+    Entrada.pulo = false; J.progresso.liberado = 0;
+    const d = MUNDOS[4].fase; J.fase.j.x = d.dourada.x; J.fase.j.y = d.dourada.y + 25; J.fase.j.vy = 0; J.passo(1 / 60); o.dourada = J.dourada;
+    return o;
+  });
+  confere('poderes: nenhum no começo; com tudo liberado há raio longo, rápido, forte e pulo duplo', r.sem.includes('"puloDuplo":false') && r.com.puloDuplo && r.com.dano === 2 && r.com.alcance > 500 && r.com.recarga < 0.3 && r.puloDuplo, r);
+  confere('gotinha dourada pode ser coletada', r.dourada === true, r);
+  r = await p.evaluate(() => MUNDOS.map(w => { const g = w.fase.dourada, ok = !!g && w.fase.retornos.length === 3 && w.fase.retornos.every(q => w.fase.plataformas.some(pl => pl.chao && q.x > pl.x && q.x < pl.x + pl.w)); return ok; }));
+  confere('cada mundo tem gotinha dourada e três pontos de retorno em chão firme', r.every(Boolean), r);
   await p.evaluate(() => { try { localStorage.clear(); } catch (e) {} });
 
   confere('sem erros no navegador', erros.length === 0, erros);

@@ -1,6 +1,6 @@
 # Concreto — Especificação do jogo
 
-Versão: 0.9 — 2026-11-16
+Versão: 0.10 — 2026-11-16
 Estado: descoberta e design, com protótipo jogável dos cinco mundos autorizado pelo responsável (ver seções 11 e 13). O protótipo não encerra a descoberta nem converte premissas provisórias em requisitos.
 Convenção: requisitos numerados são decisões confirmadas, salvo indicação explícita de interpretação, proposta ou pendência. Referências visuais não são assets aprovados.
 
@@ -48,7 +48,7 @@ Convenção: requisitos numerados são decisões confirmadas, salvo indicação 
 - V04: quando as três vidas acabam, ocorre uma animação na qual um vento espalha os pedaços de geleca do Concreto.
 - V05: depois de levar um golpe, Concreto fica um tempo sem poder levar outro (rodada 010). Duração não definida.
 - V06: ao cair num buraco, Concreto perde uma vida e volta para a última plataforma (rodada 010). Registro da fala: "ele morre" e, em seguida, "vai para a última plataforma quando ele cai"; lido como perda de uma vida, não de todas.
-- V07: sem vidas, recomeça a fase desde o início; se a derrota foi contra o boss, recomeça a luta (rodada 010).
+- V07: sem vidas, recomeça a fase desde o início; se a derrota foi contra o boss, recomeça a luta (rodada 010). Variação autorizada pelo responsável na rodada 014: no protótipo, o recomeço é na bandeira do trecho (ver seção 13). A decisão original do criador continua registrada e pode ser restaurada em `retornoPorTrecho`.
 - Pendente: duração da invulnerabilidade, contato contínuo, direção e intensidade do knockback, armadilhas, recuperação de vida, quantas vidas tem ao recomeçar, persistência de vidas entre fases e interface pós-derrota. A tela de game over foi sugerida, mas não confirmada.
 
 ### Estados funcionais preliminares
@@ -199,3 +199,8 @@ Valores adotados para tornar o protótipo jogável e, desde a rodada 011, escolh
 | Dispositivos (Q01) | Teclado, toque ou ambos | Decisão delegada na rodada 013: ambos. |
 | Música e sons (G19) | Trilhas e estilo | Uma música por mundo e uma para as lutas, mais efeitos, todos sintetizados pelo navegador e compostos para o protótipo. Botão para ligar e desligar o som. |
 | Expressões do Concreto | Animações (G03, G07) | Olhos apertados ao levar um golpe, além de piscar e abrir a boca ao atirar. |
+| Ponto de retorno (V07) | Criador definiu recomeço no início da fase; responsável autorizou variar | Uma bandeira no começo de cada trecho. Sem vidas, Concreto volta à última bandeira com três vidas; monstros derrotados e gotinhas pegas continuam como estavam. |
+| Segredo por mundo | Não definido | Uma gotinha dourada escondida em cada mundo, marcada na tela inicial. A do Mundo 5 exige o pulo duplo. |
+| Poderes | Habilidades e melhorias (árvore G) | Vencer um mundo libera um poder permanente: raio longo (após o Mundo 1), pulo duplo (2), raio rápido (3) e raio forte contra monstros comuns (4). As fases continuam vencíveis sem eles. As três vidas (V01) não mudam. |
+| Bosses — entrada e derrota | Não definido | Uma fala curta na entrada de cada boss e um estouro de pedaços do tema na derrota. Textos provisórios. |
+| Impacto | Não definido | Pausa de um instante ao acertar ou levar um golpe, tremor e mais partículas. |

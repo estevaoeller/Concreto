@@ -1,4 +1,4 @@
-# O jogo do Concreto — versão 0.9
+# O jogo do Concreto — versão 0.10
 
 ## O que já inventamos
 
@@ -44,6 +44,10 @@ Duas coisas ficaram diferentes do que você pediu, porque a Malgosha e o Lego s�
 - Tem um escudo de geleca escondido em cada mundo. Ele aguenta um golpe.
 - Tem música em cada mundo.
 - Escrevemos uma historinha bem curta só para começar. A história de verdade é você quem inventa!
+- Cada trecho tem uma bandeira. Se as vidas acabarem, você volta para a última bandeira. (Você tinha dito para voltar ao começo; dá para mudar de volta.)
+- Tem uma gotinha dourada escondida em cada mundo.
+- Cada mundo que você vence dá um poder novo: raio longo, pulo duplo, raio rápido e raio forte.
+- Cada boss fala uma frase quando aparece.
 
 Jogue e conte o que fica, o que muda e o que sai.
 

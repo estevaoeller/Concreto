@@ -152,3 +152,19 @@ Respostas recebidas por transcrição de voz, com trechos truncados. Registrado 
 - Música por mundo e para as lutas, efeitos sonoros novos e botão de som.
 - Sem decisão delegada possível, por depender só da experiência dele: qual mundo é mais divertido, qual é chato e se algum boss está difícil ou fácil demais.
 - Testes: `testes/percurso.js` ganhou verificações para escudo, movimento dos monstros, golpe no chão e liberação de cores, e o robô passou a esperar os monstros que se mexem. Resultado: todas as verificações passaram em execuções repetidas. Limitação: a música e os sons não são verificados por teste e não foram ouvidos por ninguém; a dificuldade com os ataques novos não foi testada por uma pessoa.
+
+## 2026-11-16 — Rodada 014 — Acabamento, versão de referência e publicação
+
+Decisões do responsável nesta rodada:
+
+- Ponto de retorno no meio da fase: autorizado ("pode variar"). Altera, no protótipo, o comportamento de V07 definido pelo criador; a regra original foi preservada na especificação e pode ser restaurada por configuração.
+- Aprovados: segredo por mundo, poder por mundo, entrada e saída dos bosses e efeitos de impacto.
+- Teste em celular: feito pelo responsável.
+- Autorizado levar o trabalho para `main` e publicar um link público do jogo.
+- Antes de trocar o desenho por código pelas pranchas, manter uma versão do estado atual. Atendido com a etiqueta `desenho-por-codigo-v1` no repositório.
+
+Implementado: bandeiras de retorno por trecho, gotinha dourada por mundo, quatro poderes liberados ao vencer mundos, fala de entrada e estouro de derrota dos bosses, pausa de impacto. Testes ampliados para pontos de retorno, poderes e gotinha dourada; todas as verificações passaram.
+
+Publicação: adicionada página inicial na raiz que leva a `jogo/`, para uso com GitHub Pages a partir de `main`. A ativação do Pages é feita nas configurações do repositório.
+
+Próximo passo combinado: substituir o desenho por código pelas pranchas, com aprovação dos recursos antes de integrar (AGENTS.md).

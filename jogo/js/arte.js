@@ -446,6 +446,22 @@ var Arte = (function () {
     c.beginPath(); c.arc(x, y, r * 0.72, -2.4, -1.7); c.stroke();
   }
 
+  function bandeira(c, x, y, ativa, t) {
+    c.fillStyle = '#8a5a2a'; c.fillRect(x - 3, y - 92, 6, 92);
+    var o = Math.sin(t * 5) * 4;
+    c.fillStyle = ativa ? CFG.concreto.cor : '#d8d4e6'; c.strokeStyle = ativa ? CFG.concreto.corEscura : '#7a7490'; c.lineWidth = 3; c.lineJoin = 'round';
+    c.beginPath(); c.moveTo(x + 3, y - 90); c.quadraticCurveTo(x + 26, y - 96 + o, x + 48, y - 80 + o);
+    c.quadraticCurveTo(x + 26, y - 70 + o, x + 3, y - 60); c.closePath(); c.fill(); c.stroke();
+  }
+  function gotaDourada(c, x, y, t) {
+    c.save(); c.translate(x, y);
+    c.fillStyle = 'rgba(255,220,90,' + (0.3 + Math.sin(t * 5) * 0.12) + ')'; c.beginPath(); c.arc(0, 0, 24, 0, 7); c.fill();
+    c.fillStyle = '#ffd23a'; c.strokeStyle = '#a06a08'; c.lineWidth = 3;
+    c.beginPath(); c.moveTo(0, -20); c.bezierCurveTo(16, -1, 11, 13, 0, 13); c.bezierCurveTo(-11, 13, -16, -1, 0, -20); c.fill(); c.stroke();
+    c.fillStyle = '#fff6c8'; c.beginPath(); c.arc(-4, 2, 3, 0, 7); c.fill();
+    c.restore();
+  }
+
   // Placa de madeira com dica.
   function placa(c, x, y, s) {
     c.font = '700 15px "Trebuchet MS", "Segoe UI", system-ui, sans-serif';
@@ -550,6 +566,6 @@ var Arte = (function () {
     plataforma: plataforma, concreto: concreto, gota: gota, poca: poca, monstro: monstro, raio: raio,
     portal: portal, texto: texto, painel: painel, flor: flor,
     gotinha: gotinha, coracao: coracao, placa: placa, corMonstro: corMonstro,
-    mola: mola, bolha: bolha, formas: formas, coresMonstro: CORES_MONSTRO, olhosBravos: olhosBravos, PALETA_PLANTAS: PALETA_PLANTAS
+    mola: mola, bolha: bolha, bandeira: bandeira, gotaDourada: gotaDourada, formas: formas, coresMonstro: CORES_MONSTRO, olhosBravos: olhosBravos, PALETA_PLANTAS: PALETA_PLANTAS
   };
 })();

@@ -26,6 +26,7 @@ var CFG = {
   vidas: 3,                    // confirmado (V01)
   invencivelAposDano: 1.2,     // existência confirmada (V05); duração PROVISÓRIA
   empurrao: { vx: 320, vy: 380 }, // confirmado que existe (V03); força PROVISÓRIA
+  retornoPorTrecho: true,      // PROVISÓRIO (rodada 014): sem vidas, volta à bandeira do trecho. Com false vale V07 como dito pelo criador: começo da fase.
   quedaTiraVida: true,         // confirmado (V06): cair no buraco tira 1 vida e volta para a última plataforma
 
   mola: { forca: 1.45 },       // PROVISÓRIO: a almofada joga 1,45 vez mais alto que o pulo

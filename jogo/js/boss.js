@@ -55,7 +55,7 @@ var Boss = (function () {
     }
 
     if (b.fase === 'entrada') {
-      if (b.tempo > 1.6) iniciarAviso(b);
+      if (b.tempo > 2.8) iniciarAviso(b);
     } else if (b.fase === 'aviso') {            // aviso antes do golpe (B05)
       if (B.persegue && b.tipoAtaque === 'lado' && !b.perseguiu && b.tempo >= B.aviso * 0.45) { // o aviso muda de lado uma vez
         b.perseguiu = true; mirar(b); Som.aviso();
@@ -96,7 +96,7 @@ var Boss = (function () {
 
     // raio de geleca em primeira pessoa
     if (Entrada.ataqueApertou && b.recarga <= 0) {
-      b.recarga = CFG.raio.recarga;
+      b.recarga = jogo.poder.recarga;
       b.tiros.push({ lado: b.lado, p: 0 });
       Som.raio();
     }
@@ -105,14 +105,19 @@ var Boss = (function () {
       if (tiro.p < 1) return true;
       if (tiro.lado === b.bossLado && Math.abs(b.bossX - b.bossLado) < 0.35) {
         if (b.fase === 'pausa' || !B.danoSoNaPausa) {
-          b.vida -= CFG.raio.dano; b.flash = 0.12; Som.acerto();
+          b.vida -= CFG.raio.dano; b.flash = 0.12; Som.acerto(); jogo.congela = 0.035;
           respingo(b, tiro.lado);
-          if (b.vida <= 0) { b.vida = 0; b.fase = 'vencido'; b.vencido = 0; b.brasas = []; Som.vitoria(); }
+          if (b.vida <= 0) { // derrota: o boss estoura em pedaços do seu próprio tema
+            b.vida = 0; b.fase = 'vencido'; b.vencido = 0; b.brasas = []; b.tremor = 0.5; jogo.congela = 0.25; Som.vitoria();
+            b.estouro = [];
+            for (var e = 0; e < 16; e++) b.estouro.push({ x: 0, y: 0, vx: (Math.random() - 0.5) * 700, vy: -200 - Math.random() * 500, r: 14 + Math.random() * 16 });
+          }
         } else { recado(b, 'Bloqueou!', '#ffd0d0'); Som.bloqueio(); }
       }
       return false;
     });
 
+    (b.estouro || []).forEach(function (q) { q.vy += 900 * dt; q.x += q.vx * dt; q.y += q.vy * dt; });
     b.avisos = b.avisos.filter(function (a) { a.vida -= dt; return a.vida > 0; });
     b.particulas = b.particulas.filter(function (p) {
       p.vy += 500 * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.vida -= dt; return p.vida > 0;
@@ -441,6 +446,7 @@ var Boss = (function () {
     [[-1.7, 1], [-0.85, 0.8], [0.95, 0.8], [1.65, 1]].forEach(function (r) { V.prop(c, W / 2 + (r[0] - b.visao * 0.8) * PASSO, 374, r[1]); });
 
     desenharBoss(c, b, xTela(b, b.bossX), 220);
+    (b.estouro || []).forEach(function (q) { V.objeto(c, xTela(b, b.bossX) + q.x, 200 + q.y, q.r); });
 
     // brasa no chão
     b.brasas.forEach(function (q) {
@@ -537,7 +543,18 @@ var Boss = (function () {
     // recados
     if (b.fase === 'pausa') Arte.texto(c, 'Cansou! Atire o raio!  ' + Math.ceil(B.pausa - b.tempo), W / 2, 92, 24, '#fff27a');
     else if (b.fase === 'aviso' || b.fase === 'golpe') Arte.texto(c, b.tipoAtaque === 'chao' ? 'Golpe no chão! Aperte PULO!' : b.alvos.length > 1 ? 'Ache o lado livre!' : 'Cuidado! Vá para o lado!', W / 2, 92, 22, '#ffb0a6');
-    else if (b.fase === 'entrada') Arte.texto(c, B.nome + ' apareceu!', W / 2, 300, 34, '#f2fbf4');
+    else if (b.fase === 'entrada') {
+      if (b.tempo < 1 || !B.fala) Arte.texto(c, B.nome + ' apareceu!', W / 2, 92, 30, '#f2fbf4');
+      else { // fala do boss (texto PROVISÓRIO)
+        c.font = '700 21px "Trebuchet MS", "Segoe UI", system-ui, sans-serif';
+        var lw = c.measureText(B.fala).width + 44;
+        c.fillStyle = '#ffffff'; c.strokeStyle = '#2a2050'; c.lineWidth = 4; c.lineJoin = 'round';
+        R(c, W / 2 - lw / 2, 396, lw, 56, 20); c.fill(); c.stroke();
+        c.beginPath(); c.moveTo(W / 2 - 16, 398); c.lineTo(W / 2, 372); c.lineTo(W / 2 + 16, 398); c.closePath(); c.fill(); c.stroke();
+        c.fillRect(W / 2 - 14, 397, 28, 6);
+        c.fillStyle = '#2a2050'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(B.fala, W / 2, 425);
+      }
+    }
     else if (b.fase === 'vencido') Arte.texto(c, 'Você venceu: ' + B.nome + '!', W / 2, 300, 32, '#fff27a');
   }
 

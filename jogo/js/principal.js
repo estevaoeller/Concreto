@@ -18,7 +18,7 @@
     try {
       var p = JSON.parse(localStorage.getItem(CHAVE) || '{}');
       return { liberado: Math.max(0, Math.min(MUNDOS.length - 1, p.liberado | 0)), recordes: p.recordes || [], zerou: !!p.zerou,
-        cor: CFG.concreto.cores[p.cor] ? p.cor : 'verde', mudo: !!p.mudo, viuHistoria: !!p.viuHistoria };
+        cor: CFG.concreto.cores[p.cor] ? p.cor : 'verde', mudo: !!p.mudo, viuHistoria: !!p.viuHistoria, douradas: p.douradas || [] };
     } catch (e) { return { liberado: 0, recordes: [], zerou: false, cor: 'verde', mudo: false, viuHistoria: false }; }
   }
   function salvar() { try { localStorage.setItem(CHAVE, JSON.stringify(Jogo.progresso)); } catch (e) {} }
@@ -27,7 +27,8 @@
     estado: 'titulo',          // titulo | fase | entrando | boss | morrendo | derrota | vitoria | final
     mundo: 0,
     vidas: CFG.vidas,
-    gotinhas: 0, escudo: false,
+    gotinhas: 0, escudo: false, dourada: false, congela: 0,
+    poder: { alcance: CFG.raio.alcance, recarga: CFG.raio.recarga, dano: CFG.raio.dano, puloDuplo: false },
     progresso: carregar(),
     fase: null, boss: null,
     morreuNoBoss: false, espera: 0, pausado: false, t: 0
@@ -60,9 +61,18 @@
 
   function mundoAtual() { return MUNDOS[Jogo.mundo]; }
 
+  // Poderes (PROVISÓRIO): vencer um mundo libera um poder que vale dali em diante.
+  // Mundo 1 → raio longo, 2 → pulo duplo, 3 → raio rápido, 4 → raio forte (derrota monstro comum com um raio).
+  function calcularPoder() {
+    var n = Jogo.progresso.liberado, R = CFG.raio;
+    Jogo.poder = { alcance: n >= 1 ? R.alcance * 1.4 : R.alcance, puloDuplo: n >= 2, recarga: n >= 3 ? R.recarga * 0.65 : R.recarga, dano: n >= 4 ? 2 : R.dano };
+  }
+  function listaPoderes() { return MUNDOS.filter(function (m, i) { return m.poder && i <= Jogo.progresso.liberado; }).map(function (m) { return m.poder; }); }
+
   function novaFase(i) {
     if (i !== undefined) Jogo.mundo = i;
-    Jogo.vidas = CFG.vidas; Jogo.gotinhas = 0; Jogo.escudo = false;
+    Jogo.vidas = CFG.vidas; Jogo.gotinhas = 0; Jogo.escudo = false; Jogo.dourada = false; Jogo.congela = 0;
+    calcularPoder();
     Jogo.fase = Fase.criar(mundoAtual());
     Jogo.boss = null; Jogo.morreuNoBoss = false; Jogo.pausado = false;
     Jogo.estado = 'fase';
@@ -82,6 +92,7 @@
     var confirmou = Entrada.confirmou || Entrada.puloApertou || Entrada.ataqueApertou;
     var toque = Entrada.toque, e = Jogo.estado, i;
     Jogo.t += dt;
+    if (Jogo.congela > 0) { Jogo.congela -= dt; return; } // pausa de impacto
     Som.musica(e === 'boss' ? 'boss' : e === 'final' ? 'ceu' : MUNDOS[Jogo.mundo].tema);
     // botão de som, no canto de cima à direita da tela inicial e da pausa
     if (Entrada.somApertou || ((e === 'titulo' || Jogo.pausado) && toque && toque.x > W - 70 && toque.y < 70)) { alternarSom(); toque = null; Entrada.toque = null; }
@@ -136,6 +147,8 @@
         Som.portal(); Jogo.estado = 'vitoria'; Jogo.espera = 0.8;
         var P = Jogo.progresso;
         P.recordes[Jogo.mundo] = Math.max(P.recordes[Jogo.mundo] || 0, Jogo.gotinhas);
+        P.douradas = P.douradas || []; if (Jogo.dourada) P.douradas[Jogo.mundo] = true;
+        Jogo.poderNovo = Jogo.mundo < MUNDOS.length - 1 && P.liberado <= Jogo.mundo ? MUNDOS[Jogo.mundo + 1].poder : null;
         if (Jogo.mundo < MUNDOS.length - 1) P.liberado = Math.max(P.liberado, Jogo.mundo + 1); else P.zerou = true;
         salvar();
       }
@@ -147,6 +160,7 @@
       Jogo.espera -= dt;
       if (Jogo.espera <= 0 && (confirmou || toque)) {
         if (Jogo.morreuNoBoss && CFG.boss.recomecaNoBoss) { Jogo.vidas = CFG.vidas; novoBoss(); } // V07
+        else if (CFG.retornoPorTrecho) { Jogo.vidas = CFG.vidas; Fase.voltar(Jogo.fase); Jogo.estado = 'fase'; } // ponto de retorno
         else novaFase();
       }
     } else if (e === 'vitoria') {
@@ -204,6 +218,7 @@
         c.fillStyle = '#d8d4e6'; Arte.retArred(c, b.x - 15, b.y - 6, 30, 24, 5); c.fill();
       }
       for (var q = 0; q < 3; q++) { var tem = q < estrelas(i); if (aberto) Arte.estrela(c, b.x - 22 + q * 22, b.y - r - 12, 9, tem ? '#ffd84a' : 'rgba(20,10,50,0.55)', tem ? '#a06a08' : 'rgba(255,255,255,0.35)'); }
+      if ((Jogo.progresso.douradas || [])[i]) Arte.gotaDourada(c, b.x + r + 2, b.y + r - 6, Jogo.t);
       Arte.texto(c, MUNDOS[i].nome.replace('Mundo ', '').replace(/^d[aeo]s? /, ''), b.x, b.y + 62, 15, aberto ? '#f2fbf4' : '#b0a8c8', 'center', 700);
     }
     NOMES_COR.forEach(function (nome, k) { // cores do Concreto
@@ -212,7 +227,8 @@
       c.beginPath(); c.arc(bc.x, bc.y, bc.r, 0, 7); c.fill(); c.stroke();
       if (!ok) { Arte.gota(c, bc.x + 30, bc.y + 2, 7); Arte.texto(c, String(pal.gotinhas), bc.x + 58, bc.y, 15, '#f2fbf4', 'center', 700); }
     });
-    Arte.texto(c, 'Gotinhas: ' + somaRecordes(), W / 2 - 170, 250, 17, '#f2fbf4', 'center', 700);
+    Arte.texto(c, 'Gotinhas: ' + somaRecordes(), W / 2 - 170, 240, 17, '#f2fbf4', 'center', 700);
+    listaPoderes().forEach(function (pn, k) { Arte.texto(c, pn, W / 2 - 170, 266 + k * 22, 14, '#fff27a', 'center', 700); });
     botaoSom();
     if (pisca()) Arte.texto(c, 'Toque em um mundo ou aperte Enter para jogar', W / 2, 505, 20, '#fff27a');
     Arte.texto(c, 'Setas andam · espaço pula · X raio · P pausa · C cor · S som', W / 2, 20, 14, '#d9f3e2', 'center', 600);
@@ -263,15 +279,16 @@
       if (Jogo.espera <= 0 && pisca()) Arte.texto(c, 'Toque ou aperte Enter para começar', W / 2, 460, 24, '#fff27a');
     }
     else if (e === 'derrota') {
-      faixa('O vento levou o Concreto!', ['As três vidas acabaram.', Jogo.morreuNoBoss ? 'Você volta para a luta contra o boss.' : 'Você volta para o começo da fase.'], 'Toque ou aperte Enter para tentar de novo');
+      faixa('O vento levou o Concreto!', ['As três vidas acabaram.', Jogo.morreuNoBoss ? 'Você volta para a luta contra o boss.' : CFG.retornoPorTrecho ? 'Você volta para a última bandeira.' : 'Você volta para o começo da fase.'], 'Toque ou aperte Enter para tentar de novo');
     } else if (e === 'vitoria') {
       var ultimo = Jogo.mundo === MUNDOS.length - 1;
       faixa('Mundo ' + (Jogo.mundo + 1) + ' completo!', [
         m.boss.nome + ' foi derrotado!',
-        'Gotinhas: ' + Jogo.gotinhas + ' de ' + m.fase.gotinhas.length,
+        'Gotinhas: ' + Jogo.gotinhas + ' de ' + m.fase.gotinhas.length + (Jogo.dourada ? '  +  gotinha dourada!' : ''),
+        Jogo.poderNovo ? 'Poder novo: ' + Jogo.poderNovo + '!' : (Jogo.dourada ? 'Você achou o segredo deste mundo!' : 'Tem um segredo dourado escondido neste mundo.'),
         ultimo ? 'Era o último boss!' : 'Próximo: ' + MUNDOS[Jogo.mundo + 1].nome
       ], ultimo ? 'Toque ou aperte Enter' : 'Toque ou aperte Enter para continuar');
-      for (var es = 0; es < 3; es++) Arte.estrela(c, W / 2 - 60 + es * 60, 360, 22, es < estrelas(Jogo.mundo) ? '#ffd84a' : 'rgba(20,10,50,0.6)', es < estrelas(Jogo.mundo) ? '#a06a08' : 'rgba(255,255,255,0.4)');
+      for (var es = 0; es < 3; es++) Arte.estrela(c, W / 2 - 60 + es * 60, 386, 20, es < estrelas(Jogo.mundo) ? '#ffd84a' : 'rgba(20,10,50,0.6)', es < estrelas(Jogo.mundo) ? '#a06a08' : 'rgba(255,255,255,0.4)');
     } else if (e === 'final') {
       c.fillStyle = 'rgba(30,14,64,0.55)'; c.fillRect(0, 0, W, H);
       for (var i = 0; i < 14; i++) Arte.estrela(c, (Arte.acaso(i) * W + Jogo.t * 30 * (0.5 + Arte.acaso(i + 3))) % W, 40 + Arte.acaso(i + 8) * 460, 8 + Arte.acaso(i + 5) * 10, '#ffd84a', '#a06a08');

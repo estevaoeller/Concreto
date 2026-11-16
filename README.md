@@ -4,11 +4,15 @@ Jogo de plataforma em fase de descoberta e preparação para desenvolvimento. Co
 
 ## Estado atual
 
-Especificação v0.9 (2026-11-16). Existe um protótipo jogável dos cinco mundos em [`jogo/`](jogo/), autorizado pelo responsável como instrumento de validação do design. Cada mundo tem fase em três trechos, monstros próprios, portal e boss.
+Especificação v0.10 (2026-11-16). Existe um protótipo jogável dos cinco mundos em [`jogo/`](jogo/), autorizado pelo responsável como instrumento de validação do design. Cada mundo tem fase em três trechos, monstros próprios, portal e boss.
 
 As regras ainda não decididas pelo criador foram preenchidas com escolhas provisórias, identificadas em [`jogo/js/config.js`](jogo/js/config.js), em [`jogo/js/mundos.js`](jogo/js/mundos.js) e na seção 13 da especificação. Escolha provisória não é requisito. Os mundos 2 e 5 usam as versões originais das pranchas, sem personagens ou marcas de terceiros.
 
 ## Como jogar o protótipo
+
+Com o GitHub Pages ativado em `main`, o jogo abre em https://estevaoeller.github.io/Concreto/ em qualquer navegador.
+
+A etiqueta `desenho-por-codigo-v1` guarda a versão em que todo o visual é desenhado por código, anterior ao uso das pranchas.
 
 Abrir `jogo/index.html` no navegador (não precisa instalar nada nem de internet).
 

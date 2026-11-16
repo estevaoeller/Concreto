@@ -25,6 +25,7 @@ var Fase = (function () {
         };
       }),
       escudos: dados.escudos.map(function (g) { return { x: g.x, y: g.y, pego: false }; }),
+      dourada: dados.dourada ? { x: dados.dourada.x, y: dados.dourada.y, pego: false } : null,
       gotinhas: dados.gotinhas.map(function (g) { return { x: g.x, y: g.y, pego: false }; }),
       coracoes: dados.coracoes.map(function (g) { return { x: g.x, y: g.y, pego: false }; }),
       raios: [], gotas: [], pocas: [], particulas: [],
@@ -42,6 +43,7 @@ var Fase = (function () {
     if (j.invul > 0) return;
     if (jogo.escudo) { jogo.escudo = false; Som.quebrou(); poeira(f, j.x, j.y - JH / 2, '#c8f0ff', 14); } // o escudo aguenta um golpe
     else { jogo.vidas--; Som.dano(); }
+    jogo.congela = 0.09; // o jogo para um instante: o golpe fica mais forte
     j.invul = CFG.invencivelAposDano; // V05
     j.trava = 0.3;
     f.tremor = 0.25;
@@ -89,7 +91,7 @@ var Fase = (function () {
       if (mov) j.dir = mov;
       if (j.memoriaPulo > 0) {
         if (j.coiote > 0) { j.vy = -C.forcaPulo; j.noChao = false; j.coiote = 0; j.memoriaPulo = 0; Som.pulo(); }
-        else if (C.puloDuplo && j.pulosNoAr < 1 && Entrada.puloApertou) { j.vy = -C.forcaPulo * 0.9; j.pulosNoAr++; Som.pulo(); }
+        else if (jogo.poder.puloDuplo && j.pulosNoAr < 1 && Entrada.puloApertou) { j.vy = -C.forcaPulo * 0.9; j.pulosNoAr++; j.memoriaPulo = 0; Som.pulo(); poeira(f, j.x, j.y, '#ffffff', 6, 0.6); }
       }
     }
     if (j.vy >= 0) j.lancado = false;
@@ -139,7 +141,7 @@ var Fase = (function () {
 
     // raio de geleca (A01)
     if (Entrada.ataqueApertou && j.recarga <= 0 && j.trava <= 0) {
-      j.recarga = CFG.raio.recarga;
+      j.recarga = jogo.poder.recarga;
       j.atacando = 0.2;
       f.raios.push({ x: j.x + j.dir * 40, y: j.y - JH * 0.45, dir: j.dir, andou: 0 });
       Som.raio();
@@ -178,6 +180,11 @@ var Fase = (function () {
       }
     });
     f.escudoAtivo = jogo.escudo;
+    var go = f.dourada; // segredo do mundo: gotinha dourada
+    if (go && !go.pego && Math.abs(go.x - j.x) < 30 && Math.abs(go.y - (j.y - JH / 2)) < 38) {
+      go.pego = true; jogo.dourada = true; Som.vida(); jogo.congela = 0.08;
+      poeira(f, go.x, go.y, '#ffd84a', 18, 1.3);
+    }
     f.coracoes.forEach(function (g) {
       if (!g.pego && jogo.vidas < CFG.vidas && Math.abs(g.x - j.x) < 34 && Math.abs(g.y - (j.y - JH / 2)) < 42) {
         g.pego = true; jogo.vidas++; Som.vida();
@@ -189,7 +196,7 @@ var Fase = (function () {
     f.raios = f.raios.filter(function (r) {
       var passo = CFG.raio.velocidade * dt;
       r.x += r.dir * passo; r.andou += passo;
-      if (r.andou > CFG.raio.alcance) return false;
+      if (r.andou > jogo.poder.alcance) return false;
       for (var i = 0; i < d.plataformas.length; i++) {
         var p = d.plataformas[i];
         if (toca(r.x - 12, r.y - 5, 24, 10, p.x, p.y, p.w, altura(p))) { poeira(f, r.x, r.y, CFG.concreto.cor, 4); return false; }
@@ -197,10 +204,10 @@ var Fase = (function () {
       for (var k = 0; k < f.monstros.length; k++) {
         var m = f.monstros[k];
         if (m.vida > 0 && toca(r.x - 12, r.y - 5, 24, 10, m.x - MW / 2, m.y - MH, MW, MH)) {
-          m.vida -= CFG.raio.dano; m.piscando = 0.15;
-          Som.acerto();
-          poeira(f, r.x, r.y, CFG.concreto.cor, 5);
-          if (m.vida <= 0) { poeira(f, m.x, m.y - MH / 2, Arte.corMonstro(m.tipo), 18); Som.derrotou(); }
+          m.vida -= jogo.poder.dano; m.piscando = 0.15;
+          Som.acerto(); jogo.congela = 0.045;
+          poeira(f, r.x, r.y, CFG.concreto.cor, 7);
+          if (m.vida <= 0) { poeira(f, m.x, m.y - MH / 2, Arte.corMonstro(m.tipo), 22, 1.3); poeira(f, m.x, m.y - MH / 2, '#ffffff', 8, 1.6); f.tremor = 0.12; Som.derrotou(); }
           return false;
         }
       }
@@ -254,7 +261,7 @@ var Fase = (function () {
     // aviso de trecho novo
     var tr = 0;
     d.trechos.forEach(function (t, i) { if (j.x >= t.x) tr = i; });
-    if (tr !== f.trecho) { f.trecho = tr; f.avisoTrecho = 2.5; }
+    if (tr > f.trecho) { f.trecho = tr; f.avisoTrecho = 2.5; Som.gotinha(); } // chegou a um ponto de retorno novo
 
     // câmera segue Concreto, olhando um pouco para a frente
     var alvo = j.x - W * 0.4 + j.dir * 40;
@@ -277,6 +284,16 @@ var Fase = (function () {
       });
     }
   }
+  // Ponto de retorno (PROVISÓRIO): sem vidas, volta ao começo do trecho em que estava. O que já foi feito continua feito.
+  function voltar(f) {
+    var j = f.j, r = f.dados.retornos[f.trecho];
+    j.x = r.x; j.y = r.y; j.vx = 0; j.vy = 0; j.dir = 1; j.noChao = true; j.trava = 0; j.recarga = 0; j.entrando = 0;
+    j.invul = 1.5; j.seguro = { x: r.x, y: r.y };
+    f.raios = []; f.particulas = []; f.gotas = []; f.tremor = 0;
+    f.monstros.forEach(function (m) { m.estado = 'calmo'; m.tempo = 0; });
+    f.camX = Math.max(0, Math.min(f.dados.largura - W, r.x - W * 0.4));
+  }
+
   function soParticulas(f, dt) {
     f.t += dt;
     f.particulas = f.particulas.filter(function (p) {
@@ -294,6 +311,11 @@ var Fase = (function () {
     if (f.tema.liquido) f.tema.liquido(c, f.t);
     d.placas.forEach(function (p) { if (p.x - cam > -200 && p.x - cam < W + 200) Arte.placa(c, p.x - cam, 452, p.texto); });
     d.plataformas.forEach(function (p) { Arte.plataforma(c, p, cam, f.tema.pal); });
+    d.retornos.forEach(function (r, i) { // bandeira do ponto de retorno
+      var x = r.x - 46 - cam;
+      if (i > 0 && x > -40 && x < W + 40) Arte.bandeira(c, x, 452, i <= f.trecho, f.t);
+    });
+    if (f.dourada && !f.dourada.pego && f.dourada.x - cam > -40 && f.dourada.x - cam < W + 40) Arte.gotaDourada(c, f.dourada.x - cam, f.dourada.y + Math.sin(f.t * 3) * 4, f.t);
     f.molas.forEach(function (m) { if (m.x - cam > -80 && m.x - cam < W + 20) Arte.mola(c, m.x - cam, m.y - 8, m.w, Math.max(0, m.aperto)); });
     Arte.portal(c, d.portalX - cam, 452, f.t);
     f.pocas.forEach(function (p) { Arte.poca(c, p.x - cam, p.y - 8, Math.min(1, p.vida)); });
@@ -339,5 +361,5 @@ var Fase = (function () {
     c.restore();
   }
 
-  return { criar: criar, atualizar: atualizar, desenhar: desenhar, espalhar: espalhar, soParticulas: soParticulas };
+  return { criar: criar, atualizar: atualizar, desenhar: desenhar, espalhar: espalhar, soParticulas: soParticulas, voltar: voltar };
 })();
