@@ -4,7 +4,7 @@
 // PROVISÓRIO: primeira pessoa, barra grande e aviso temático para os outros bosses; três lados (esquerda, meio, direita);
 // andar para o lado escapa do golpe; o raio só machuca na pausa; onda que cobre dois lados; brasa que fica no chão.
 var Boss = (function () {
-  var W = CFG.largura, H = CFG.altura, PASSO = 270, R = Arte.retArred;
+  var W = CFG.largura, H = CFG.altura, PASSO = 270, PULO = 0.75, R = Arte.retArred;
 
   function criar(def) {
     var cfg = {}, k;
@@ -15,12 +15,23 @@ var Boss = (function () {
       lado: 0, visao: 0,            // lado do Concreto: -1, 0, 1 (visao segue o lado com suavidade)
       bossLado: 0, bossX: 0,
       fase: 'entrada', tempo: 0, ataques: 0, alvos: [], brasas: [], golpeou: false, trocou: 0, flash: 0,
-      recarga: 0, tiros: [], avisos: [], particulas: [], invul: 0, tremor: 0, vencido: 0
+      recarga: 0, tiros: [], avisos: [], particulas: [], invul: 0, tremor: 0, vencido: 0,
+      tipoAtaque: 'lado', perseguiu: false, pulo: 0   // pulo: tempo no ar do Concreto, para escapar do golpe no chão
     };
   }
 
   function recado(b, s, cor) { b.avisos.push({ s: s, vida: 0.8, cor: cor || '#f2fbf4', lado: b.bossLado }); }
-  function ferir(b, jogo) { jogo.vidas--; b.invul = CFG.invencivelAposDano; b.tremor = 0.4; Som.dano(); }
+  function ferir(b, jogo) {
+    if (jogo.escudo) { jogo.escudo = false; Som.quebrou(); } else { jogo.vidas--; Som.dano(); }
+    b.invul = CFG.invencivelAposDano; b.tremor = 0.4;
+  }
+  function mirar(b) {
+    b.alvos = [b.lado];                             // mira onde o Concreto está agora
+    if (b.vida / b.cfg.vida <= b.cfg.ondaAbaixoDe) { // onda: cobre dois lados, sobra um seguro
+      var outros = [-1, 0, 1].filter(function (l) { return l !== b.lado; });
+      b.alvos.push(outros[Math.floor(Math.random() * 2)]);
+    }
+  }
 
   // Devolve 'morreu' ou 'venceu'.
   function atualizar(b, dt, jogo) {
@@ -30,6 +41,8 @@ var Boss = (function () {
     if (b.recarga > 0) b.recarga -= dt;
     if (b.tremor > 0) b.tremor -= dt;
     if (b.flash > 0) b.flash -= dt;
+    if (b.pulo > 0) b.pulo -= dt;
+    if (Entrada.puloApertou && b.pulo <= 0) { b.pulo = PULO; Som.pulo(); }
 
     if (Entrada.esqApertou && b.lado > -1) b.lado--;
     if (Entrada.dirApertou && b.lado < 1) b.lado++;
@@ -44,12 +57,18 @@ var Boss = (function () {
     if (b.fase === 'entrada') {
       if (b.tempo > 1.6) iniciarAviso(b);
     } else if (b.fase === 'aviso') {            // aviso antes do golpe (B05)
+      if (B.persegue && b.tipoAtaque === 'lado' && !b.perseguiu && b.tempo >= B.aviso * 0.45) { // o aviso muda de lado uma vez
+        b.perseguiu = true; mirar(b); Som.aviso();
+      }
       if (b.tempo >= B.aviso) { b.fase = 'golpe'; b.tempo = 0; b.golpeou = false; }
     } else if (b.fase === 'golpe') {
       if (!b.golpeou && b.tempo >= B.golpe * 0.5) {
         b.golpeou = true;
-        if (b.alvos.indexOf(b.lado) >= 0 && b.invul <= 0) ferir(b, jogo);
-        if (B.brasa) b.alvos.forEach(function (l) { b.brasas.push({ lado: l, tempo: B.brasa }); });
+        if (b.tipoAtaque === 'chao') { b.tremor = 0.3; if (b.pulo <= 0.08 && b.invul <= 0) ferir(b, jogo); } // no chão: só escapa pulando
+        else {
+          if (b.alvos.indexOf(b.lado) >= 0 && b.invul <= 0) ferir(b, jogo);
+          if (B.brasa) b.alvos.forEach(function (l) { b.brasas.push({ lado: l, tempo: B.brasa }); });
+        }
       }
       if (b.tempo >= B.golpe) {
         b.ataques++;
@@ -103,12 +122,10 @@ var Boss = (function () {
   }
 
   function iniciarAviso(b) {
-    b.fase = 'aviso'; b.tempo = 0;
-    b.alvos = [b.lado];                             // mira onde o Concreto está agora
-    if (b.vida / b.cfg.vida <= b.cfg.ondaAbaixoDe) { // onda: cobre dois lados, sobra um seguro
-      var outros = [-1, 0, 1].filter(function (l) { return l !== b.lado; });
-      b.alvos.push(outros[Math.floor(Math.random() * 2)]);
-    }
+    b.fase = 'aviso'; b.tempo = 0; b.perseguiu = false;
+    // golpe no chão: o segundo ataque de cada ciclo, para os bosses que têm esse golpe
+    b.tipoAtaque = b.cfg.chao && b.ataques === 1 ? 'chao' : 'lado';
+    if (b.tipoAtaque === 'chao') b.alvos = [-1, 0, 1]; else mirar(b);
     Som.aviso();
   }
   function respingo(b, lado) {
@@ -390,10 +407,12 @@ var Boss = (function () {
     var B = b.cfg, V = b.vis, A = V.arena, i;
     c.save();
     if (b.tremor > 0) c.translate((Math.random() - 0.5) * 16, (Math.random() - 0.5) * 12);
+    var noAr = b.pulo > 0 ? Math.sin((1 - b.pulo / PULO) * Math.PI) : 0;
+    c.translate(0, noAr * 46); // pulando, o chão desce na tela
     // arena
     var ceu = c.createLinearGradient(0, 0, 0, 340);
     ceu.addColorStop(0, A.ceu[0]); ceu.addColorStop(1, A.ceu[1]);
-    c.fillStyle = ceu; c.fillRect(-20, -20, W + 40, 372);
+    c.fillStyle = ceu; c.fillRect(-20, -80, W + 40, 432);
     if (A.estrelas) {
       c.fillStyle = 'rgba(255,240,255,0.8)';
       for (i = 0; i < 40; i++) {
@@ -416,7 +435,7 @@ var Boss = (function () {
     [-2.1, -1.35, 1.35, 2.1].forEach(function (l, k) {
       var px = W / 2 + (l - b.visao * 0.6) * PASSO, larg = 46 + (k % 2) * 14;
       c.fillStyle = A.coluna[0]; c.strokeStyle = A.coluna[1]; c.lineWidth = 3;
-      c.fillRect(px - larg / 2, -10, larg, 346); c.strokeRect(px - larg / 2, -10, larg, 346);
+      c.fillRect(px - larg / 2, -70, larg, 406); c.strokeRect(px - larg / 2, -70, larg, 406);
       c.fillRect(px - larg / 2 - 8, 316, larg + 16, 22); c.strokeRect(px - larg / 2 - 8, 316, larg + 16, 22);
     });
     [[-1.7, 1], [-0.85, 0.8], [0.95, 0.8], [1.65, 1]].forEach(function (r) { V.prop(c, W / 2 + (r[0] - b.visao * 0.8) * PASSO, 374, r[1]); });
@@ -435,7 +454,23 @@ var Boss = (function () {
     });
 
     // aviso e golpe
-    if (b.fase === 'aviso' || b.fase === 'golpe') b.alvos.forEach(function (alvoLado) {
+    if ((b.fase === 'aviso' || b.fase === 'golpe') && b.tipoAtaque === 'chao') {
+      // golpe no chão: uma onda vem do fundo e passa por baixo; o aviso é o objeto do boss batendo no meio da arena
+      var kc = b.fase === 'aviso' ? b.tempo / B.aviso : 1, qc = b.fase === 'golpe' ? Math.min(1, b.tempo / (B.golpe * 0.5)) : 0;
+      c.fillStyle = 'rgba(255,80,60,' + (0.14 + 0.22 * kc) + ')'; c.fillRect(-20, 400, W + 40, H);
+      V.objeto(c, W / 2 + Math.sin(b.t * 40) * 4 * kc, 60 + kc * 260, 30 + kc * 22);
+      if (b.fase === 'golpe') {
+        c.strokeStyle = V.feixe[0]; c.lineWidth = 26 + qc * 30; c.globalAlpha = 0.9;
+        c.beginPath(); c.ellipse(W / 2, 360 + qc * 150, 200 + qc * 520, 30 + qc * 70, 0, 0, 7); c.stroke();
+        c.strokeStyle = V.feixe[1]; c.lineWidth = 5;
+        c.beginPath(); c.ellipse(W / 2, 360 + qc * 150, 200 + qc * 520, 30 + qc * 70, 0, 0, 7); c.stroke(); c.globalAlpha = 1;
+      }
+      if (Math.floor(b.t * 8) % 2) { // seta para cima: pule!
+        c.fillStyle = '#fff27a'; c.strokeStyle = 'rgba(8,20,16,0.85)'; c.lineWidth = 5; c.lineJoin = 'round';
+        c.beginPath(); c.moveTo(W / 2, 400); c.lineTo(W / 2 + 46, 452); c.lineTo(W / 2 + 18, 452); c.lineTo(W / 2 + 18, 500);
+        c.lineTo(W / 2 - 18, 500); c.lineTo(W / 2 - 18, 452); c.lineTo(W / 2 - 46, 452); c.closePath(); c.stroke(); c.fill();
+      }
+    } else if (b.fase === 'aviso' || b.fase === 'golpe') b.alvos.forEach(function (alvoLado) {
       var ax = xTela(b, alvoLado);
       if (b.fase === 'aviso') {
         var k = b.tempo / B.aviso;
@@ -481,12 +516,14 @@ var Boss = (function () {
     });
 
     // a beirada da geleca do Concreto, embaixo da tela (é ele quem está olhando)
+    c.translate(0, -noAr * 46 - noAr * 26); // a geleca sobe junto com o olhar
     if (vidas > 0 && !(b.invul > 0 && Math.floor(b.t * 14) % 2 === 0)) {
       c.fillStyle = CFG.concreto.cor; c.strokeStyle = CFG.concreto.corEscura; c.lineWidth = 6;
       c.beginPath(); c.moveTo(W / 2 - 230, H + 10);
       for (i = 0; i <= 10; i++) c.lineTo(W / 2 - 230 + i * 46, H - 26 - Math.sin(i / 10 * Math.PI) * 30 - Math.sin(b.t * 4 + i) * 4);
-      c.lineTo(W / 2 + 230, H + 10); c.closePath(); c.fill(); c.stroke();
+      c.lineTo(W / 2 + 230, H + 40); c.lineTo(W / 2 - 230, H + 40); c.closePath(); c.fill(); c.stroke();
     }
+    c.translate(0, noAr * 26);
     if (b.invul > 0) { c.fillStyle = 'rgba(255,60,40,' + (0.25 * b.invul / CFG.invencivelAposDano) + ')'; c.fillRect(-20, -20, W + 40, H + 40); }
     c.restore();
 
@@ -499,7 +536,7 @@ var Boss = (function () {
 
     // recados
     if (b.fase === 'pausa') Arte.texto(c, 'Cansou! Atire o raio!  ' + Math.ceil(B.pausa - b.tempo), W / 2, 92, 24, '#fff27a');
-    else if (b.fase === 'aviso' || b.fase === 'golpe') Arte.texto(c, b.alvos.length > 1 ? 'Ache o lado livre!' : 'Cuidado! Vá para o lado!', W / 2, 92, 22, '#ffb0a6');
+    else if (b.fase === 'aviso' || b.fase === 'golpe') Arte.texto(c, b.tipoAtaque === 'chao' ? 'Golpe no chão! Aperte PULO!' : b.alvos.length > 1 ? 'Ache o lado livre!' : 'Cuidado! Vá para o lado!', W / 2, 92, 22, '#ffb0a6');
     else if (b.fase === 'entrada') Arte.texto(c, B.nome + ' apareceu!', W / 2, 300, 34, '#f2fbf4');
     else if (b.fase === 'vencido') Arte.texto(c, 'Você venceu: ' + B.nome + '!', W / 2, 300, 32, '#fff27a');
   }

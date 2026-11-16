@@ -137,3 +137,18 @@ Respostas recebidas por transcrição de voz, com trechos truncados. Registrado 
 - Escolhas novas, todas provisórias e listadas na seção 13 da especificação v0.8: formato de luta comum aos bosses, identidade de cada boss, mecânicas de cenário (lava, plataformas móveis, almofadas), progressão com escolha de mundo e progresso salvo, tela final e pausa.
 - Removido do código o ciclo de dia e noite, já retirado pelo criador na rodada 010.
 - Testes: `testes/percurso.js` passou a jogar os cinco mundos (travessia, portal, boss e liberação do seguinte) além das regras por ID. Resultado: todas as verificações passaram. Limitação: o robô não mede dificuldade nem diversão; os mundos 2 a 5 nunca foram jogados por uma pessoa.
+
+## 2026-11-16 — Rodada 013 — Decisões delegadas e melhorias
+
+- Retorno do responsável: o jogo com cinco mundos foi jogado e considerado jogável e interessante. Não houve registro de observações específicas do criador.
+- Decisão de processo: o responsável pediu que as perguntas pendentes fossem decididas pelo desenvolvimento, com o que já se sabe, e que as melhorias fossem implementadas. As decisões abaixo são delegadas e provisórias; qualquer uma pode ser substituída pelo criador.
+- Monstros (I02, movimento antes em aberto): cada tipo passa a ter um jeito de se mexer (parado, anda, pula, flutua). A faca por proximidade continua valendo para todos.
+- Bosses: cada um ganhou um ataque próprio, sem alterar B01. Novidade de controle: o botão de pulo passa a ser usado nas lutas para escapar do golpe no chão (Coelho e Guardião).
+- Gotinhas: liberam cores do Concreto e contam para estrelas por mundo.
+- Cor do Concreto (P04): as quatro alternativas da prancha ficam disponíveis; verde é a inicial.
+- Espada e escudo: sem espada, mantendo A02; escudo como bolha de geleca que aguenta um golpe.
+- Dispositivos (Q01): teclado e toque.
+- História: abertura e encerramento curtos e provisórios.
+- Música por mundo e para as lutas, efeitos sonoros novos e botão de som.
+- Sem decisão delegada possível, por depender só da experiência dele: qual mundo é mais divertido, qual é chato e se algum boss está difícil ou fácil demais.
+- Testes: `testes/percurso.js` ganhou verificações para escudo, movimento dos monstros, golpe no chão e liberação de cores, e o robô passou a esperar os monstros que se mexem. Resultado: todas as verificações passaram em execuções repetidas. Limitação: a música e os sons não são verificados por teste e não foram ouvidos por ninguém; a dificuldade com os ataques novos não foi testada por uma pessoa.

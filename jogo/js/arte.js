@@ -3,7 +3,6 @@
 // As pranchas são estudos ainda não aprovados; o visual continua PROVISÓRIO.
 var Arte = (function () {
   var W = CFG.largura, H = CFG.altura;
-  var CONTORNO = '#1d6b1a';
 
   function mistura(a, b, t) {
     var r = [];
@@ -227,40 +226,45 @@ var Arte = (function () {
     }
     c.scale(dir, 1);
     var g = c.createLinearGradient(0, -hh, 0, 0);
-    g.addColorStop(0, '#c9f545');
+    g.addColorStop(0, CFG.concreto.clara);
     g.addColorStop(0.55, CFG.concreto.cor);
-    g.addColorStop(1, '#8ed412');
+    g.addColorStop(1, CFG.concreto.funda);
     corpo(); c.fillStyle = g; c.fill();
     c.save();
     corpo(); c.clip();
-    c.fillStyle = 'rgba(92,176,10,0.5)';             // manchas mais escuras
+    c.fillStyle = 'rgba(' + CFG.concreto.mancha + ',0.5)';             // manchas mais escuras
     c.beginPath(); c.ellipse(U(-0.34), V(-0.2), U(0.15), V(0.13), 0.3, 0, 7); c.fill();
     c.beginPath(); c.ellipse(U(0.34), V(-0.16), U(0.1), V(0.1), 0, 0, 7); c.fill();
     c.beginPath(); c.ellipse(U(-0.02), V(-0.06), U(0.09), V(0.06), 0, 0, 7); c.fill();
-    c.fillStyle = 'rgba(226,255,130,0.75)';          // pintinhas claras
+    c.fillStyle = 'rgba(' + CFG.concreto.luz + ',0.75)';          // pintinhas claras
     c.beginPath(); c.arc(U(-0.2), V(-0.42), U(0.035), 0, 7); c.fill();
     c.beginPath(); c.arc(U(-0.27), V(-0.56), U(0.022), 0, 7); c.fill();
     c.beginPath(); c.arc(U(0.3), V(-0.42), U(0.025), 0, 7); c.fill();
-    c.strokeStyle = 'rgba(240,255,170,0.9)'; c.lineWidth = U(0.055); c.lineCap = 'round'; // brilho
+    c.strokeStyle = 'rgba(' + CFG.concreto.luz + ',0.9)'; c.lineWidth = U(0.055); c.lineCap = 'round'; // brilho
     c.beginPath(); c.moveTo(U(-0.33 + bal), V(-0.62));
     c.quadraticCurveTo(U(-0.27 + bal), V(-0.86), U(-0.1 + bal), V(-0.92)); c.stroke();
     c.beginPath(); c.moveTo(U(0.3 + bal), V(-0.88)); c.lineTo(U(0.42 + bal), V(-0.82 + cai)); c.stroke();
     c.restore();
     corpo();
-    c.strokeStyle = CONTORNO; c.lineWidth = Math.max(3, ww * 0.06); c.lineJoin = 'round'; c.stroke();
+    c.strokeStyle = CFG.concreto.corEscura; c.lineWidth = Math.max(3, ww * 0.06); c.lineJoin = 'round'; c.stroke();
     // rosto
     var fx = 0.07 + bal * 0.6, oy = -0.6;
     var pisca = (t % 3.4) < 0.12;
     c.lineCap = 'round';
     [-1, 1].forEach(function (s) {
       var ex = U(fx + s * 0.135), ey = V(oy), rx = U(0.062), ry = pisca ? V(0.012) : V(0.125);
+      if (o.dano) { // levou um golpe: olhos apertados
+        c.strokeStyle = '#10200c'; c.lineWidth = Math.max(2.5, ww * 0.05);
+        c.beginPath(); c.moveTo(ex - s * rx * 1.2, ey - ry * 0.6); c.lineTo(ex + s * rx * 0.9, ey); c.lineTo(ex - s * rx * 1.2, ey + ry * 0.6); c.stroke();
+        return;
+      }
       c.fillStyle = '#10200c';
       c.beginPath(); c.ellipse(ex, ey, rx, ry, 0, 0, 7); c.fill();
       if (!pisca) {
         c.fillStyle = '#fff';
         c.beginPath(); c.ellipse(ex + rx * 0.1, ey - ry * 0.45, rx * 0.5, ry * 0.3, 0, 0, 7); c.fill();
       }
-      c.strokeStyle = CONTORNO; c.lineWidth = Math.max(2, ww * 0.04); // sobrancelhas decididas
+      c.strokeStyle = CFG.concreto.corEscura; c.lineWidth = Math.max(2, ww * 0.04); // sobrancelhas decididas
       var b = o.atacando ? 0.05 : 0;
       c.beginPath();
       c.moveTo(ex + s * U(0.07), ey - V(0.21 - b * 0.4));
@@ -282,19 +286,19 @@ var Arte = (function () {
   }
 
   function gota(c, x, y, r) {
-    c.fillStyle = CFG.concreto.cor; c.strokeStyle = CONTORNO; c.lineWidth = Math.max(1.5, r * 0.28);
+    c.fillStyle = CFG.concreto.cor; c.strokeStyle = CFG.concreto.corEscura; c.lineWidth = Math.max(1.5, r * 0.28);
     c.beginPath();
     c.moveTo(x, y - r * 1.7);
     c.bezierCurveTo(x + r * 1.3, y - r * 0.1, x + r * 0.9, y + r * 0.8, x, y + r * 0.8);
     c.bezierCurveTo(x - r * 0.9, y + r * 0.8, x - r * 1.3, y - r * 0.1, x, y - r * 1.7);
     c.fill(); c.stroke();
-    c.fillStyle = 'rgba(240,255,170,0.9)';
+    c.fillStyle = 'rgba(' + CFG.concreto.luz + ',0.9)';
     c.beginPath(); c.arc(x - r * 0.3, y + r * 0.1, r * 0.2, 0, 7); c.fill();
   }
 
   function poca(c, x, y, a) {
     c.globalAlpha = a;
-    c.fillStyle = CFG.concreto.cor; c.strokeStyle = CONTORNO; c.lineWidth = 2;
+    c.fillStyle = CFG.concreto.cor; c.strokeStyle = CFG.concreto.corEscura; c.lineWidth = 2;
     c.beginPath(); c.ellipse(x, y - 2, 12, 4, 0, 0, 7); c.fill(); c.stroke();
     c.globalAlpha = 1;
   }
@@ -434,6 +438,14 @@ var Arte = (function () {
     if (cheio) { c.fillStyle = 'rgba(255,255,255,0.75)'; c.beginPath(); c.ellipse(x - r * 0.4, y - r * 0.35, r * 0.22, r * 0.14, -0.6, 0, 7); c.fill(); }
   }
 
+  // Escudo de geleca (PROVISÓRIO): bolha que aguenta um golpe.
+  function bolha(c, x, y, r, t) {
+    c.fillStyle = 'rgba(150,225,255,0.22)'; c.strokeStyle = 'rgba(210,245,255,0.95)'; c.lineWidth = Math.max(2, r * 0.08);
+    c.beginPath(); c.arc(x, y, r + Math.sin(t * 5) * r * 0.04, 0, 7); c.fill(); c.stroke();
+    c.strokeStyle = 'rgba(255,255,255,0.9)'; c.lineWidth = Math.max(2, r * 0.1); c.lineCap = 'round';
+    c.beginPath(); c.arc(x, y, r * 0.72, -2.4, -1.7); c.stroke();
+  }
+
   // Placa de madeira com dica.
   function placa(c, x, y, s) {
     c.font = '700 15px "Trebuchet MS", "Segoe UI", system-ui, sans-serif';
@@ -450,14 +462,14 @@ var Arte = (function () {
     c.save();
     c.translate(x, y); c.scale(dir, 1);
     var o = Math.sin(t * 30) * 1.5;
-    c.fillStyle = CFG.concreto.cor; c.strokeStyle = CONTORNO; c.lineWidth = 2.5; c.lineJoin = 'round';
+    c.fillStyle = CFG.concreto.cor; c.strokeStyle = CFG.concreto.corEscura; c.lineWidth = 2.5; c.lineJoin = 'round';
     c.beginPath();
     c.moveTo(-34, 0);
     c.bezierCurveTo(-22, -7 - o, -4, -5 + o, 6, -9);
     c.bezierCurveTo(22, -11, 24, 11, 6, 9);
     c.bezierCurveTo(-4, 5 - o, -22, 7 + o, -34, 0);
     c.fill(); c.stroke();
-    c.fillStyle = 'rgba(240,255,170,0.9)';
+    c.fillStyle = 'rgba(' + CFG.concreto.luz + ',0.9)';
     c.beginPath(); c.ellipse(6, -3, 6, 2, 0, 0, 7); c.fill();
     c.fillStyle = CFG.concreto.cor;
     [[-40, -8, 3.5], [-48, 5, 2.5], [-26, 11, 2.5], [-30, -12, 2]].forEach(function (p) {
@@ -524,8 +536,9 @@ var Arte = (function () {
   }
 
   // Painel: corações de vida à esquerda, gotinhas coletadas à direita.
-  function painel(c, vidas, gotinhas, total) {
+  function painel(c, vidas, gotinhas, total, escudo, t) {
     for (var i = 0; i < CFG.vidas; i++) coracao(c, 36 + i * 40, 40, 15, i < vidas);
+    if (escudo) bolha(c, 36 + (vidas - 1) * 40, 40, 21, t || 0);
     c.fillStyle = 'rgba(8,20,16,0.4)';
     retArred(c, W - 142, 18, 126, 42, 21); c.fill();
     gota(c, W - 120, 42, 9);
@@ -535,8 +548,8 @@ var Arte = (function () {
   return {
     mistura: mistura, acaso: acaso, retArred: retArred, ceu: ceu, fundoPlantas: fundoPlantas,
     plataforma: plataforma, concreto: concreto, gota: gota, poca: poca, monstro: monstro, raio: raio,
-    portal: portal, texto: texto, painel: painel, flor: flor, CONTORNO: CONTORNO,
+    portal: portal, texto: texto, painel: painel, flor: flor,
     gotinha: gotinha, coracao: coracao, placa: placa, corMonstro: corMonstro,
-    mola: mola, formas: formas, coresMonstro: CORES_MONSTRO, olhosBravos: olhosBravos, PALETA_PLANTAS: PALETA_PLANTAS
+    mola: mola, bolha: bolha, formas: formas, coresMonstro: CORES_MONSTRO, olhosBravos: olhosBravos, PALETA_PLANTAS: PALETA_PLANTAS
   };
 })();

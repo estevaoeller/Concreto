@@ -6,8 +6,14 @@ var CFG = {
   altura: 540,
 
   concreto: {
-    cor: '#a8e61d',            // PROVISÓRIO: verde da alternativa A da prancha de estudos (P04 em aberto)
-    corEscura: '#1d6b1a',      // PROVISÓRIO
+    // Cor atual. As quatro alternativas da prancha de estudos ficam em `cores`; a escolha definitiva (P04) segue em aberto.
+    cor: '#a8e61d', corEscura: '#1d6b1a', clara: '#c9f545', funda: '#8ed412', mancha: '92,176,10', luz: '240,255,170',
+    cores: {
+      verde: { nome: 'Verde', gotinhas: 0, cor: '#a8e61d', corEscura: '#1d6b1a', clara: '#c9f545', funda: '#8ed412', mancha: '92,176,10', luz: '240,255,170' },
+      azul: { nome: 'Azul', gotinhas: 100, cor: '#3fc8f5', corEscura: '#0f5a8a', clara: '#a4e8ff', funda: '#1fa6dc', mancha: '20,130,190', luz: '225,247,255' },
+      roxo: { nome: 'Roxo', gotinhas: 200, cor: '#b673f2', corEscura: '#4a1f8a', clara: '#dcb8ff', funda: '#9048d8', mancha: '110,50,180', luz: '242,228,255' },
+      laranja: { nome: 'Laranja', gotinhas: 300, cor: '#ffa62a', corEscura: '#9a4a08', clara: '#ffd47a', funda: '#f08a10', mancha: '210,110,10', luz: '255,242,205' }
+    },      // PROVISÓRIO
     velocidade: 260,           // PROVISÓRIO (px/s)
     forcaPulo: 680,            // PROVISÓRIO
     gravidade: 1800,           // PROVISÓRIO
@@ -33,7 +39,11 @@ var CFG = {
 
   monstro: {
     vida: 2,                   // PROVISÓRIO (quantos raios aguenta)
-    anda: false,               // "representação parada" (I02); deslocamento pendente
+    velocidade: 55,            // PROVISÓRIO: quem anda
+    passeio: 130,              // PROVISÓRIO: até onde anda, para cada lado
+    forcaPulo: 430,            // PROVISÓRIO: quem pula
+    intervaloPulo: 1.7,        // PROVISÓRIO
+    alturaVoo: 70,             // PROVISÓRIO: quem flutua sobe e desce até aqui
     distanciaFaca: 130,        // PROVISÓRIO (I04: "muito perto")
     preparoFaca: 0.7,          // PROVISÓRIO (tempo com a faca à mostra antes do golpe)
     duracaoGolpe: 0.25,        // PROVISÓRIO

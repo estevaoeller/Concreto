@@ -30,16 +30,15 @@ Adaptação de Grill Me e Grill with Docs, de Matt Pocock (https://github.com/ma
 
 Perguntar uma por vez, ajustando conforme respostas:
 
-Atualizado após a rodada 010 (respondidas: dano por contato e faca, invulnerabilidade, queda, reinício, Cthulhu na fase 1; retirado o ciclo de dia e noite).
+Atualizado após a rodada 013. As perguntas de regra foram decididas por delegação e estão na seção 13 da especificação. A entrevista passa a ser de revisão, com o criador jogando:
 
-1. Respondida na rodada 011: entrar no portal leva ao boss. Revisar com o criador as escolhas delegadas (seção 13 da especificação), uma por vez, depois de ele jogar.
-2. "Você falou de uma espada e de um escudo. É para o Concreto ter no jogo? Como ele usaria?" Não presumir; a decisão vigente é A02 (sem espada).
-3. "Se o boss aparecer, precisa derrotá-lo para entrar no portal?"
-4. "A tela muda para primeira pessoa em todas as lutas de boss ou só na do Cthulhu? E todos têm a barrinha de vida grande?" Dividir em duas perguntas no diálogo.
-5. "Quando o boss vai atacar, como o Concreto escapa do golpe?" Explorar a fala sobre bater nos lados sem presumir que significa desviar.
-6. "Nos dez segundos, como o Concreto ataca? E o que acontece se tentar atacar fora desse tempo?"
-7. "O que acontece depois de derrotar o boss do último mundo?"
-8. "Qual dos quatro Concretos você escolhe: verde, azul, roxo ou laranja?"
+1. "Qual mundo você mais gostou? Qual foi o mais chato?"
+2. "Algum boss ficou difícil demais ou fácil demais?"
+3. "Os monstros se mexendo ficaram como você queria?"
+4. "O golpe de cada boss ficou legal? Você mudaria algum?"
+5. "Por que o Concreto atravessa os mundos? Como a história termina?"
+6. "Você quer a espada no jogo? Antes você disse que a arma é só dos monstros." Não presumir.
+7. "O boss do mundo 2 e o mundo 5 ficaram diferentes do que você pediu. O que achou?"
 
 Depois resolver as dependências dos controles, inimigos normais, personalização dos mundos e direção de arte. Não ler o roteiro inteiro de uma vez.
 

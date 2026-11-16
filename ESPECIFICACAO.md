@@ -1,6 +1,6 @@
 # Concreto — Especificação do jogo
 
-Versão: 0.8 — 2026-11-16
+Versão: 0.9 — 2026-11-16
 Estado: descoberta e design, com protótipo jogável dos cinco mundos autorizado pelo responsável (ver seções 11 e 13). O protótipo não encerra a descoberta nem converte premissas provisórias em requisitos.
 Convenção: requisitos numerados são decisões confirmadas, salvo indicação explícita de interpretação, proposta ou pendência. Referências visuais não são assets aprovados.
 
@@ -134,8 +134,8 @@ Não há desenhos, sprites ou áudio aprovados. O estilo e o formato técnico pe
 
 ## 10. Decisões pendentes prioritárias
 
-1. Validar com o criador as escolhas delegadas na rodada 011 (seção 13), jogando o protótipo.
-2. Espada e escudo: decisão adiada pelo responsável na rodada 011. Até lá vale A02 (Concreto sem espada).
+1. Validar com o criador as escolhas delegadas nas rodadas 011 a 013 (seção 13), jogando o protótipo.
+2. Espada: não implementada; vale A02 até decisão expressa do criador em contrário. O escudo entrou como item provisório.
 3. Confirmar se a câmera em primeira pessoa e a barra de vida grande valem para todos os bosses.
 4. Definir como o jogador se defende dos dois ataques, como ataca durante a janela e se o boss pode receber dano fora dela.
 5. Definir relação portal/derrota do boss, repetição de ciclos, vitória final e continuidade de vidas.
@@ -157,7 +157,7 @@ Fora do protótipo: história, final narrativo, itens além de gotinhas e coraç
 
 O protótipo pode ser usado como apoio à entrevista: o criador joga, e cada premissa provisória da seção 13 vira uma pergunta concreta ("ficou como você imaginou?").
 
-O responsável delegou as escolhas pendentes ao desenvolvimento, com revisão posterior (rodada 011). A próxima rodada é de revisão: o criador joga e diz o que manter, mudar ou tirar entre os itens da seção 13. Perguntas que continuam sendo dele: espada e escudo, cor do Concreto e o final do jogo. Ver [plano de entrevista](PLANO-ENTREVISTA.md).
+O responsável delegou ao desenvolvimento as decisões pendentes, com revisão posterior (rodadas 011 e 013). A próxima rodada é de revisão: o criador joga e diz o que manter, mudar ou tirar entre os itens da seção 13. Continuam sendo dele, e podem substituir qualquer escolha delegada: a história e o final, a espada, a cor definitiva do Concreto e o jeito de cada monstro e de cada boss. Ver [plano de entrevista](PLANO-ENTREVISTA.md).
 
 ## 13. Premissas provisórias do protótipo
 
@@ -181,15 +181,21 @@ Valores adotados para tornar o protótipo jogável e, desde a rodada 011, escolh
 | Indicador de vidas (G10) | Forma do indicador | Três corações no canto da tela. |
 | Tolerância do pulo | Física não definida | Ainda dá para pular 0,1 s depois de sair da beirada, e o pulo apertado 0,12 s antes de pousar também vale. |
 | Tamanho da fase | Duração e desenho não definidos | Três trechos de dificuldade crescente, como no storyboard S01; cerca de 35 s em linha reta. |
-| Tipos de monstro | Tipos não definidos | Quatro aparências da prancha P02 (Espinho, Planta Mordedora, Cogumelo, Semente), todas paradas e com o mesmo comportamento. Sinal de alerta quando percebem o Concreto. |
+| Monstros — movimento (I02) | Deslocamento não definido | Decisão delegada na rodada 013: cada tipo tem um jeito. Parado, anda (vai e volta na própria plataforma), pula (no lugar) ou flutua (sobe e desce). A faca por proximidade (I04) vale para todos, e todos param para atacar. |
 | Dicas | Tutorial não definido | Três placas de madeira no começo da fase. |
 | Portal | Transição não definida | Concreto é puxado para dentro do portal e a tela clareia antes da luta. |
 | Boss — onda de papel | Variedade de ataques não definida | Com menos da metade da vida, cada golpe cobre dois dos três lados; sobra um lado seguro. A regra de dois ataques e pausa de 10 s (B01) não muda. |
 | Boss — aparência e arena | Arte não aprovada | Manto roxo, medalhão dourado e salão roxo com colunas e rolos, conforme a prancha B01. |
 | Bosses 2 a 5 — formato da luta | Primeira pessoa e barra grande valem para todos? | Sim para todos, com o mesmo formato do Cthulhu: três lados, aviso temático antes de cada golpe, raio só na pausa. |
-| Bosses 2 a 5 — identidade | Ataques e avisos personalizados | Rainha de Lava (cubo de lava; o lado atingido fica em brasa por 1,2 s), Anjo (estrela de luz), Coelho de Pelúcia (bola de algodão; troca de lado mais rápido), Guardião de Blocos (peça; golpe sempre em dois lados). Vida crescente: 24, 28, 30, 32 e 40. |
+| Bosses — ataque próprio | Ataques personalizados | Decisão delegada na rodada 013, sempre dentro de B01 (dois ataques e pausa de 10 s). Cthulhu: onda de papel em dois lados com menos de metade da vida. Rainha de Lava: o lado atingido fica em brasa por 1,2 s. Anjo: o aviso muda de lado uma vez antes do golpe. Coelho de Pelúcia: o segundo ataque é um golpe no chão, que só se evita pulando. Guardião de Blocos: golpes sempre em dois lados e segundo ataque no chão. Vida: 24, 28, 30, 32 e 40. |
 | Mundos 2 a 5 — fases | Desenho das fases e mecânicas de cenário | Três trechos por mundo. Mundo 2: lava nos buracos. Mundo 3: plataformas que se mexem. Mundo 4: almofadas que jogam para o alto. Mundo 5: as duas coisas. Cair continua valendo V06 em todos. |
 | Mundos 2 a 5 — monstros | Tipos por mundo | Quatro aparências por mundo, da prancha P02; todos parados e com faca. |
 | Progressão | Desbloqueio, persistência e vidas entre mundos | Vencer o boss libera o mundo seguinte; tela de escolha de mundo; progresso e recorde de gotinhas guardados no aparelho; três vidas ao começar cada mundo. |
-| Final | O que acontece depois do último boss | Tela de comemoração com o total de gotinhas. O final da história continua em aberto. |
+| História e final | História, missão e desfecho em aberto | Decisão delegada na rodada 013: abertura de quatro linhas (cinco chefes bagunçaram os mundos; Concreto atravessa os portais para enfrentá-los) e frase de encerramento. Texto provisório; a história é do criador. |
 | Pausa | Não definida | Botão na tela e tecla P; permite voltar à escolha de mundos. |
+| Gotinhas — utilidade | Itens e progressão (árvore G) | Decisão delegada na rodada 013: as gotinhas liberam cores do Concreto (azul com 100, roxo com 200, laranja com 300) e contam para as estrelas de cada mundo (1 por vencer, 2 com 60% das gotinhas, 3 com 90%). |
+| Cor do Concreto (P04) | Qual das quatro alternativas | Decisão delegada na rodada 013: as quatro ficam no jogo. Verde é a inicial; as outras são liberadas com gotinhas e escolhidas na tela inicial. |
+| Espada e escudo | Pedido não esclarecido na rodada 010 | Decisão delegada na rodada 013: sem espada, porque A02 é decisão expressa do criador. O escudo entra como bolha de geleca: um por mundo, aguenta um golpe e vale também na luta contra o boss. Não protege de queda. |
+| Dispositivos (Q01) | Teclado, toque ou ambos | Decisão delegada na rodada 013: ambos. |
+| Música e sons (G19) | Trilhas e estilo | Uma música por mundo e uma para as lutas, mais efeitos, todos sintetizados pelo navegador e compostos para o protótipo. Botão para ligar e desligar o som. |
+| Expressões do Concreto | Animações (G03, G07) | Olhos apertados ao levar um golpe, além de piscar e abrir a boca ao atirar. |

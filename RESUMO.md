@@ -1,4 +1,4 @@
-# O jogo do Concreto — versão 0.8
+# O jogo do Concreto — versão 0.9
 
 ## O que já inventamos
 
@@ -36,11 +36,21 @@ Algumas coisas que você ainda não decidiu, nós inventamos para o jogo ficar d
 
 Duas coisas ficaram diferentes do que você pediu, porque a Malgosha e o Lego são de outras pessoas: o boss do mundo 2 é a Rainha de Lava e o mundo 5 é de blocos de montar, com o Guardião de Blocos. Dá para conversar sobre isso!
 
+## Novidades
+
+- Os monstros agora se mexem: uns andam, uns pulam, uns flutuam e uns ficam parados. Todos ainda puxam a faca quando você chega perto.
+- Cada boss tem um golpe só dele. O Coelho e o Guardião batem no chão: aí tem que apertar o PULO!
+- As gotinhas servem para liberar cores novas do Concreto (azul, roxo e laranja) e para ganhar estrelas.
+- Tem um escudo de geleca escondido em cada mundo. Ele aguenta um golpe.
+- Tem música em cada mundo.
+- Escrevemos uma historinha bem curta só para começar. A história de verdade é você quem inventa!
+
 Jogue e conte o que fica, o que muda e o que sai.
 
 ## O que vamos descobrir depois
 
-- Você falou de espada e de escudo: é para o Concreto ter no jogo? (Decidimos depois.)
+- O Concreto ganhou um escudo de geleca. E a espada: você quer mesmo? Antes você disse que a arma é só dos monstros.
+- Por que o Concreto atravessa os mundos? Como a história termina?
 - Todos os bosses têm luta em primeira pessoa e barra de vida grande?
 - Como Concreto escapa dos ataques dos bosses?
 - O que acontece quando ganha do último boss?

@@ -15,9 +15,16 @@ var Fase = (function () {
         invul: 0, trava: 0, recarga: 0, atacando: 0, pulosNoAr: 0, coiote: 0, memoriaPulo: 0, pouso: 0, entrando: 0, apoio: null,
         seguro: { x: dados.inicio.x, y: dados.inicio.y }, proxGota: CFG.concreto.intervaloGota
       },
-      monstros: dados.monstros.map(function (m) {
-        return { x: m.x, y: m.y, tipo: m.tipo || 'espinho', vida: CFG.monstro.vida, olha: -1, estado: 'calmo', tempo: 0, piscando: 0, acertou: false };
+      monstros: dados.monstros.map(function (m, i) {
+        var base = null; // plataforma onde ele fica: quem anda não sai dela
+        dados.plataformas.forEach(function (p) { if (!p.mov && Math.abs(p.y - m.y) < 2 && m.x >= p.x && m.x <= p.x + p.w) base = p; });
+        return {
+          x: m.x, y: m.y, by: m.y, tipo: m.tipo || 'espinho', modo: m.modo || 'parado', vida: CFG.monstro.vida,
+          olha: -1, estado: 'calmo', tempo: 0, piscando: 0, acertou: false, anda: i % 2 ? 1 : -1, vy: 0, relogio: i * 0.7,
+          min: Math.max(base ? base.x + 34 : m.x, m.x - CFG.monstro.passeio), max: Math.min(base ? base.x + base.w - 34 : m.x, m.x + CFG.monstro.passeio)
+        };
       }),
+      escudos: dados.escudos.map(function (g) { return { x: g.x, y: g.y, pego: false }; }),
       gotinhas: dados.gotinhas.map(function (g) { return { x: g.x, y: g.y, pego: false }; }),
       coracoes: dados.coracoes.map(function (g) { return { x: g.x, y: g.y, pego: false }; }),
       raios: [], gotas: [], pocas: [], particulas: [],
@@ -33,8 +40,8 @@ var Fase = (function () {
   function ferir(f, jogo, deX) {
     var j = f.j;
     if (j.invul > 0) return;
-    jogo.vidas--;
-    Som.dano();
+    if (jogo.escudo) { jogo.escudo = false; Som.quebrou(); poeira(f, j.x, j.y - JH / 2, '#c8f0ff', 14); } // o escudo aguenta um golpe
+    else { jogo.vidas--; Som.dano(); }
     j.invul = CFG.invencivelAposDano; // V05
     j.trava = 0.3;
     f.tremor = 0.25;
@@ -164,6 +171,13 @@ var Fase = (function () {
         poeira(f, g.x, g.y, '#eaffa0', 4, 0.5);
       }
     });
+    f.escudos.forEach(function (g) {
+      if (!g.pego && !jogo.escudo && Math.abs(g.x - j.x) < 36 && Math.abs(g.y - (j.y - JH / 2)) < 46) {
+        g.pego = true; jogo.escudo = true; Som.escudo();
+        poeira(f, g.x, g.y, '#c8f0ff', 10);
+      }
+    });
+    f.escudoAtivo = jogo.escudo;
     f.coracoes.forEach(function (g) {
       if (!g.pego && jogo.vidas < CFG.vidas && Math.abs(g.x - j.x) < 34 && Math.abs(g.y - (j.y - JH / 2)) < 42) {
         g.pego = true; jogo.vidas++; Som.vida();
@@ -200,7 +214,19 @@ var Fase = (function () {
       if (m.piscando > 0) m.piscando -= dt;
       var dx = j.x - m.x, perto = Math.abs(dx) < M.distanciaFaca && Math.abs(j.y - m.y) < 80;
       if (m.estado !== 'golpe') m.olha = dx >= 0 ? 1 : -1;
-      m.tempo += dt;
+      m.tempo += dt; m.relogio += dt;
+      // cada tipo se mexe de um jeito; para atacar com a faca, todos param
+      if (m.modo === 'anda' && m.estado === 'calmo' && m.max > m.min) {
+        m.x += m.anda * M.velocidade * dt;
+        if (m.x >= m.max) { m.x = m.max; m.anda = -1; } else if (m.x <= m.min) { m.x = m.min; m.anda = 1; }
+        m.olha = m.anda;
+      } else if (m.modo === 'pula') {
+        if (m.y >= m.by && m.relogio >= M.intervaloPulo && m.estado === 'calmo') { m.vy = -M.forcaPulo; m.relogio = 0; }
+        m.vy += 1200 * dt; m.y = Math.min(m.by, m.y + m.vy * dt);
+        if (m.y >= m.by) m.vy = 0;
+      } else if (m.modo === 'flutua') {
+        m.y = m.by - M.alturaVoo * (0.5 - 0.5 * Math.cos(m.relogio * 2));
+      }
       if (m.estado === 'calmo') {
         if (perto) { m.estado = 'preparando'; m.tempo = 0; Som.percebeu(); }
       } else if (m.estado === 'preparando') {
@@ -279,6 +305,10 @@ var Fase = (function () {
       var x = g.x - cam;
       if (!g.pego && x > -40 && x < W + 40) Arte.coracao(c, x, g.y + Math.sin(f.t * 3 + i) * 4, 15 + Math.sin(f.t * 6) * 1.5, true);
     });
+    f.escudos.forEach(function (g, i) {
+      var x = g.x - cam;
+      if (!g.pego && x > -40 && x < W + 40) { Arte.bolha(c, x, g.y + Math.sin(f.t * 3 + i) * 4, 18, f.t); Arte.gota(c, x, g.y + 4 + Math.sin(f.t * 3 + i) * 4, 7); }
+    });
     f.monstros.forEach(function (m) {
       var x = m.x - cam;
       if (m.vida > 0 && x > -80 && x < W + 80) Arte.monstro(c, x, m.y, m, f.t);
@@ -296,7 +326,8 @@ var Fase = (function () {
         Arte.concreto(c, 0, 26, { w: JW + 8, h: JH + 8, dir: j.dir, t: f.t, semSombra: true });
         c.restore();
       } else {
-        Arte.concreto(c, j.x - cam, j.y, { w: JW + 8, h: JH + 8, dir: j.dir, t: f.t + (j.vx ? f.t : 0), espichar: esp, atacando: j.atacando > 0 });
+        Arte.concreto(c, j.x - cam, j.y, { w: JW + 8, h: JH + 8, dir: j.dir, t: f.t + (j.vx ? f.t : 0), espichar: esp, atacando: j.atacando > 0, dano: j.trava > 0 });
+        if (f.escudoAtivo) Arte.bolha(c, j.x - cam, j.y - 28, 44, f.t);
       }
     }
     f.particulas.forEach(function (p) {

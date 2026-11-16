@@ -3,12 +3,20 @@
 // Mundos 2 e 5 usam as versões originais das pranchas (vulcânico e blocos de montar), sem marcas ou personagens de terceiros.
 var MUNDOS = (function () {
   var Y = 460;
+  // Jeito de se mexer de cada monstro (PROVISÓRIO; I02 deixava o deslocamento em aberto). A faca por proximidade vale para todos (I04).
+  var MODO = {
+    planta: 'parado', espinho: 'anda', cogumelo: 'pula', semente: 'parado',
+    rocha: 'parado', lava: 'anda', brasa: 'pula', fumaca: 'flutua',
+    nuvem: 'flutua', estrela: 'pula', passaro: 'flutua', vento: 'anda',
+    almofada: 'parado', urso: 'anda', coelhinho: 'pula', novelo: 'anda',
+    arco: 'parado', bloco: 'anda', piramide: 'pula', pilha: 'parado'
+  };
 
   // Monta uma fase da esquerda para a direita. Distâncias em pixels a partir do ponto atual.
   function construir(tipos, roteiro) {
-    var d = { plataformas: [], monstros: [], gotinhas: [], coracoes: [], placas: [], molas: [], trechos: [], inicio: { x: 90, y: Y } };
-    var x = 0, nm = 0, primeiro = true;
-    function monstro(mx, my) { d.monstros.push({ x: mx, y: my, tipo: tipos[nm++ % tipos.length] }); }
+    var d = { plataformas: [], monstros: [], gotinhas: [], coracoes: [], escudos: [], placas: [], molas: [], trechos: [], inicio: { x: 90, y: Y } };
+    var x = 0, nm = 0, primeiro = true, poeEscudo = false;
+    function monstro(mx, my) { var tipo = tipos[nm++ % tipos.length]; d.monstros.push({ x: mx, y: my, tipo: tipo, modo: MODO[tipo] }); }
     function fila(fx, fy, n) { for (var i = 0; i < n; i++) d.gotinhas.push({ x: fx + i * 44, y: fy }); }
     function arco(x0, x1, alt, n) {
       for (var i = 0; i < n; i++) { var k = i / (n - 1); d.gotinhas.push({ x: x0 + (x1 - x0) * k, y: Y - 60 - Math.sin(k * Math.PI) * alt }); }
@@ -23,7 +31,7 @@ var MUNDOS = (function () {
       if (o.c) d.coracoes.push({ x: px + w / 2, y: py - 52 });
     }
     var b = {
-      trecho: function (nome) { d.trechos.push({ x: x, nome: nome }); },
+      trecho: function (nome) { d.trechos.push({ x: x, nome: nome }); if (nome === 'Trecho 2') poeEscudo = true; },
       placa: function (dx, texto) { d.placas.push({ x: x + dx, texto: texto }); },
       // chão: o.m = monstros, o.f = plataformas por cima [dx, y, largura, opções], o.mola = almofadas [dx]
       chao: function (w, o) {
@@ -33,6 +41,7 @@ var MUNDOS = (function () {
         (o.f || []).forEach(function (f) { flutuante(x + f[0], f[1], f[2], f[3]); });
         (o.mola || []).forEach(function (dx) { d.molas.push({ x: x + dx, y: Y, w: 60, aperto: 0 }); });
         if (!primeiro && !o.semGotas) fila(x + 70, Y - 40, 3);
+        if (poeEscudo) { d.escudos.push({ x: x + 40, y: Y - 110 }); poeEscudo = false; } // um escudo de geleca por mundo
         primeiro = false;
         x += w;
       },
@@ -50,7 +59,7 @@ var MUNDOS = (function () {
     {
       nome: 'Mundo das Plantas', tema: 'plantas',
       boss: { tipo: 'cthulhu', nome: 'Cthulhu Higiênico', vida: 24, aviso: 1.1, ondaAbaixoDe: 0.5, trocaDeLado: 2.5 },
-      fase: construir(['espinho', 'semente', 'cogumelo', 'planta'], function (b) {
+      fase: construir(['planta', 'espinho', 'cogumelo', 'semente'], function (b) {
         b.trecho('Trecho 1');
         b.placa(190, 'Ande para a direita'); b.placa(410, 'PULO para subir'); b.placa(745, 'RAIO de longe!');
         b.chao(1000, { m: [900], f: [[520, 370, 160]] }); b.buraco(120);
@@ -91,7 +100,7 @@ var MUNDOS = (function () {
     },
     {
       nome: 'Mundo do Céu', tema: 'ceu',
-      boss: { tipo: 'anjo', nome: 'Anjo', vida: 30, aviso: 0.95, ondaAbaixoDe: 0.5, trocaDeLado: 2.0 },
+      boss: { tipo: 'anjo', nome: 'Anjo', vida: 30, aviso: 1.2, ondaAbaixoDe: 0.4, trocaDeLado: 2.0, persegue: true },
       fase: construir(['nuvem', 'estrela', 'passaro', 'vento'], function (b) {
         b.trecho('Trecho 1');
         b.placa(200, 'Algumas plataformas se mexem!');
@@ -114,7 +123,7 @@ var MUNDOS = (function () {
     },
     {
       nome: 'Mundo de Pelúcia', tema: 'pelucia',
-      boss: { tipo: 'coelho', nome: 'Coelho de Pelúcia', vida: 32, aviso: 0.9, ondaAbaixoDe: 0.6, trocaDeLado: 1.7 },
+      boss: { tipo: 'coelho', nome: 'Coelho de Pelúcia', vida: 32, aviso: 1.0, ondaAbaixoDe: 0.4, trocaDeLado: 1.7, chao: true },
       fase: construir(['urso', 'coelhinho', 'novelo', 'almofada'], function (b) {
         b.trecho('Trecho 1');
         b.placa(200, 'Pise na almofada rosa!');
@@ -136,7 +145,7 @@ var MUNDOS = (function () {
     },
     {
       nome: 'Mundo dos Blocos', tema: 'blocos',
-      boss: { tipo: 'guardiao', nome: 'Guardião de Blocos', vida: 40, aviso: 0.9, ondaAbaixoDe: 1, trocaDeLado: 1.8 },
+      boss: { tipo: 'guardiao', nome: 'Guardião de Blocos', vida: 40, aviso: 1.0, ondaAbaixoDe: 1, trocaDeLado: 1.8, chao: true },
       fase: construir(['bloco', 'arco', 'pilha', 'piramide'], function (b) {
         b.trecho('Trecho 1');
         b.chao(700, { m: [520], f: [[260, 370, 150]] });

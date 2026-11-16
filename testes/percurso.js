@@ -17,11 +17,12 @@ function confere(nome, ok, detalhe) {
   p.on('pageerror', e => erros.push(String(e)));
   p.on('console', m => { if (m.type() === 'error') erros.push(m.text()); });
   const foto = async nome => { if (capturas) await p.screenshot({ path: path.join(capturas, nome + '.png') }); };
-  const novaFase = async (m) => { await p.goto(pagina); await p.waitForTimeout(300); await p.evaluate(m => Jogo.novaFase(m || 0), m); await p.waitForTimeout(200); };
+  const novaFase = async (m) => { await p.goto(pagina); await p.waitForTimeout(300); await p.evaluate(m => { Jogo.semHistoria = true; Jogo.novaFase(m || 0); }, m); await p.waitForTimeout(200); };
 
   await p.goto(pagina); await p.evaluate(() => { try { localStorage.clear(); } catch (e) {} });
   await p.goto(pagina); await p.waitForTimeout(400); await foto('1-titulo');
-  await p.keyboard.press('Enter'); await p.waitForTimeout(500); await foto('2-fase');
+  await p.keyboard.press('Enter'); await p.waitForTimeout(1300); await foto('2-historia');
+  await p.keyboard.press('Enter'); await p.waitForTimeout(500); await foto('3-fase');
 
   // V01: começa com três vidas
   confere('V01 começa com três vidas', await p.evaluate(() => Jogo.vidas) === 3);
@@ -92,10 +93,10 @@ function confere(nome, ok, detalhe) {
       const apoio = (x, y) => d.plataformas.some(pl => x > pl.x && x < pl.x + pl.w && pl.y >= y - 4);
       while (J.estado === 'fase' && n < 60 * 300) {
         const j = J.fase.j;
-        const m = J.fase.monstros.find(m => m.vida > 0 && m.x > j.x && m.x - j.x < 190 && Math.abs(m.y - j.y) < 60);
+        const m = J.fase.monstros.find(m => m.vida > 0 && m.x > j.x - 10 && m.x - j.x < 210 && Math.abs(m.by - j.y) < 60); // para e atira até o caminho ficar livre
         Entrada.dir = !m || !j.noChao;
         if (!j.noChao && j.vy > 0 && apoio(j.x, j.y) && !apoio(j.x + 40, j.y)) Entrada.dir = false; // pousa em vez de passar do ponto
-        if (n % 25 === 0) Entrada.ataqueApertou = true;
+        if (n % 22 === 0) Entrada.ataqueApertou = true;
         const naMola = J.fase.molas.some(mo => j.x > mo.x - 80 && j.x < mo.x + mo.w + 10);
         if (j.noChao && !m && !naMola && !apoio(j.x + 36, j.y)) { Entrada.puloApertou = true; Entrada.pulo = true; }
         else if (j.noChao) Entrada.pulo = false;
@@ -108,11 +109,13 @@ function confere(nome, ok, detalhe) {
       const J = Jogo; let n = 0;
       while (J.estado === 'entrando' && n < 200) { J.passo(1 / 60); n++; }
       const b = J.boss; n = 0;
-      const perigo = l => b.alvos.indexOf(l) >= 0 || b.brasas.some(q => q.lado === l);
+      const perigo = l => ((b.fase === 'aviso' || b.fase === 'golpe') && b.alvos.indexOf(l) >= 0) || b.brasas.some(q => q.lado === l);
       const ir = l => { if (l > b.lado) Entrada.dirApertou = true; else if (l < b.lado) Entrada.esqApertou = true; };
       while (J.estado === 'boss' && n < 60 * 400) {
         const emAtaque = b.fase === 'aviso' || b.fase === 'golpe';
-        if (perigo(b.lado)) { const livre = [-1, 0, 1].filter(l => !perigo(l)).sort((x, y) => Math.abs(x - b.lado) - Math.abs(y - b.lado))[0]; if (livre !== undefined) ir(livre); }
+        if (b.tipoAtaque === 'chao' && b.fase === 'aviso' && b.tempo > b.cfg.aviso - 0.2) Entrada.puloApertou = true; // golpe no chão: pula
+        if (b.tipoAtaque === 'chao' && emAtaque) { /* lado não importa */ }
+        else if (perigo(b.lado)) { const livre = [-1, 0, 1].filter(l => !perigo(l)).sort((x, y) => Math.abs(x - b.lado) - Math.abs(y - b.lado))[0]; if (livre !== undefined) ir(livre); }
         else if (b.fase === 'pausa') { if (b.lado !== b.bossLado) { if (!perigo(b.bossLado) && !perigo(b.lado + Math.sign(b.bossLado - b.lado))) ir(b.bossLado); } else if (n % 24 === 0) Entrada.ataqueApertou = true; }
         J.passo(1 / 60); n++;
       }
@@ -203,6 +206,46 @@ function confere(nome, ok, detalhe) {
     return { estado: J.estado, vidas: J.vidas };
   });
   confere('V07 derrota no boss recomeça a luta', r.estado === 'boss' && r.vidas === 3, r);
+
+  // Escolhas provisórias da rodada 013 (seção 13 da especificação)
+  await novaFase(0);
+  r = await p.evaluate(() => {
+    const J = Jogo, j = J.fase.j, m = J.fase.monstros[0], o = {};
+    J.escudo = true; j.x = m.x - 30; J.passo(1 / 60);
+    o.vidasComEscudo = J.vidas; o.escudoDepois = J.escudo;
+    o.modos = [...new Set(MUNDOS.flatMap(w => w.fase.monstros.map(q => q.modo)))].sort().join(',');
+    const anda = J.fase.monstros.find(q => q.modo === 'anda'), x0 = anda.x;
+    j.x = 60; for (let i = 0; i < 120; i++) J.passo(1 / 60);
+    o.andou = Math.abs(anda.x - x0) > 20 && anda.x >= anda.min && anda.x <= anda.max;
+    return o;
+  });
+  confere('escudo de geleca aguenta um golpe sem tirar vida', r.vidasComEscudo === 3 && r.escudoDepois === false, r);
+  confere('monstros: parado, anda, pula e flutua existem; quem anda fica na sua plataforma', r.modos === 'anda,flutua,parado,pula' && r.andou, r);
+  r = await p.evaluate(() => {
+    const J = Jogo, o = {};
+    const luta = pula => {
+      J.novaFase(3); J.estado = 'boss'; J.boss = null; J.fase.j.x = MUNDOS[3].fase.portalX; J.estado = 'fase'; J.fase.j.y = 460;
+      for (let i = 0; i < 200 && J.estado !== 'boss'; i++) J.passo(1 / 60);
+      const b = J.boss; let n = 0, viuChao = false;
+      while (n < 60 * 12 && !(viuChao && b.fase === 'pausa')) {
+        if (b.tipoAtaque === 'chao' && b.fase === 'aviso') { viuChao = true; if (pula && b.tempo > b.cfg.aviso - 0.2) Entrada.puloApertou = true; }
+        else if (b.fase === 'aviso' && b.alvos.indexOf(b.lado) >= 0) { if (b.lado < 1) Entrada.dirApertou = true; else Entrada.esqApertou = true; }
+        J.passo(1 / 60); n++;
+      }
+      return { vidas: J.vidas, viuChao };
+    };
+    o.semPular = luta(false); o.pulando = luta(true);
+    return o;
+  });
+  confere('golpe no chão (Coelho): acerta quem fica no chão e erra quem pula', r.semPular.viuChao && r.semPular.vidas === 2 && r.pulando.vidas === 3, r);
+  r = await p.evaluate(() => {
+    const J = Jogo; J.progresso.recordes = [50, 60]; const antes = J.progresso.cor;
+    J.estado = 'titulo'; Entrada.corApertou = true; J.passo(1 / 60); const c1 = J.progresso.cor;
+    Entrada.corApertou = true; J.passo(1 / 60); const c2 = J.progresso.cor;
+    return { antes, c1, c2, cor: CFG.concreto.cor };
+  });
+  confere('cores: com 110 gotinhas só verde e azul estão liberadas', r.antes === 'verde' && r.c1 === 'azul' && r.c2 === 'verde', r);
+  await p.evaluate(() => { try { localStorage.clear(); } catch (e) {} });
 
   confere('sem erros no navegador', erros.length === 0, erros);
   await nav.close();

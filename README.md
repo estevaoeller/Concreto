@@ -4,7 +4,7 @@ Jogo de plataforma em fase de descoberta e preparação para desenvolvimento. Co
 
 ## Estado atual
 
-Especificação v0.8 (2026-11-16). Existe um protótipo jogável dos cinco mundos em [`jogo/`](jogo/), autorizado pelo responsável como instrumento de validação do design. Cada mundo tem fase em três trechos, monstros próprios, portal e boss.
+Especificação v0.9 (2026-11-16). Existe um protótipo jogável dos cinco mundos em [`jogo/`](jogo/), autorizado pelo responsável como instrumento de validação do design. Cada mundo tem fase em três trechos, monstros próprios, portal e boss.
 
 As regras ainda não decididas pelo criador foram preenchidas com escolhas provisórias, identificadas em [`jogo/js/config.js`](jogo/js/config.js), em [`jogo/js/mundos.js`](jogo/js/mundos.js) e na seção 13 da especificação. Escolha provisória não é requisito. Os mundos 2 e 5 usam as versões originais das pranchas, sem personagens ou marcas de terceiros.
 
@@ -16,7 +16,9 @@ Abrir `jogo/index.html` no navegador (não precisa instalar nada nem de internet
 - Celular ou tablet: botões na tela.
 - Na luta contra o boss: esquerda/direita mudam de lado, X (ou RAIO) atira.
 - Tela inicial: escolha o mundo com as setas ou tocando nele. Tecla P ou o botão de pausa pausam o jogo.
-- Gotinhas contam pontos; corações devolvem uma vida. Entrar no portal leva à luta contra o boss.
+- Gotinhas liberam cores do Concreto e valem estrelas; corações devolvem uma vida; a bolha de escudo aguenta um golpe. Entrar no portal leva à luta contra o boss.
+- Em algumas lutas o boss dá um golpe no chão: aperte o pulo para escapar.
+- Tecla C troca a cor do Concreto na tela inicial; tecla S liga e desliga o som.
 
 Para gerar um arquivo HTML único (fácil de enviar): `node ferramentas/empacotar.js`.
 
