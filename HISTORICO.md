@@ -229,3 +229,8 @@ Pedido do responsável: manter o desenho por código (prompts ficam como opção
 - Prompts opcionais para o Guardião de Blocos, a nave e o meteoro em `prompts/sprites/README.md`. Não são necessários.
 - Ponto de atenção: o final "Geleca da paz" exige atravessar os cinco mundos sem derrotar monstros. O robô de teste não joga assim; não foi verificado por uma pessoa se é viável em todos os trechos.
 - Testes: verificações novas para a escolha, o registro da amizade e os sete finais. Todas as verificações passaram.
+
+## 2026-11-16 — Rodada 021 — Roteiro de entrevista
+
+- Criado `ROTEIRO-ENTREVISTA.md`: 38 perguntas em linguagem simples, cada uma com o que o jogo faz hoje e o identificador da regra, para o criador confirmar, mudar ou tirar. Dez estão marcadas como prioritárias.
+- Avaliação do desenvolvimento: o jogo está completo de ponta a ponta; o que falta é validação com o criador, não funcionalidade.

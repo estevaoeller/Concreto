@@ -31,7 +31,8 @@ Nas lutas contra os bosses: esquerda e direita trocam de lado para fugir do golp
 - [Especificação](ESPECIFICACAO.md): as regras do jogo e a origem de cada uma.
 - [Resumo para o criador](RESUMO.md): o mesmo conteúdo em linguagem simples.
 - [Histórico](HISTORICO.md): decisões e alterações, rodada a rodada.
-- [Plano de entrevista](PLANO-ENTREVISTA.md): o que ainda perguntar ao criador.
+- [Roteiro de entrevista](ROTEIRO-ENTREVISTA.md): as perguntas para o criador confirmar ou mudar o que está no jogo.
+- [Plano de entrevista](PLANO-ENTREVISTA.md): o método e o histórico das rodadas de perguntas.
 - [Plano de desenvolvimento](DESENVOLVIMENTO.md) e [instruções para agentes](AGENTS.md).
 
 ## Arte
