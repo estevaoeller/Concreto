@@ -404,7 +404,9 @@ var Boss = (function () {
     c.globalAlpha = vencido ? Math.max(0, 1 - b.vencido / 2) : 1;
     if (vencido) c.rotate(b.vencido * 0.25);
     if (b.flash > 0) c.scale(1.05, 1.05);
-    b.vis.corpo(c, b, b.t, est);
+    // folha de sprites do boss (quatro estados), quando existe; senão, o desenho por código
+    var quadro = est.tonto ? 'cansado' : b.fase === 'golpe' ? 'ataca' : b.fase === 'aviso' ? 'prepara' : 'neutro';
+    if (typeof SPRITES === 'undefined' || !SPRITES[b.cfg.tipo] || !Arte.sprite(c, b.cfg.tipo, quadro, 0, 218, 372, 'neutro')) b.vis.corpo(c, b, b.t, est);
     c.restore();
   }
 

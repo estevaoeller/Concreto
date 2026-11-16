@@ -207,7 +207,7 @@
     c.fillStyle = 'rgba(30,14,64,0.62)'; c.fillRect(0, 0, W, H);
     Arte.texto(c, 'CONCRETO', W / 2, 102, 84, '#4a1f8a', 'center', 800, '#4a1f8a');
     Arte.texto(c, 'CONCRETO', W / 2, 96, 84, '#b6f03a', 'center', 800, '#1d6b1a');
-    Arte.concreto(c, W / 2, 300, { w: 100, h: 116, dir: 1, t: Jogo.t, espichar: Math.sin(Jogo.t * 3) * 0.1, pose: 'grande' });
+    Arte.concreto(c, W / 2, 300, { w: 100, h: 116, dir: 1, t: Jogo.t, espichar: Math.sin(Jogo.t * 3) * 0.1, pose: 'parado' });
     for (var i = 0; i < MUNDOS.length; i++) {
       var b = bolinha(i), aberto = i <= lib, sel = i === Jogo.mundo;
       if (i < MUNDOS.length - 1) {
@@ -281,7 +281,7 @@
     if (e === 'titulo') telaTitulo();
     else if (e === 'historia') { // história PROVISÓRIA: o criador ainda vai inventar a dele
       c.fillStyle = 'rgba(30,14,64,0.72)'; c.fillRect(0, 0, W, H);
-      Arte.concreto(c, W / 2, 200, { w: 90, h: 104, dir: 1, t: Jogo.t, espichar: Math.sin(Jogo.t * 3) * 0.1, pose: 'grande' });
+      Arte.concreto(c, W / 2, 200, { w: 90, h: 104, dir: 1, t: Jogo.t, espichar: Math.sin(Jogo.t * 3) * 0.1, pose: 'parado' });
       ['Cinco chefes bagunçaram os cinco mundos.', 'Só o Concreto, uma geleca corajosa,', 'consegue atravessar os portais.', 'Atravesse cada mundo e enfrente o chefe no final!']
         .forEach(function (ln, k) { Arte.texto(c, ln, W / 2, 262 + k * 36, 23, '#f2fbf4', 'center', 600); });
       if (Jogo.espera <= 0 && pisca()) Arte.texto(c, 'Toque ou aperte Enter para começar', W / 2, 460, 24, '#fff27a');
@@ -301,7 +301,7 @@
       c.fillStyle = 'rgba(30,14,64,0.55)'; c.fillRect(0, 0, W, H);
       for (var i = 0; i < 14; i++) Arte.estrela(c, (Arte.acaso(i) * W + Jogo.t * 30 * (0.5 + Arte.acaso(i + 3))) % W, 40 + Arte.acaso(i + 8) * 460, 8 + Arte.acaso(i + 5) * 10, '#ffd84a', '#a06a08');
       Arte.texto(c, 'Você venceu os cinco mundos!', W / 2, 110, 44, '#fff27a');
-      Arte.concreto(c, W / 2, 330 - Math.abs(Math.sin(Jogo.t * 4)) * 40, { w: 110, h: 128, dir: 1, t: Jogo.t, espichar: Math.sin(Jogo.t * 8) * 0.25, pose: 'grande' });
+      Arte.concreto(c, W / 2, 330 - Math.abs(Math.sin(Jogo.t * 4)) * 40, { w: 110, h: 128, dir: 1, t: Jogo.t, espichar: Math.sin(Jogo.t * 8) * 0.25, pose: 'feliz' });
       Arte.texto(c, 'Gotinhas: ' + totalGotinhas(), W / 2, 400, 24, '#f2fbf4');
       Arte.texto(c, 'Os cinco mundos estão em paz de novo. Obrigado, Concreto!', W / 2, 440, 19, '#d9f3e2', 'center', 600);
       if (Jogo.espera <= 0 && pisca()) Arte.texto(c, 'Toque ou aperte Enter para voltar aos mundos', W / 2, 490, 22, '#fff27a');

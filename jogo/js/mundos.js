@@ -87,7 +87,7 @@ var MUNDOS = (function () {
     },
     {
       nome: 'Mundo Vulcânico', tema: 'vulcao', poder: 'Raio longo',
-      boss: { tipo: 'rainha', fala: 'Meu vulcão vai derreter você, geleca!', nome: 'Rainha de Lava', vida: 28, aviso: 1.0, ondaAbaixoDe: 0.4, trocaDeLado: 2.3, brasa: 1.2 },
+      boss: { tipo: 'rainha', fala: 'Meu vulcão vai derreter você, geleca!', nome: 'Bruxa Vulcânica', vida: 28, aviso: 1.0, ondaAbaixoDe: 0.4, trocaDeLado: 2.3, brasa: 1.2 },
       fase: construir(['lava', 'rocha', 'brasa', 'fumaca'], function (b) {
         b.trecho('Trecho 1');
         b.placa(200, 'Cuidado com a lava!');

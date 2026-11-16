@@ -195,8 +195,20 @@ var Arte = (function () {
   // Segue a alternativa A da prancha de estudos: geleca verde-limão de contorno grosso,
   // topo que tomba para o lado (P02), barra de baixo escorrendo, olhos pretos grandes e boca aberta.
   // ---- Concreto a partir da prancha de estudos (sprites.js). Em avaliação; o desenho por código continua disponível. ----
-  var folha = null, folhas = {};
-  if (typeof SPRITES !== 'undefined') { folha = new Image(); folha.src = SPRITES.concreto.dados; }
+  var folha = null, folhas = {}, imagens = {};
+  if (typeof SPRITES !== 'undefined') {
+    Object.keys(SPRITES).forEach(function (nome) { imagens[nome] = new Image(); imagens[nome].src = SPRITES[nome].dados; });
+    folha = imagens.concreto;
+  }
+  // Desenha um quadro de uma folha de sprites com a base em (x, y) e a altura pedida. Devolve false se a imagem não estiver pronta.
+  function sprite(c, nome, quadro, x, y, altura, refQuadro) {
+    var im = imagens[nome];
+    if (CFG.concreto.visual !== 'pranchas' || !im || !im.complete || !im.naturalWidth) return false;
+    var Q = SPRITES[nome].quadros, q = Q[quadro] || Q[refQuadro], k = altura / Q[refQuadro || quadro].h;
+    c.imageSmoothingQuality = 'high';
+    c.drawImage(im, q.x, q.y, q.w, q.h, x - q.w * k / 2, y - q.h * k, q.w * k, q.h * k);
+    return true;
+  }
   var MATIZ = { verde: 0, azul: 115, roxo: 190, laranja: -45 }; // quanto girar o verde da prancha para chegar em cada cor
   function folhaDaCor(nome) {
     if (!folha || !folha.complete || !folha.naturalWidth) return null;
@@ -222,7 +234,7 @@ var Arte = (function () {
   function concretoDaPrancha(c, x, y, o) {
     var cv = folhaDaCor(o.cor || CFG.concreto.nomeCor || 'verde');
     if (!cv) return false;
-    var q = SPRITES.concreto.quadros[o.pose] || SPRITES.concreto.quadros.parado, ref = SPRITES.concreto.quadros[o.pose === 'grande' ? 'grande' : 'parado'];
+    var q = SPRITES.concreto.quadros[o.pose] || SPRITES.concreto.quadros.parado, ref = SPRITES.concreto.quadros.parado;
     var k = (o.h || 58) * 1.2 / ref.h, esp = (o.espichar || 0) * 0.35, dir = o.dir || 1;
     c.save(); c.translate(x, y);
     if (!o.semSombra) { c.fillStyle = 'rgba(60,40,110,0.2)'; c.beginPath(); c.ellipse(0, 3, q.w * k * 0.42, q.h * k * 0.07, 0, 0, 7); c.fill(); }
@@ -606,6 +618,6 @@ var Arte = (function () {
     plataforma: plataforma, concreto: concreto, gota: gota, poca: poca, monstro: monstro, raio: raio,
     portal: portal, texto: texto, painel: painel, flor: flor,
     gotinha: gotinha, coracao: coracao, placa: placa, corMonstro: corMonstro,
-    mola: mola, bolha: bolha, bandeira: bandeira, gotaDourada: gotaDourada, formas: formas, coresMonstro: CORES_MONSTRO, olhosBravos: olhosBravos, PALETA_PLANTAS: PALETA_PLANTAS
+    sprite: sprite, mola: mola, bolha: bolha, bandeira: bandeira, gotaDourada: gotaDourada, formas: formas, coresMonstro: CORES_MONSTRO, olhosBravos: olhosBravos, PALETA_PLANTAS: PALETA_PLANTAS
   };
 })();
