@@ -176,3 +176,10 @@ Próximo passo combinado: substituir o desenho por código pelas pranchas, com a
 - Integrado ao jogo com troca imediata entre "Desenho: prancha" e "Desenho: código" na tela inicial (tecla V). As quatro cores funcionam nos dois modos.
 - Estado do recurso: em avaliação, registrado em `assets/game/README.md` com origem, preparação e limitações. Monstros, cenários e bosses continuam desenhados por código.
 - Testes: bateria completa executada com o modo prancha ativo; resultado registrado no relato da rodada.
+
+## 2026-11-16 — Rodada 016 — Recorte do Concreto refeito
+
+- Retorno do responsável: o recorte não ficou bom, porque trechos do contorno foram apagados no tratamento da imagem.
+- Causa: o método partia do verde do corpo e depois anexava o contorno escuro; onde a prancha tem um brilho claro entre o corpo e o traço, o contorno não era alcançado.
+- Correção: o recorte passou a remover o fundo (branco, lilás e sombras) de fora para dentro e a manter o personagem inteiro. Riscos finos grudados no corpo são retirados e o raio da pose de disparo é cortado rente ao corpo.
+- Conferido visualmente, pose a pose, em fundo claro e escuro: contorno completo nas onze imagens. Restam um resto pequeno de risco na pose de carregar e uma emenda na pose de disparo.
