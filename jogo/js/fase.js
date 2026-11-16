@@ -209,7 +209,7 @@ var Fase = (function () {
           m.vida -= jogo.poder.dano; m.piscando = 0.15;
           Som.acerto(); jogo.congela = 0.045;
           poeira(f, r.x, r.y, CFG.concreto.cor, 7);
-          if (m.vida <= 0) { poeira(f, m.x, m.y - MH / 2, Arte.corMonstro(m.tipo), 22, 1.3); poeira(f, m.x, m.y - MH / 2, '#ffffff', 8, 1.6); f.tremor = 0.12; Som.derrotou(); }
+          if (m.vida <= 0) { poeira(f, m.x, m.y - MH / 2, Arte.corMonstro(m.tipo), 22, 1.3); poeira(f, m.x, m.y - MH / 2, '#ffffff', 8, 1.6); f.tremor = 0.12; Som.derrotou(); jogo.derrotados = (jogo.derrotados || 0) + 1; }
           return false;
         }
       }

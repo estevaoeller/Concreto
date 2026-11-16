@@ -217,3 +217,15 @@ Pedido do responsável: contar a história com cenas feitas em código — abert
 - Invenções do desenvolvimento nesta rodada (H05): o meteoro como causa da queda, as falas e a despedida dos chefes.
 - As páginas de texto da rodada 018 foram substituídas pela abertura animada. A fala que aparecia dentro da luta saiu, porque a provocação agora acontece na cena de antes.
 - Testes: novas verificações para a abertura, o mapa e a sequência mapa, fase, provocação, luta, peça, final e vitória. Todas as verificações passaram. As cenas foram conferidas quadro a quadro; o ritmo das cenas não foi avaliado por uma pessoa.
+
+## 2026-11-16 — Rodada 020 — Motivos dos chefes, escolhas e sete finais
+
+Pedido do responsável: manter o desenho por código (prompts ficam como opção) e aprofundar a história — por que aqueles chefes, por que as peças estão com eles, a provocação antes da luta, e cerca de sete finais, para valer a pena jogar de jeitos diferentes.
+
+- H06: cada chefe ganhou um motivo para querer a peça (guarda-chuva, flor, música, brinquedo, medo do escuro). A conversa antes da luta passou de três para quatro falas, e o mapa entre os mundos traz um boato sobre o próximo chefe.
+- H07: depois de cada luta, o jogador escolhe ajudar o chefe ou seguir viagem. É a primeira escolha de história do jogo. Ajudar não muda a dificuldade; muda quem vira amigo.
+- H08: sete finais, decididos por amigos feitos, gotinhas douradas, gotinhas coletadas e monstros comuns derrotados. A tela de progresso ganhou uma página de finais, com pistas.
+- Os motivos, os presentes, as falas e os finais são invenção do desenvolvimento, a pedido. A história definitiva é do criador.
+- Prompts opcionais para o Guardião de Blocos, a nave e o meteoro em `prompts/sprites/README.md`. Não são necessários.
+- Ponto de atenção: o final "Geleca da paz" exige atravessar os cinco mundos sem derrotar monstros. O robô de teste não joga assim; não foi verificado por uma pessoa se é viável em todos os trechos.
+- Testes: verificações novas para a escolha, o registro da amizade e os sete finais. Todas as verificações passaram.

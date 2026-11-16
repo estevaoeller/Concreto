@@ -1,6 +1,6 @@
 # Concreto — Especificação do jogo
 
-Versão: 1.1 — 2026-11-16
+Versão: 1.2 — 2026-11-16
 Estado: jogo completo em protótipo (cinco mundos), em validação com o criador. Esta versão reorganiza o documento; nenhuma regra foi alterada na reorganização. O percurso das decisões está em [HISTORICO.md](HISTORICO.md).
 
 ## 1. Como ler
@@ -136,6 +136,30 @@ Tudo nesta seção é Delegado.
   - depois de cada boss: ele se rende, a peça volta para o Concreto e encaixa na nave;
   - no final: a nave completa, a despedida dos chefes e a decolagem.
 - H05 (Delegada): o motivo da queda (um meteoro), as falas dos chefes e do Concreto e a despedida no final. Toda cena pode ser avançada com um toque e pulada pelo botão "Pular".
+- H06 (Delegada, a pedido do responsável): cada chefe tem um motivo para querer a peça, contado na conversa antes da luta e antecipado por um boato no mapa.
+
+| Chefe | Peça | Por que não devolve | O que o Concreto pode fazer |
+|---|---|---|---|
+| Cthulhu Higiênico | Casco | Usa como guarda-chuva; papel não pode pegar chuva | Um guarda-chuva de geleca |
+| Bruxa Vulcânica | Cúpula | Protege sua única flor do calor do vulcão | Uma redoma de geleca para a flor |
+| Anjo | Antena | Escuta a música das estrelas; o céu é quieto demais | Um sininho de geleca que toca com o vento |
+| Coelho de Pelúcia | Motor | É seu único brinquedo; ninguém brinca com ele | Uma bola de geleca que quica |
+| Guardião de Blocos | Luzes | Iluminam a torre; ele tem medo do escuro | Uma lanterna de geleca |
+
+- H07 (Delegada): depois de vencer cada chefe, o jogador escolhe entre ajudar o chefe ou seguir viagem. Ajudando, o Concreto deixa o presente da tabela e o chefe vira amigo. A peça é recuperada nos dois casos. Vale a escolha da última vez que o mundo foi vencido.
+- H08 (Delegada, a pedido do responsável): há sete finais. O final depende de como se jogou; vale o primeiro da lista cujas condições forem cumpridas.
+
+| # | Final | Condição |
+|---|---|---|
+| 1 | Festa na nave | Cinco amigos, cinco gotinhas douradas e pelo menos 90% das gotinhas |
+| 2 | Amigos para sempre | Cinco amigos |
+| 3 | Geleca da paz | Nenhum monstro comum derrotado nos cinco mundos |
+| 4 | Caçador de tesouros | Cinco gotinhas douradas |
+| 5 | Colecionador de geleca | Pelo menos 90% das gotinhas |
+| 6 | Viajante solitário | Nenhum amigo |
+| 7 | De volta para casa | Qualquer outro caso |
+
+  Para amigos e monstros derrotados vale a última passagem por cada mundo; para gotinhas, o recorde; a gotinha dourada, uma vez achada, fica. A tela de progresso mostra os finais já vistos e uma pista para os outros.
 - A história foi inventada para o protótipo. A versão definitiva é do criador.
 
 ## 11. Interface, pistas e som

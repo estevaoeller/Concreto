@@ -32,7 +32,11 @@ Nas lutas você olha pelos olhos do Concreto. Todos os bosses atacam duas vezes 
 
 Antes de cada golpe aparece um aviso. Vá para o lado para escapar. Cada boss tem um golpe só dele, e o Coelho e o Guardião batem no chão: aí tem que apertar o PULO.
 
-Antes da luta, o boss aparece com a peça e provoca o Concreto. Depois de perder, ele devolve a peça. Entre um mundo e outro, o jogo mostra a nave e as peças que ainda faltam. No final, a nave fica completa e decola!
+Antes da luta, o boss aparece com a peça, provoca o Concreto e conta por que não quer devolver. Cada um tem um motivo! Depois de perder, ele devolve a peça, e você escolhe: ajudar o boss com o problema dele ou seguir viagem. Se ajudar, ele vira amigo. Entre um mundo e outro, o jogo mostra a nave e as peças que ainda faltam. No final, a nave fica completa e decola!
+
+## Sete finais
+
+O jogo tem sete finais diferentes. Depende de como você joga: se fez amigos, se achou as gotinhas douradas, se pegou todas as gotinhas, se não derrotou nenhum monstro... A tela de progresso dá pistas. Dá para jogar de novo de outro jeito para ver os outros!
 
 ## O que tem para achar
 

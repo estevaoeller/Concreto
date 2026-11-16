@@ -211,6 +211,11 @@
     peca(3, '#8f86b8', '#3a2f6a', function () { c.beginPath(); c.moveTo(-26, 22); c.lineTo(26, 22); c.lineTo(18, 42); c.lineTo(-18, 42); c.closePath(); });
     peca(1, 'rgba(160,230,255,0.85)', '#2f7de0', function () { c.beginPath(); c.arc(0, -8, 40, Math.PI, 0); c.closePath(); });
     peca(0, '#b673f2', '#4a1f8a', function () { c.beginPath(); c.ellipse(0, 6, 92, 24, 0, 0, 7); });
+    if (pecas[0]) { // volume do casco
+      c.fillStyle = 'rgba(60,20,120,0.35)'; c.beginPath(); c.ellipse(0, 14, 84, 14, 0, 0, Math.PI); c.fill();
+      c.strokeStyle = 'rgba(255,255,255,0.55)'; c.lineWidth = 4; c.beginPath(); c.ellipse(0, 2, 78, 15, 0, Math.PI * 1.1, Math.PI * 1.75); c.stroke();
+    }
+    if (pecas[1]) { c.strokeStyle = 'rgba(255,255,255,0.8)'; c.lineWidth = 4; c.beginPath(); c.arc(0, -8, 30, Math.PI * 1.15, Math.PI * 1.5); c.stroke(); }
     peca(2, '#ffd84a', '#a06a08', function () { c.beginPath(); c.moveTo(-3, -48); c.lineTo(-3, -72); c.arc(0, -78, 8, Math.PI * 0.5, Math.PI * 2.5); c.lineTo(3, -72); c.lineTo(3, -48); c.closePath(); });
     if (pecas[4]) for (var i = -3; i <= 3; i++) {
       c.fillStyle = Math.floor(t * 4 + i) % 2 ? '#fff27a' : '#7affc8'; c.strokeStyle = '#4a1f8a'; c.lineWidth = 2;

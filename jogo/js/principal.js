@@ -18,8 +18,9 @@
     try {
       var p = JSON.parse(localStorage.getItem(CHAVE) || '{}');
       return { liberado: Math.max(0, Math.min(MUNDOS.length - 1, p.liberado | 0)), recordes: p.recordes || [], zerou: !!p.zerou,
-        visual: p.visual === 'codigo' ? 'codigo' : 'pranchas', cor: CFG.concreto.cores[p.cor] ? p.cor : 'verde', mudo: !!p.mudo, viuHistoria: !!p.viuHistoria, douradas: p.douradas || [] };
-    } catch (e) { return { liberado: 0, recordes: [], zerou: false, visual: 'pranchas', cor: 'verde', mudo: false, viuHistoria: false }; }
+        visual: p.visual === 'codigo' ? 'codigo' : 'pranchas', cor: CFG.concreto.cores[p.cor] ? p.cor : 'verde', mudo: !!p.mudo, viuHistoria: !!p.viuHistoria, douradas: p.douradas || [],
+        amigos: p.amigos || [], derrotados: p.derrotados || [], finais: p.finais || {} };
+    } catch (e) { return { liberado: 0, recordes: [], zerou: false, visual: 'pranchas', cor: 'verde', mudo: false, viuHistoria: false, douradas: [], amigos: [], derrotados: [], finais: {} }; }
   }
   function salvar() { try { localStorage.setItem(CHAVE, JSON.stringify(Jogo.progresso)); } catch (e) {} }
 
@@ -77,18 +78,28 @@
 
   function novaFase(i) {
     if (i !== undefined) Jogo.mundo = i;
-    Jogo.vidas = CFG.vidas; Jogo.gotinhas = 0; Jogo.escudo = false; Jogo.dourada = false; Jogo.congela = 0;
+    Jogo.vidas = CFG.vidas; Jogo.gotinhas = 0; Jogo.escudo = false; Jogo.dourada = false; Jogo.congela = 0; Jogo.derrotados = 0;
     calcularPoder();
     Jogo.fase = Fase.criar(mundoAtual(), !Jogo.semHistoria);
     Jogo.boss = null; Jogo.morreuNoBoss = false; Jogo.pausado = false;
     Jogo.estado = 'fase';
     if (Jogo.semHistoria) return;
     // antes da fase: o mapa das peças da nave; na primeira vez, a abertura vem antes
-    var mostrarMapa = function () { tocarCena(Cenas.mapa(Jogo.mundo, pecasDaNave(), function () { Jogo.estado = 'fase'; })); };
+    var mostrarMapa = function () { tocarCena(Cenas.mapa(Jogo.mundo, pecasDaNave(), function () { Jogo.estado = 'fase'; }, Jogo.progresso.amigos)); };
     if (Jogo.mundo === 0 && !Jogo.progresso.viuHistoria) tocarCena(Cenas.abertura(function () { Jogo.progresso.viuHistoria = true; salvar(); mostrarMapa(); }));
     else mostrarMapa();
   }
   function tocarCena(cena) { Jogo.cena = cena; Jogo.estado = 'cena'; }
+  // o que decide o final: amigos feitos, gotinhas douradas, gotinhas e monstros derrotados (vale a última passagem por cada mundo)
+  function dadosDoFinal() {
+    var P = Jogo.progresso, pegas = 0, total = 0, derrotados = 0;
+    MUNDOS.forEach(function (m, i) {
+      pegas += P.recordes[i] || 0; total += m.fase.gotinhas.length;
+      derrotados += P.derrotados[i] === undefined || P.derrotados[i] === null ? 1 : P.derrotados[i];
+    });
+    return { amigos: MUNDOS.map(function (m, i) { return !!P.amigos[i]; }), douradas: MUNDOS.filter(function (m, i) { return (P.douradas || [])[i]; }).length, gotinhas: pegas / total, derrotados: derrotados };
+  }
+  Jogo.dadosDoFinal = dadosDoFinal; // para testes
   function novoBoss(semFala) { Jogo.boss = Boss.criar(mundoAtual().boss, semFala); Jogo.estado = 'boss'; }
   function irParaTitulo() {
     Jogo.estado = 'titulo'; Jogo.pausado = false;
@@ -122,11 +133,12 @@
 
     if (e === 'cena') {
       var noPular = toque && toque.x > W - 134 && toque.y < 60;
-      Cenas.atualizar(Jogo.cena, dt, (confirmou || toque) && !noPular, Entrada.pausou || noPular);
+      Cenas.atualizar(Jogo.cena, dt, { avancar: (confirmou || toque) && !noPular, pular: Entrada.pausou || noPular, esq: Entrada.esqApertou, dir: Entrada.dirApertou, toque: noPular ? null : toque });
       Entrada.toque = null;
       return;
     } else if (e === 'progresso') {
       Jogo.espera -= dt;
+      if (Entrada.esqApertou || Entrada.dirApertou || (toque && toque.y < 70 && toque.x > W - 300)) { Jogo.pagProgresso = Jogo.pagProgresso ? 0 : 1; Entrada.toque = null; return; }
       if (Jogo.espera <= 0 && (confirmou || toque || Entrada.progressoApertou)) { Jogo.estado = 'titulo'; Entrada.toque = null; return; }
     } else if (e === 'titulo') {
       Jogo.fase.t += dt;
@@ -174,12 +186,20 @@
         var P = Jogo.progresso, ultimoMundo = Jogo.mundo === MUNDOS.length - 1;
         P.recordes[Jogo.mundo] = Math.max(P.recordes[Jogo.mundo] || 0, Jogo.gotinhas);
         P.douradas = P.douradas || []; if (Jogo.dourada) P.douradas[Jogo.mundo] = true;
+        P.derrotados[Jogo.mundo] = Jogo.derrotados; // monstros comuns derrotados nesta passagem pelo mundo
         Jogo.poderNovo = Jogo.mundo < MUNDOS.length - 1 && P.liberado <= Jogo.mundo ? MUNDOS[Jogo.mundo + 1].poder : null;
         if (Jogo.mundo < MUNDOS.length - 1) P.liberado = Math.max(P.liberado, Jogo.mundo + 1); else P.zerou = true;
         salvar();
         if (!Jogo.semHistoria) { // a peça volta para o Concreto; depois do último boss, o final
           var irVitoria = function () { Jogo.estado = 'vitoria'; Jogo.espera = 0.5; };
-          tocarCena(Cenas.depoisDoBoss(Jogo.mundo, pecasDaNave(), ultimoMundo ? function () { tocarCena(Cenas.final(irVitoria)); } : irVitoria));
+          var mundoDaCena = Jogo.mundo;
+          var mostrarFinal = function () { // qual dos sete finais depende de como se jogou
+            var id = Cenas.qualFinal(dadosDoFinal());
+            P.finais = P.finais || {}; P.finais[id] = true; Jogo.ultimoFinal = id; salvar();
+            tocarCena(Cenas.final(id, dadosDoFinal(), irVitoria));
+          };
+          tocarCena(Cenas.depoisDoBoss(mundoDaCena, pecasDaNave(), ultimoMundo ? mostrarFinal : irVitoria,
+            function (ajudou) { P.amigos[mundoDaCena] = ajudou; salvar(); }));
         }
       }
     } else if (e === 'morrendo') {
@@ -281,7 +301,23 @@
   function telaProgresso() {
     var P = Jogo.progresso;
     ceuEstrelado();
-    Arte.texto(c, 'Progresso', W / 2, 44, 38, '#fff27a');
+    var achados = Cenas.FINAIS.filter(function (f) { return P.finais[f.id]; }).length;
+    c.fillStyle = 'rgba(255,255,255,0.14)'; c.strokeStyle = 'rgba(255,255,255,0.5)'; c.lineWidth = 2;
+    Arte.retArred(c, W - 262, 22, 240, 40, 20); c.fill(); c.stroke();
+    Arte.texto(c, Jogo.pagProgresso ? '◀ Mundos' : 'Finais: ' + achados + ' de ' + Cenas.FINAIS.length + ' ▶', W - 142, 43, 17, '#f2fbf4', 'center', 700);
+    if (Jogo.pagProgresso) { // os sete finais: os que já foram vistos e uma pista para os outros
+      Arte.texto(c, 'Finais', W / 2 - 120, 44, 38, '#fff27a');
+      Cenas.FINAIS.forEach(function (f, i) {
+        var y = 104 + i * 56, visto = P.finais[f.id];
+        c.fillStyle = 'rgba(255,255,255,' + (visto ? 0.16 : 0.07) + ')'; Arte.retArred(c, 80, y - 24, 800, 48, 14); c.fill();
+        Arte.estrela(c, 112, y, 14, visto ? '#ffd84a' : 'rgba(20,10,50,0.55)', visto ? '#a06a08' : 'rgba(255,255,255,0.35)');
+        Arte.texto(c, (i + 1) + '. ' + (visto ? f.nome : '???'), 140, y - 8, 19, visto ? '#f2fbf4' : '#a8a0c8', 'left', 700);
+        Arte.texto(c, 'Pista: ' + f.dica, 140, y + 13, 14, visto ? '#7affc8' : '#d0c8e8', 'left', 600);
+      });
+      if (Jogo.espera <= 0 && pisca()) Arte.texto(c, 'Toque ou aperte Enter para voltar', W / 2, 512, 18, '#fff27a');
+      return;
+    }
+    Arte.texto(c, 'Progresso', W / 2 - 120, 44, 38, '#fff27a');
     Arte.nave(c, 150, 190, 0.95, pecasDaNave(), Jogo.t);
     var np = pecasDaNave().filter(Boolean).length;
     Arte.texto(c, 'Nave: ' + np + ' de 5 peças', 150, 266, 17, '#f2fbf4', 'center', 700);
@@ -303,6 +339,7 @@
       Arte.gota(c, x0 + 300, y + 2, 9);
       Arte.texto(c, (P.recordes[i] || 0) + '/' + m.fase.gotinhas.length, x0 + 316, y, 17, '#f2fbf4', 'left', 700);
       if ((P.douradas || [])[i]) Arte.gotaDourada(c, x0 + 430, y, Jogo.t); else { c.globalAlpha = 0.3; Arte.gotaDourada(c, x0 + 430, y, 0); c.globalAlpha = 1; }
+      if (P.amigos[i]) { Arte.coracao(c, x0 + 250, y, 11, true); }
       var temPeca = pecasDaNave()[i];
       Arte.texto(c, temPeca ? 'Peça: ' + m.boss.peca : 'Peça: falta', x0 + 470, y + 2, 14, temPeca ? '#7affc8' : '#d0c8e8', 'left', 700);
     });
@@ -361,7 +398,7 @@
     } else if (e === 'vitoria') {
       var ultimo = Jogo.mundo === MUNDOS.length - 1;
       faixa('Mundo ' + (Jogo.mundo + 1) + ' completo!', [
-        m.boss.nome + ' devolveu a peça: ' + m.boss.peca + '!',
+        m.boss.nome + ' devolveu a peça: ' + m.boss.peca + (Jogo.progresso.amigos[Jogo.mundo] ? ' e virou amigo!' : '!'),
         'Gotinhas: ' + Jogo.gotinhas + ' de ' + m.fase.gotinhas.length + (Jogo.dourada ? '  +  gotinha dourada!' : ''),
         Jogo.poderNovo ? 'Poder novo: ' + Jogo.poderNovo + '!' : (Jogo.dourada ? 'Você achou o segredo deste mundo!' : 'Tem um segredo dourado escondido neste mundo.'),
         ultimo ? 'A nave está completa!' : 'Próximo: ' + MUNDOS[Jogo.mundo + 1].nome
@@ -371,10 +408,11 @@
     } else if (e === 'final') {
       ceuEstrelado();
       var sobe = Math.min(1, Jogo.t % 100000 > 0 ? (1 - Math.max(0, Jogo.espera)) : 0), ny = 300 - Math.sin(Jogo.t * 2) * 14;
-      Arte.texto(c, 'A nave está consertada!', W / 2, 80, 44, '#fff27a');
+      var nf = Cenas.FINAIS.filter(function (f) { return f.id === Jogo.ultimoFinal; })[0];
+      Arte.texto(c, nf ? nf.nome : 'A nave está consertada!', W / 2, 80, 44, '#fff27a');
       Arte.nave(c, W / 2, ny, 1.3, [true, true, true, true, true], Jogo.t, true);
       Arte.concreto(c, W / 2, ny + 6, { w: 34, h: 40, dir: 1, t: Jogo.t, semSombra: true, pose: 'feliz' });
-      Arte.texto(c, 'O Concreto pode voltar para casa. Obrigado pela ajuda!', W / 2, 430, 21, '#f2fbf4', 'center', 600);
+      Arte.texto(c, 'Finais vistos: ' + Cenas.FINAIS.filter(function (f) { return Jogo.progresso.finais[f.id]; }).length + ' de ' + Cenas.FINAIS.length + '. Jogue de outro jeito para ver os outros!', W / 2, 430, 19, '#f2fbf4', 'center', 600);
       Arte.texto(c, 'Gotinhas: ' + totalGotinhas(), W / 2, 466, 19, '#d9f3e2', 'center', 600);
       if (Jogo.espera <= 0 && pisca()) Arte.texto(c, 'Toque ou aperte Enter para voltar aos mundos', W / 2, 510, 20, '#fff27a');
     }

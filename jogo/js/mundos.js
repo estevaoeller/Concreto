@@ -65,7 +65,10 @@ var MUNDOS = (function () {
   return [
     {
       nome: 'Mundo das Plantas', tema: 'plantas',
-      boss: { tipo: 'cthulhu', peca: 'Casco', conversa: ['Olha só o que caiu no meu jardim! Um casco brilhante!', 'Isso é da minha nave! Devolve!', 'Só se você passar por todo este papel. Ninguém escapa sem se enrolar!'], rendicao: 'Tá bom, tá bom! Me desenrolei todo. Toma o seu casco.', nome: 'Cthulhu Higiênico', art: 'o', vida: 24, aviso: 1.1, ondaAbaixoDe: 0.5, trocaDeLado: 2.5 },
+      boss: { tipo: 'cthulhu', peca: 'Casco', conversa: ['Olha só o que caiu no meu jardim! Um casco brilhante!', 'Isso é da minha nave! Devolve!', 'Nem pensar! Ele é o meu guarda-chuva. Papel higiênico não pode pegar chuva!', 'Quer de volta? Então passe por todo este papel!'],
+        rendicao: 'Tá bom, tá bom! Me desenrolei todo. Toma o seu casco... mas e quando chover?', ajuda: 'um guarda-chuva de geleca', obrigado: 'Um guarda-chuva só meu! Nunca mais vou desmanchar. Obrigado, amigo!',
+        tchau: 'Tudo bem... Vou procurar uma folha bem grande. Boa viagem.', boato: 'Dizem que o chefe das plantas morre de medo de chuva.',
+        nome: 'Cthulhu Higiênico', art: 'o', vida: 24, aviso: 1.1, ondaAbaixoDe: 0.5, trocaDeLado: 2.5 },
       fase: construir(['planta', 'espinho', 'cogumelo', 'semente'], function (b) {
         b.trecho('Trecho 1');
         b.placa(190, 'Ande para a direita'); b.placa(410, 'PULO para subir'); b.placa(745, 'RAIO de longe!');
@@ -87,7 +90,10 @@ var MUNDOS = (function () {
     },
     {
       nome: 'Mundo Vulcânico', tema: 'vulcao', poder: 'Raio longo',
-      boss: { tipo: 'rainha', peca: 'Cúpula', conversa: ['Essa cúpula esquenta o meu caldeirão direitinho.', 'É a cúpula da minha nave!', 'Então vem pegar, geleca. Cuidado para não derreter!'], rendicao: 'Ufa... esfriei. Pode levar a sua cúpula.', nome: 'Bruxa Vulcânica', art: 'a', vida: 28, aviso: 1.0, ondaAbaixoDe: 0.4, trocaDeLado: 2.3, brasa: 1.2 },
+      boss: { tipo: 'rainha', peca: 'Cúpula', conversa: ['Essa cúpula é perfeita para mim!', 'É a cúpula da minha nave!', 'Ela protege a minha única flor do calor do vulcão. Não devolvo!', 'Vem pegar, geleca. Cuidado para não derreter!'],
+        rendicao: 'Ufa... esfriei. Pode levar a cúpula. Só não sei o que vai ser da minha flor.', ajuda: 'uma redoma de geleca para a flor', obrigado: 'Ela não queima mais! Minha flor está salva. Obrigada, geleca.',
+        tchau: 'Vai, vai. Eu dou um jeito... eu acho.', boato: 'Dizem que a bruxa do vulcão cuida de uma flor em segredo.',
+        nome: 'Bruxa Vulcânica', art: 'a', vida: 28, aviso: 1.0, ondaAbaixoDe: 0.4, trocaDeLado: 2.3, brasa: 1.2 },
       fase: construir(['lava', 'rocha', 'brasa', 'fumaca'], function (b) {
         b.trecho('Trecho 1');
         b.placa(200, 'Cuidado com a lava!');
@@ -109,7 +115,10 @@ var MUNDOS = (function () {
     },
     {
       nome: 'Mundo do Céu', tema: 'ceu', poder: 'Pulo duplo',
-      boss: { tipo: 'anjo', peca: 'Antena', conversa: ['A antena caiu do céu. O céu é meu, então a antena é minha.', 'Ela caiu da MINHA nave!', 'Prove que merece. Aqui em cima quem manda sou eu!'], rendicao: 'Você mereceu. A antena é sua.', nome: 'Anjo', art: 'o', vida: 30, aviso: 1.2, ondaAbaixoDe: 0.4, trocaDeLado: 2.0, persegue: true },
+      boss: { tipo: 'anjo', peca: 'Antena', conversa: ['A antena caiu do céu. O céu é meu, então a antena é minha.', 'Ela caiu da MINHA nave!', 'Com ela eu escuto a música das estrelas. Aqui em cima é quieto demais...', 'Prove que merece. Aqui quem manda sou eu!'],
+        rendicao: 'Você mereceu. A antena é sua. O céu vai ficar em silêncio de novo...', ajuda: 'um sininho de geleca que toca com o vento', obrigado: 'Que som bonito! Agora o céu tem música. Obrigado!',
+        tchau: 'Vá em paz. Eu já estou acostumado com o silêncio.', boato: 'Dizem que o anjo se sente sozinho lá no alto.',
+        nome: 'Anjo', art: 'o', vida: 30, aviso: 1.2, ondaAbaixoDe: 0.4, trocaDeLado: 2.0, persegue: true },
       fase: construir(['nuvem', 'estrela', 'passaro', 'vento'], function (b) {
         b.trecho('Trecho 1');
         b.placa(200, 'Algumas plataformas se mexem!');
@@ -133,7 +142,10 @@ var MUNDOS = (function () {
     },
     {
       nome: 'Mundo de Pelúcia', tema: 'pelucia', poder: 'Raio rápido',
-      boss: { tipo: 'coelho', peca: 'Motor', conversa: ['Brinquedo novo! Esse motor faz vrum-vrum!', 'Não é brinquedo. É o motor da minha nave!', 'Quer de volta? Então vamos brincar. Eu brinco pesado!'], rendicao: 'Cansei de brincar... Toma o seu motor.', nome: 'Coelho de Pelúcia', art: 'o', vida: 32, aviso: 1.0, ondaAbaixoDe: 0.4, trocaDeLado: 1.7, chao: true },
+      boss: { tipo: 'coelho', peca: 'Motor', conversa: ['Brinquedo novo! Esse motor faz vrum-vrum!', 'Não é brinquedo. É o motor da minha nave!', 'Faz muito tempo que ninguém brinca comigo. O motor é o meu único brinquedo!', 'Quer de volta? Então brinca comigo. Eu brinco pesado!'],
+        rendicao: 'Cansei de brincar... Toma o motor. Foi a brincadeira mais legal que eu já tive.', ajuda: 'uma bola de geleca que quica', obrigado: 'Uma bola que quica! Você volta para brincar? Você é meu amigo?',
+        tchau: 'Tá bom... Tchau. Eu fico aqui com os botões.', boato: 'Dizem que o coelho só quer alguém para brincar.',
+        nome: 'Coelho de Pelúcia', art: 'o', vida: 32, aviso: 1.0, ondaAbaixoDe: 0.4, trocaDeLado: 1.7, chao: true },
       fase: construir(['urso', 'coelhinho', 'novelo', 'almofada'], function (b) {
         b.trecho('Trecho 1');
         b.placa(200, 'Pise na almofada rosa!');
@@ -156,7 +168,10 @@ var MUNDOS = (function () {
     },
     {
       nome: 'Mundo dos Blocos', tema: 'blocos', poder: 'Raio forte',
-      boss: { tipo: 'guardiao', peca: 'Luzes', conversa: ['As luzes da sua nave seguram o topo da minha torre.', 'É a última peça. Preciso dela para voltar para casa!', 'Então tente me desmontar, pequenino!'], rendicao: 'Desmontei! As luzes são suas. Boa viagem, pequenino.', nome: 'Guardião de Blocos', art: 'o', vida: 40, aviso: 1.0, ondaAbaixoDe: 1, trocaDeLado: 1.8, chao: true },
+      boss: { tipo: 'guardiao', peca: 'Luzes', conversa: ['As luzes da sua nave iluminam o topo da minha torre.', 'É a última peça. Preciso dela para voltar para casa!', 'Sem elas a torre fica escura. E eu... eu tenho medo do escuro.', 'Então tente me desmontar, pequenino!'],
+        rendicao: 'Desmontei! As luzes são suas. Só vai ficar bem escuro por aqui...', ajuda: 'uma lanterna de geleca que brilha no escuro', obrigado: 'Ela brilha! Não tenho mais medo. Boa viagem, pequenino. Obrigado.',
+        tchau: 'Boa viagem, pequenino. Eu fecho os olhos e pronto.', boato: 'Dizem que o guardião dos blocos tem medo do escuro.',
+        nome: 'Guardião de Blocos', art: 'o', vida: 40, aviso: 1.0, ondaAbaixoDe: 1, trocaDeLado: 1.8, chao: true },
       fase: construir(['bloco', 'arco', 'pilha', 'piramide'], function (b) {
         b.trecho('Trecho 1');
         b.dourada(335, 165);

@@ -30,20 +30,36 @@ function confere(nome, ok, detalhe) {
   confere('H03 depois da abertura vem o mapa das peças da nave', cena.estado === 'cena' && cena.passos === 1 && cena.viu, cena);
   await foto('mapa-1'); await p.keyboard.press('Enter'); await p.waitForTimeout(1300); await foto('3-fase');
   confere('depois do mapa a fase começa', await p.evaluate(() => Jogo.estado) === 'fase');
-  // cenas de boss: provocação antes, peça depois; no último mundo, o final
+  // cenas de boss: provocação antes; depois, a escolha de ajudar, a peça e, no último mundo, um dos sete finais
   let fluxo = await p.evaluate(() => {
-    const J = Jogo, o = [], passa = () => { let n = 0; while (J.estado === 'cena' && n++ < 40) { Entrada.pausou = true; J.passo(1 / 60); } };
+    const J = Jogo, o = [];
+    const passa = (escolha) => { let n = 0; while (J.estado === 'cena' && n++ < 80) { const ps = J.cena.passos[J.cena.i]; if (ps && ps.escolha) { J.cena.t = 1; if (escolha) Entrada.dirApertou = true; J.passo(1 / 60); Entrada.confirmou = true; } else Entrada.pausou = true; J.passo(1 / 60); } };
     J.progresso.liberado = 4; J.novaFase(4); o.push(J.estado + ':' + J.cena.passos.length); passa(); o.push(J.estado);
     J.fase.j.x = MUNDOS[4].fase.portalX; J.fase.j.y = 460; J.fase.saindo = 0;
     for (let i = 0; i < 200 && J.estado !== 'cena'; i++) J.passo(1 / 60);
     o.push(J.estado + ':' + J.cena.passos.length); passa(); o.push(J.estado + ':' + (J.boss.cfg.fala === null));
     J.boss.fase = 'vencido'; J.boss.vencido = 3; J.passo(1 / 60);
-    o.push(J.estado + ':' + J.cena.passos.length); Entrada.pausou = true; J.passo(1 / 60);
-    o.push(J.estado + ':' + J.cena.passos.length); passa(); o.push(J.estado);
-    J.progresso.liberado = 0; J.progresso.zerou = false; J.progresso.recordes = [];
+    o.push(J.estado + ':' + J.cena.passos.length);
+    Entrada.pausou = true; J.passo(1 / 60); o.push('escolha:' + !!J.cena.passos[J.cena.i].escolha);
+    J.cena.t = 1; Entrada.confirmou = true; J.passo(1 / 60); o.push('amigo:' + J.progresso.amigos[4] + ':' + J.cena.passos.length);
+    Entrada.pausou = true; J.passo(1 / 60); o.push(J.estado + ':' + J.cena.passos.length + ':' + J.ultimoFinal + ':' + !!J.progresso.finais[J.ultimoFinal]);
+    passa(); o.push(J.estado);
+    J.progresso.liberado = 0; J.progresso.zerou = false; J.progresso.recordes = []; J.progresso.amigos = []; J.progresso.finais = {};
     return o.join(' > ');
   });
-  confere('H02/H03 mapa > fase > provocação do boss > luta > peça recuperada > final > vitória', fluxo === 'cena:1 > fase > cena:3 > boss:true > cena:3 > cena:4 > vitoria', fluxo);
+  confere('H04 mapa > fase > provocação > luta > rendição > escolha > ajuda > final > vitória',
+    fluxo === 'cena:1 > fase > cena:4 > boss:true > cena:4 > escolha:true > amigo:true:6 > cena:4:casa:true > vitoria', fluxo);
+  // H06: os sete finais, pela ordem de prioridade
+  let finais = await p.evaluate(() => {
+    const t = [true, true, true, true, true], n = [false, false, false, false, false], q = Cenas.qualFinal;
+    return [
+      q({ amigos: t, douradas: 5, gotinhas: 0.95, derrotados: 9 }), q({ amigos: t, douradas: 2, gotinhas: 0.5, derrotados: 9 }),
+      q({ amigos: [true, false, true, false, false], douradas: 5, gotinhas: 0.95, derrotados: 0 }), q({ amigos: [true, false, false, false, false], douradas: 5, gotinhas: 0.5, derrotados: 9 }),
+      q({ amigos: [true, false, false, false, false], douradas: 1, gotinhas: 0.92, derrotados: 9 }), q({ amigos: n, douradas: 1, gotinhas: 0.5, derrotados: 9 }),
+      q({ amigos: [true, false, false, false, false], douradas: 1, gotinhas: 0.5, derrotados: 9 })
+    ].join(',') + ' | ' + Cenas.FINAIS.map(f => f.id).join(',') + ' | ' + Cenas.FINAIS.every(f => { const c = Cenas.final(f.id, { amigos: t, douradas: 5, gotinhas: 1, derrotados: 0 }); return c.passos.length === 4; });
+  });
+  confere('H06 sete finais distintos, um para cada jeito de jogar', finais === 'festa,amigos,paz,tesouros,colecionador,solitario,casa | festa,amigos,paz,tesouros,colecionador,solitario,casa | true', finais);
   await novaFase(0);
 
   // V01: começa com três vidas

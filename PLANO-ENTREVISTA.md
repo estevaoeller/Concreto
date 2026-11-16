@@ -37,7 +37,8 @@ Atualizado após a rodada 018. As perguntas de regra foram decididas por delega�
 3. "Os monstros se mexendo ficaram como você queria?"
 4. "O golpe de cada boss ficou legal? Você mudaria algum?"
 5. "Inventamos que o Concreto é um alienígena e que a nave dele quebrou em cinco peças. Você gosta? Como é a história de verdade?"
-6. "Você quer a espada no jogo? Antes você disse que a arma é só dos monstros." Não presumir.
+6. "Inventamos um motivo para cada chefe querer a peça, e sete finais. Quais você gosta? Quais você mudaria? Que final você inventaria?"
+7. "Você quer a espada no jogo? Antes você disse que a arma é só dos monstros." Não presumir.
 7. "O boss do mundo 2 e o mundo 5 ficaram diferentes do que você pediu. O que achou?"
 
 Depois resolver as dependências dos controles, inimigos normais, personalização dos mundos e direção de arte. Não ler o roteiro inteiro de uma vez.
