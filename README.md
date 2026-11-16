@@ -12,7 +12,7 @@ As regras ainda não decididas pelo criador foram preenchidas com escolhas provi
 
 Com o GitHub Pages ativado em `main`, o jogo abre em https://estevaoeller.github.io/Concreto/ em qualquer navegador.
 
-A etiqueta `desenho-por-codigo-v1` guarda a versão em que todo o visual é desenhado por código, anterior ao uso das pranchas.
+A branch `desenho-por-codigo-v1` guarda a versão em que todo o visual é desenhado por código, anterior ao uso das pranchas.
 
 Abrir `jogo/index.html` no navegador (não precisa instalar nada nem de internet).
 

@@ -161,7 +161,7 @@ Decisões do responsável nesta rodada:
 - Aprovados: segredo por mundo, poder por mundo, entrada e saída dos bosses e efeitos de impacto.
 - Teste em celular: feito pelo responsável.
 - Autorizado levar o trabalho para `main` e publicar um link público do jogo.
-- Antes de trocar o desenho por código pelas pranchas, manter uma versão do estado atual. Atendido com a etiqueta `desenho-por-codigo-v1` no repositório.
+- Antes de trocar o desenho por código pelas pranchas, manter uma versão do estado atual. Atendido com a branch `desenho-por-codigo-v1` no repositório (o envio de etiqueta não foi aceito pelo ambiente).
 
 Implementado: bandeiras de retorno por trecho, gotinha dourada por mundo, quatro poderes liberados ao vencer mundos, fala de entrada e estouro de derrota dos bosses, pausa de impacto. Testes ampliados para pontos de retorno, poderes e gotinha dourada; todas as verificações passaram.
 
