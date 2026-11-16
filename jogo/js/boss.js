@@ -6,10 +6,11 @@
 var Boss = (function () {
   var W = CFG.largura, H = CFG.altura, PASSO = 270, PULO = 0.75, R = Arte.retArred;
 
-  function criar(def) {
+  function criar(def, semFala) {
     var cfg = {}, k;
     for (k in CFG.boss) cfg[k] = CFG.boss[k];
     for (k in def) cfg[k] = def[k];
+    if (semFala) { cfg.fala = null; cfg.entrada = 1.3; } // a provocação já foi dita na cena de antes
     return {
       cfg: cfg, vis: VISUAL[cfg.tipo], vida: cfg.vida, t: 0,
       lado: 0, visao: 0,            // lado do Concreto: -1, 0, 1 (visao segue o lado com suavidade)
@@ -55,7 +56,7 @@ var Boss = (function () {
     }
 
     if (b.fase === 'entrada') {
-      if (b.tempo > 2.8) iniciarAviso(b);
+      if (b.tempo > (B.entrada || 2.8)) iniciarAviso(b);
     } else if (b.fase === 'aviso') {            // aviso antes do golpe (B05)
       if (B.persegue && b.tipoAtaque === 'lado' && !b.perseguiu && b.tempo >= B.aviso * 0.45) { // o aviso muda de lado uma vez
         b.perseguiu = true; mirar(b); Som.aviso();
@@ -585,5 +586,14 @@ var Boss = (function () {
     else if (b.fase === 'vencido') Arte.texto(c, 'Você venceu: ' + B.nome + '!', W / 2, 300, 32, '#fff27a');
   }
 
-  return { criar: criar, atualizar: atualizar, desenhar: desenhar };
+  // Retrato do boss para as cenas de história. (x, y) = centro; quadro: neutro, prepara, ataca ou cansado.
+  function retrato(c, tipo, x, y, esc, quadro, t) {
+    var est = { cansado: quadro === 'cansado', vencido: false, tonto: quadro === 'cansado', bravo: quadro === 'prepara' || quadro === 'ataca', forca: quadro === 'cansado' ? 0.3 : 1 };
+    c.save(); c.translate(x, y + Math.sin(t * 2) * 6 * esc); c.scale(esc, esc);
+    if (typeof SPRITES === 'undefined' || !SPRITES[tipo] || !Arte.sprite(c, tipo, quadro, 0, 218, 372, 'neutro')) VISUAL[tipo].corpo(c, { fase: quadro === 'cansado' ? 'pausa' : 'espera', vencido: 0 }, t, est);
+    c.restore();
+  }
+  function arena(tipo) { return VISUAL[tipo].arena; }
+
+  return { criar: criar, atualizar: atualizar, desenhar: desenhar, retrato: retrato, arena: arena };
 })();

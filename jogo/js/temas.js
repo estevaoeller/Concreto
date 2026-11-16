@@ -198,11 +198,11 @@
 
   // Nave do Concreto (história PROVISÓRIA): disco voador em cinco peças. pecas[i] diz se a peça i já foi recuperada.
   // 0 casco, 1 cúpula, 2 antena, 3 motor, 4 luzes.
-  Arte.nave = function (c, x, y, e, pecas, t, voando) {
+  Arte.nave = function (c, x, y, e, pecas, t, voando, soPecas) {
     c.save(); c.translate(x, y); c.scale(e, e); c.lineJoin = 'round'; c.lineCap = 'round';
     function peca(i, cor, borda, desenho) {
       if (pecas[i]) { c.setLineDash([]); c.fillStyle = cor; c.strokeStyle = borda; c.lineWidth = 4; desenho(); c.fill(); c.stroke(); }
-      else { c.setLineDash([7, 7]); c.strokeStyle = 'rgba(255,255,255,0.6)'; c.lineWidth = 3; desenho(); c.stroke(); c.setLineDash([]); }
+      else if (!soPecas) { c.setLineDash([7, 7]); c.strokeStyle = 'rgba(255,255,255,0.6)'; c.lineWidth = 3; desenho(); c.stroke(); c.setLineDash([]); }
     }
     if (voando && pecas[3]) { // fogo do motor
       c.fillStyle = '#ffd23a'; c.beginPath(); c.moveTo(-18, 34); c.quadraticCurveTo(0, 90 + Math.sin(t * 30) * 14, 18, 34); c.fill();
@@ -215,7 +215,7 @@
     if (pecas[4]) for (var i = -3; i <= 3; i++) {
       c.fillStyle = Math.floor(t * 4 + i) % 2 ? '#fff27a' : '#7affc8'; c.strokeStyle = '#4a1f8a'; c.lineWidth = 2;
       c.beginPath(); c.arc(i * 24, 8 + Math.abs(i) * 1.5, 6, 0, 7); c.fill(); c.stroke();
-    } else for (var k = -3; k <= 3; k++) {
+    } else if (!soPecas) for (var k = -3; k <= 3; k++) {
       c.setLineDash([3, 4]); c.strokeStyle = 'rgba(255,255,255,0.6)'; c.lineWidth = 2;
       c.beginPath(); c.arc(k * 24, 8 + Math.abs(k) * 1.5, 6, 0, 7); c.stroke(); c.setLineDash([]);
     }

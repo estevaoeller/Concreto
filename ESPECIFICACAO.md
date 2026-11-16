@@ -1,6 +1,6 @@
 # Concreto — Especificação do jogo
 
-Versão: 1.0 — 2026-11-16
+Versão: 1.1 — 2026-11-16
 Estado: jogo completo em protótipo (cinco mundos), em validação com o criador. Esta versão reorganiza o documento; nenhuma regra foi alterada na reorganização. O percurso das decisões está em [HISTORICO.md](HISTORICO.md).
 
 ## 1. Como ler
@@ -111,7 +111,7 @@ Identificadores: C conceito, P personagem, M movimento, A ataque, I inimigos, V 
 | Coelho de Pelúcia | 32 | O segundo ataque é um golpe no chão; só se escapa pulando. |
 | Guardião de Blocos | 40 | Golpes sempre em dois lados; o segundo ataque é no chão. |
 
-- X14 (Delegada): cada boss diz uma frase ao aparecer e estoura em pedaços do seu tema ao perder.
+- X14 (Delegada): cada boss provoca o Concreto numa cena antes da luta (H04) e estoura em pedaços do seu tema ao perder.
 - Aberto: se o criador quer outro jeito de escapar e de atacar; se algum boss está difícil ou fácil demais.
 
 ## 9. Itens, poderes e segredos
@@ -129,6 +129,13 @@ Tudo nesta seção é Delegado.
 - H01 (Responsável): o Concreto é um alienígena.
 - H02 (Delegada, a pedido do responsável): a nave dele caiu e se quebrou em cinco peças. Cada peça foi parar em um mundo, e o chefe de cada mundo guardou uma. O Concreto atravessa os portais para recuperar as peças, consertar a nave e voltar para casa.
 - H03 (Delegada): cada boss vencido devolve uma peça (casco, cúpula, antena, motor, luzes). Com as cinco, a nave decola.
+- H04 (Responsável): a história é contada por cenas desenhadas por código, nestes momentos:
+  - abertura, na primeira vez que o jogo começa (e pelo botão "Ver a história"): a viagem, o meteoro, as peças caindo nos cinco mundos, os chefes com as peças e o chamado para a aventura;
+  - antes de cada mundo: a nave com as peças recuperadas e as que faltam, e com quem está a próxima;
+  - antes de cada boss: ele aparece com a peça, provoca, o Concreto responde e ele desafia;
+  - depois de cada boss: ele se rende, a peça volta para o Concreto e encaixa na nave;
+  - no final: a nave completa, a despedida dos chefes e a decolagem.
+- H05 (Delegada): o motivo da queda (um meteoro), as falas dos chefes e do Concreto e a despedida no final. Toda cena pode ser avançada com um toque e pulada pelo botão "Pular".
 - A história foi inventada para o protótipo. A versão definitiva é do criador.
 
 ## 11. Interface, pistas e som
@@ -136,7 +143,7 @@ Tudo nesta seção é Delegado.
 Tudo nesta seção é Delegado.
 
 - X20: vidas em corações, contador de gotinhas, botão de pausa, botão de som.
-- X21: tela inicial com escolha de mundo, de cor e de tipo de desenho; tela de progresso; abertura em três páginas; tela final.
+- X21: tela inicial com escolha de mundo, de cor e de tipo de desenho; tela de progresso; cenas de história (H04); tela final.
 - X22: pistas visuais — seta de direção no começo, seta do portal no fim, área vermelha mostrando o alcance da faca, setas nas plataformas que se mexem, bandeira nos pontos de retorno, borda vermelha e coração pulsando na última vida.
 - X23: pistas nas lutas — radar dos três lados (onde você está, onde o golpe cai, onde está o boss), barra do tempo da pausa, mira quando o raio vai acertar, seta para o lado do boss, botões de toque que piscam na hora de usar.
 - X24: uma música por mundo e uma para as lutas, mais efeitos, todos sintetizados e compostos para o protótipo.
@@ -160,7 +167,7 @@ Mantidas só como registro.
 ## 14. Implementação e testes
 
 - HTML, CSS e JavaScript puros com Canvas 2D, resolução lógica de 960×540, sem dependências e sem etapa de build. O jogo abre direto de `jogo/index.html`. Não é decisão definitiva de motor.
-- Arquivos: `config.js` (regras e números), `entrada.js` (teclado, toque, som e música), `sprites.js` (imagens recortadas, gerado), `arte.js` e `temas.js` (desenho), `mundos.js` (os cinco mundos), `fase.js` (exploração), `boss.js` (lutas), `principal.js` (telas e progressão).
+- Arquivos: `config.js` (regras e números), `entrada.js` (teclado, toque, som e música), `sprites.js` (imagens recortadas, gerado), `arte.js` e `temas.js` (desenho), `mundos.js` (os cinco mundos), `fase.js` (exploração), `boss.js` (lutas), `cenas.js` (cenas de história), `principal.js` (telas e progressão).
 - A primeira pessoa é feita em 2D, com três posições laterais.
 - Testes: `node testes/percurso.js` roda o jogo num navegador e confere as regras pelos identificadores, além de atravessar os cinco mundos e vencer os cinco bosses com um robô. O robô não mede dificuldade nem diversão.
 - Publicação: página inicial na raiz para GitHub Pages a partir de `main`.

@@ -207,3 +207,13 @@ Implementado:
 - Cenários dos mundos 2 a 5 com mais elementos; chegada do Concreto por portal no começo de cada mundo; tela de progresso.
 - Documentação: especificação reescrita como v1.0, com a origem de cada regra (criador, responsável, delegada, aberta) e identificadores X para as escolhas delegadas, no lugar da antiga "seção 13". README, catálogo e registro de recursos refeitos. Nenhuma regra mudou na reorganização.
 - Testes: bateria completa executada após as mudanças; todas as verificações passaram.
+
+## 2026-11-16 — Rodada 019 — Cenas de história em código
+
+Pedido do responsável: contar a história com cenas feitas em código — abertura no início, provocação do boss antes de cada luta, peça recuperada depois de cada vitória, as peças que faltam entre um mundo e outro, e a nave completa no final. Avaliar depois se vale trocar por imagens.
+
+- Criado `jogo/js/cenas.js`, um sistema de cenas em passos, com legenda que aparece aos poucos, balões de fala, avanço por toque e botão de pular.
+- Cinco tipos de cena (H04): abertura em cinco passos; mapa das peças antes de cada mundo; conversa de três falas antes de cada boss; rendição, peça recuperada e encaixe na nave depois de cada boss; final em quatro passos.
+- Invenções do desenvolvimento nesta rodada (H05): o meteoro como causa da queda, as falas e a despedida dos chefes.
+- As páginas de texto da rodada 018 foram substituídas pela abertura animada. A fala que aparecia dentro da luta saiu, porque a provocação agora acontece na cena de antes.
+- Testes: novas verificações para a abertura, o mapa e a sequência mapa, fase, provocação, luta, peça, final e vitória. Todas as verificações passaram. As cenas foram conferidas quadro a quadro; o ritmo das cenas não foi avaliado por uma pessoa.

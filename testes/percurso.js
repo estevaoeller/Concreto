@@ -21,10 +21,30 @@ function confere(nome, ok, detalhe) {
 
   await p.goto(pagina); await p.evaluate(() => { try { localStorage.clear(); } catch (e) {} });
   await p.goto(pagina); await p.waitForTimeout(400); await foto('1-titulo');
-  await p.keyboard.press('Enter'); await p.waitForTimeout(1300); await foto('2-historia');
-  for (let k = 0; k < 3; k++) { await p.keyboard.press('Enter'); await p.waitForTimeout(800); if (k < 2) await foto('2-historia-' + (k + 2)); }
-  await p.waitForTimeout(1200); await foto('3-fase');
-  confere('história: três páginas e depois a fase começa', await p.evaluate(() => Jogo.estado) === 'fase');
+  // H02: na primeira vez, a abertura roda antes do mundo 1; depois vem o mapa das peças; depois a fase
+  await p.keyboard.press('Enter'); await p.waitForTimeout(1500);
+  let cena = await p.evaluate(() => ({ estado: Jogo.estado, passos: Jogo.cena && Jogo.cena.passos.length }));
+  confere('H02 abertura roda no começo, com cinco passos', cena.estado === 'cena' && cena.passos === 5, cena);
+  for (let k = 0; k < 5; k++) { await foto('abertura-' + (k + 1)); await p.keyboard.press('Enter'); await p.waitForTimeout(1500); }
+  cena = await p.evaluate(() => ({ estado: Jogo.estado, passos: Jogo.cena && Jogo.cena.passos.length, viu: Jogo.progresso.viuHistoria }));
+  confere('H03 depois da abertura vem o mapa das peças da nave', cena.estado === 'cena' && cena.passos === 1 && cena.viu, cena);
+  await foto('mapa-1'); await p.keyboard.press('Enter'); await p.waitForTimeout(1300); await foto('3-fase');
+  confere('depois do mapa a fase começa', await p.evaluate(() => Jogo.estado) === 'fase');
+  // cenas de boss: provocação antes, peça depois; no último mundo, o final
+  let fluxo = await p.evaluate(() => {
+    const J = Jogo, o = [], passa = () => { let n = 0; while (J.estado === 'cena' && n++ < 40) { Entrada.pausou = true; J.passo(1 / 60); } };
+    J.progresso.liberado = 4; J.novaFase(4); o.push(J.estado + ':' + J.cena.passos.length); passa(); o.push(J.estado);
+    J.fase.j.x = MUNDOS[4].fase.portalX; J.fase.j.y = 460; J.fase.saindo = 0;
+    for (let i = 0; i < 200 && J.estado !== 'cena'; i++) J.passo(1 / 60);
+    o.push(J.estado + ':' + J.cena.passos.length); passa(); o.push(J.estado + ':' + (J.boss.cfg.fala === null));
+    J.boss.fase = 'vencido'; J.boss.vencido = 3; J.passo(1 / 60);
+    o.push(J.estado + ':' + J.cena.passos.length); Entrada.pausou = true; J.passo(1 / 60);
+    o.push(J.estado + ':' + J.cena.passos.length); passa(); o.push(J.estado);
+    J.progresso.liberado = 0; J.progresso.zerou = false; J.progresso.recordes = [];
+    return o.join(' > ');
+  });
+  confere('H02/H03 mapa > fase > provocação do boss > luta > peça recuperada > final > vitória', fluxo === 'cena:1 > fase > cena:3 > boss:true > cena:3 > cena:4 > vitoria', fluxo);
+  await novaFase(0);
 
   // V01: começa com três vidas
   confere('V01 começa com três vidas', await p.evaluate(() => Jogo.vidas) === 3);

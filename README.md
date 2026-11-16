@@ -20,7 +20,9 @@ Abrir `jogo/index.html` no navegador. Não precisa instalar nada nem de internet
 | Pausar | P ou Esc | Botão de pausa |
 | Confirmar | Enter | Toque na tela |
 
-Na tela inicial: escolha o mundo com as setas ou tocando nele; C troca a cor do Concreto; V troca entre as folhas de sprites e o desenho por código; G abre o progresso; S liga e desliga o som.
+Na tela inicial: escolha o mundo com as setas ou tocando nele; C troca a cor do Concreto; V troca entre as folhas de sprites e o desenho por código; G abre o progresso; H mostra a história; S liga e desliga o som.
+
+As cenas de história avançam com um toque ou Enter e podem ser puladas pelo botão "Pular" ou com Esc.
 
 Nas lutas contra os bosses: esquerda e direita trocam de lado para fugir do golpe; o raio só machuca quando o boss cansa; em algumas lutas é preciso pular para escapar de um golpe no chão.
 
@@ -42,7 +44,7 @@ O Concreto e quatro bosses usam folhas de sprites. O quinto boss, os monstros, o
 
 ## Para quem desenvolve
 
-- Código em `jogo/js/`: `config.js` (regras e números), `mundos.js` (os cinco mundos), `fase.js` (exploração), `boss.js` (lutas), `arte.js` e `temas.js` (desenho), `entrada.js` (controles e som), `principal.js` (telas e progressão). `sprites.js` é gerado.
+- Código em `jogo/js/`: `config.js` (regras e números), `mundos.js` (os cinco mundos), `fase.js` (exploração), `boss.js` (lutas), `cenas.js` (cenas de história), `arte.js` e `temas.js` (desenho), `entrada.js` (controles e som), `principal.js` (telas e progressão). `sprites.js` é gerado.
 - Testes: `node testes/percurso.js` (precisa de Node e do Playwright com Chromium). Cada verificação cita o identificador da regra na especificação.
 - Recortar as folhas de sprites: `python3 ferramentas/recortar_sprites.py` (precisa de Pillow, numpy e scipy).
 - Gerar um arquivo HTML único: `node ferramentas/empacotar.js`.

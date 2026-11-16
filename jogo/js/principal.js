@@ -82,9 +82,14 @@
     Jogo.fase = Fase.criar(mundoAtual(), !Jogo.semHistoria);
     Jogo.boss = null; Jogo.morreuNoBoss = false; Jogo.pausado = false;
     Jogo.estado = 'fase';
-    if (Jogo.mundo === 0 && !Jogo.progresso.viuHistoria && !Jogo.semHistoria) { Jogo.estado = 'historia'; Jogo.espera = 1; Jogo.pagina = 0; }
+    if (Jogo.semHistoria) return;
+    // antes da fase: o mapa das peças da nave; na primeira vez, a abertura vem antes
+    var mostrarMapa = function () { tocarCena(Cenas.mapa(Jogo.mundo, pecasDaNave(), function () { Jogo.estado = 'fase'; })); };
+    if (Jogo.mundo === 0 && !Jogo.progresso.viuHistoria) tocarCena(Cenas.abertura(function () { Jogo.progresso.viuHistoria = true; salvar(); mostrarMapa(); }));
+    else mostrarMapa();
   }
-  function novoBoss() { Jogo.boss = Boss.criar(mundoAtual().boss); Jogo.estado = 'boss'; }
+  function tocarCena(cena) { Jogo.cena = cena; Jogo.estado = 'cena'; }
+  function novoBoss(semFala) { Jogo.boss = Boss.criar(mundoAtual().boss, semFala); Jogo.estado = 'boss'; }
   function irParaTitulo() {
     Jogo.estado = 'titulo'; Jogo.pausado = false;
     Jogo.fase = Fase.criar(mundoAtual());
@@ -100,6 +105,7 @@
     Jogo.t += dt;
     if (Jogo.congela > 0) { Jogo.congela -= dt; return; } // pausa de impacto
     Som.musica(e === 'boss' ? 'boss' : e === 'final' ? 'ceu' : MUNDOS[Jogo.mundo].tema);
+    e = Jogo.estado;
     // botão de som, no canto de cima à direita da tela inicial e da pausa
     if (Entrada.somApertou || ((e === 'titulo' || Jogo.pausado) && toque && toque.x > W - 70 && toque.y < 70)) { alternarSom(); toque = null; Entrada.toque = null; }
 
@@ -114,12 +120,11 @@
       if (Entrada.pausou || noBotao) { Jogo.pausado = true; return; }
     }
 
-    if (e === 'historia') {
-      Jogo.espera -= dt;
-      if (Jogo.espera <= 0 && (confirmou || toque)) {
-        if (Jogo.pagina < HISTORIA.length - 1) { Jogo.pagina++; Jogo.espera = 0.6; }
-        else { Jogo.progresso.viuHistoria = true; salvar(); Jogo.estado = 'fase'; }
-      }
+    if (e === 'cena') {
+      var noPular = toque && toque.x > W - 134 && toque.y < 60;
+      Cenas.atualizar(Jogo.cena, dt, (confirmou || toque) && !noPular, Entrada.pausou || noPular);
+      Entrada.toque = null;
+      return;
     } else if (e === 'progresso') {
       Jogo.espera -= dt;
       if (Jogo.espera <= 0 && (confirmou || toque || Entrada.progressoApertou)) { Jogo.estado = 'titulo'; Entrada.toque = null; return; }
@@ -136,6 +141,7 @@
         CFG.concreto.visual = CFG.concreto.visual === 'pranchas' ? 'codigo' : 'pranchas'; Jogo.progresso.visual = CFG.concreto.visual; salvar(); toque = null;
       }
       if (Entrada.progressoApertou || (toque && Math.abs(toque.x - (W / 2 - 170)) < 84 && Math.abs(toque.y - 238) < 18)) { Jogo.estado = 'progresso'; Jogo.espera = 0.4; return; }
+      if (Entrada.historiaApertou || (toque && Math.abs(toque.x - (W / 2 - 170)) < 84 && Math.abs(toque.y - 280) < 18)) { tocarCena(Cenas.abertura(irParaTitulo)); Entrada.toque = null; return; }
       if (Entrada.esqApertou && Jogo.mundo > 0) Jogo.mundo--;
       if (Entrada.dirApertou && Jogo.mundo < lib) Jogo.mundo++;
       if (Entrada.esqApertou || Entrada.dirApertou) Jogo.fase = Fase.criar(mundoAtual());
@@ -156,18 +162,25 @@
       Fase.soParticulas(Jogo.fase, dt);
       Jogo.espera -= dt;
       Jogo.fase.j.entrando = Math.min(1, 1 - Jogo.espera / 0.9);
-      if (Jogo.espera <= 0) novoBoss();
+      if (Jogo.espera <= 0) {
+        if (Jogo.semHistoria) novoBoss();
+        else tocarCena(Cenas.antesDoBoss(Jogo.mundo, function () { novoBoss(true); })); // o boss provoca antes da luta
+      }
     } else if (e === 'boss') {
       var rb = Boss.atualizar(Jogo.boss, dt, Jogo);
       if (rb === 'morreu') { Jogo.estado = 'morrendo'; Jogo.espera = 2.4; Jogo.morreuNoBoss = true; Jogo.boss.vento = []; }
       if (rb === 'venceu') {
         Som.portal(); Jogo.estado = 'vitoria'; Jogo.espera = 0.8;
-        var P = Jogo.progresso;
+        var P = Jogo.progresso, ultimoMundo = Jogo.mundo === MUNDOS.length - 1;
         P.recordes[Jogo.mundo] = Math.max(P.recordes[Jogo.mundo] || 0, Jogo.gotinhas);
         P.douradas = P.douradas || []; if (Jogo.dourada) P.douradas[Jogo.mundo] = true;
         Jogo.poderNovo = Jogo.mundo < MUNDOS.length - 1 && P.liberado <= Jogo.mundo ? MUNDOS[Jogo.mundo + 1].poder : null;
         if (Jogo.mundo < MUNDOS.length - 1) P.liberado = Math.max(P.liberado, Jogo.mundo + 1); else P.zerou = true;
         salvar();
+        if (!Jogo.semHistoria) { // a peça volta para o Concreto; depois do último boss, o final
+          var irVitoria = function () { Jogo.estado = 'vitoria'; Jogo.espera = 0.5; };
+          tocarCena(Cenas.depoisDoBoss(Jogo.mundo, pecasDaNave(), ultimoMundo ? function () { tocarCena(Cenas.final(irVitoria)); } : irVitoria));
+        }
       }
     } else if (e === 'morrendo') {
       if (Jogo.morreuNoBoss) { Jogo.boss.t += dt; ventoBoss(dt); } else Fase.soParticulas(Jogo.fase, dt);
@@ -249,18 +262,13 @@
     Arte.texto(c, CFG.concreto.visual === 'pranchas' ? 'Desenho: prancha' : 'Desenho: código', W / 2 - 170, 196, 14, '#f2fbf4', 'center', 700);
     Arte.retArred(c, W / 2 - 252, 222, 164, 32, 16); c.fill(); c.stroke();
     Arte.texto(c, 'Progresso', W / 2 - 170, 238, 14, '#f2fbf4', 'center', 700);
-    Arte.nave(c, W / 2 - 170, 300, 0.42, pecasDaNave(), Jogo.t);
+    Arte.retArred(c, W / 2 - 252, 264, 164, 32, 16); c.fill(); c.stroke();
+    Arte.texto(c, 'Ver a história', W / 2 - 170, 280, 14, '#f2fbf4', 'center', 700);
     botaoSom();
     if (pisca()) Arte.texto(c, 'Toque em um mundo ou aperte Enter para jogar', W / 2, 505, 20, '#fff27a');
-    Arte.texto(c, 'Setas andam · espaço pula · X raio · P pausa · C cor · V desenho · G progresso · S som', W / 2, 20, 13, '#d9f3e2', 'center', 600);
+    Arte.texto(c, 'Setas andam · espaço pula · X raio · P pausa · C cor · V desenho · G progresso · H história · S som', W / 2, 20, 13, '#d9f3e2', 'center', 600);
   }
 
-  // História PROVISÓRIA, inventada a pedido do responsável: o Concreto é um alienígena e quer consertar a nave para voltar para casa.
-  var HISTORIA = [
-    ['O Concreto é um alienígena de geleca.', 'Ele viajava pelo espaço na sua nave...'],
-    ['...quando a nave caiu e se quebrou em cinco peças!', 'Cada peça foi parar em um mundo diferente.'],
-    ['O chefe de cada mundo guardou uma peça.', 'Atravesse os portais, vença os chefes', 'e conserte a nave para o Concreto voltar para casa!']
-  ];
   function ceuEstrelado() {
     var g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#0e0a2a'); g.addColorStop(1, '#3a1f6e');
     c.fillStyle = g; c.fillRect(0, 0, W, H);
@@ -269,30 +277,6 @@
       c.beginPath(); c.arc(Arte.acaso(i) * W, Arte.acaso(i + 70) * H, 0.8 + Arte.acaso(i + 9) * 1.8, 0, 7); c.fill();
     }
   }
-  function telaHistoria() {
-    var pg = Jogo.pagina || 0, t = Jogo.t;
-    ceuEstrelado();
-    if (pg === 0) { // voando
-      Arte.nave(c, W / 2 + Math.sin(t * 1.5) * 60, 190 + Math.sin(t * 3) * 10, 1.1, [true, true, true, true, true], t, true);
-      Arte.concreto(c, W / 2 + Math.sin(t * 1.5) * 60, 196 + Math.sin(t * 3) * 10, { w: 30, h: 36, dir: 1, t: t, semSombra: true, pose: 'feliz' });
-    } else if (pg === 1) { // quebrou: as peças voam para longe
-      var k = (t * 0.5) % 1;
-      c.save(); c.translate(W / 2, 200); c.rotate(-0.3); Arte.nave(c, 0, 0, 1.1, [true, false, false, false, false], t); c.restore();
-      [[-1, -1], [1, -1], [-1.4, 0.2], [1.4, 0.2], [0, -1.5]].forEach(function (d, i) {
-        var px = W / 2 + d[0] * (60 + k * 260), py = 190 + d[1] * (40 + k * 150);
-        c.globalAlpha = 1 - k; Arte.estrela(c, px, py, 14, ['#b673f2', '#a0e6ff', '#ffd84a', '#8f86b8', '#7affc8'][i], '#2a1050'); c.globalAlpha = 1;
-      });
-      Arte.concreto(c, W / 2 - 150, 330, { w: 50, h: 58, dir: 1, t: t, semSombra: true, pose: 'susto' });
-    } else { // o que fazer
-      Arte.nave(c, W / 2 + 150, 200, 0.9, [false, false, false, false, false], t);
-      Arte.concreto(c, W / 2 - 120, 250, { w: 70, h: 82, dir: 1, t: t, semSombra: true, pose: 'dispara' });
-      Arte.seta(c, W / 2 + 10, 200, 0, 26, '#fff27a', t);
-    }
-    HISTORIA[pg].forEach(function (ln, i) { Arte.texto(c, ln, W / 2, 380 + i * 34, 23, '#f2fbf4', 'center', 600); });
-    for (var q = 0; q < HISTORIA.length; q++) { c.fillStyle = q === pg ? '#fff27a' : 'rgba(255,255,255,0.4)'; c.beginPath(); c.arc(W / 2 - 20 + q * 20, 500, 5, 0, 7); c.fill(); }
-    if (Jogo.espera <= 0 && pisca()) Arte.texto(c, pg < HISTORIA.length - 1 ? 'Toque ou aperte Enter' : 'Toque ou aperte Enter para começar', W / 2, 526, 18, '#fff27a');
-  }
-
   // Tela de progresso: o que já foi conquistado em cada mundo.
   function telaProgresso() {
     var P = Jogo.progresso;
@@ -342,7 +326,8 @@
   function desenhar() {
     var e = Jogo.estado, m = mundoAtual();
     var noBoss = e === 'boss' || ((e === 'morrendo' || e === 'derrota' || e === 'vitoria') && Jogo.boss && (Jogo.morreuNoBoss || e === 'vitoria'));
-    if (e === 'final' || e === 'historia' || e === 'progresso') {
+    if (e === 'cena') { Cenas.desenhar(c, Jogo.cena); return; }
+    if (e === 'final' || e === 'progresso') {
       // telas inteiras, desenhadas mais abaixo
     } else if (noBoss) {
       Boss.desenhar(c, Jogo.boss, Jogo.vidas);
@@ -352,7 +337,7 @@
     } else {
       Fase.desenhar(c, Jogo.fase, e === 'morrendo' || e === 'derrota' || e === 'titulo');
     }
-    if (e !== 'titulo' && e !== 'final' && e !== 'historia' && e !== 'progresso') {
+    if (e !== 'titulo' && e !== 'final' && e !== 'progresso') {
       Arte.painel(c, Jogo.vidas, Jogo.gotinhas, m.fase.gotinhas.length, Jogo.escudo, Jogo.t);
       if (e === 'fase' || e === 'boss') { // botão de pausa
         c.fillStyle = 'rgba(8,20,16,0.4)'; c.beginPath(); c.arc(172, 40, 20, 0, 7); c.fill();
@@ -370,7 +355,6 @@
     if (e === 'entrando') { c.fillStyle = 'rgba(244,226,255,' + (Jogo.fase.j.entrando * 0.9) + ')'; c.fillRect(0, 0, W, H); }
 
     if (e === 'titulo') telaTitulo();
-    else if (e === 'historia') telaHistoria();
     else if (e === 'progresso') telaProgresso();
     else if (e === 'derrota') {
       faixa('O vento levou o Concreto!', ['As três vidas acabaram.', Jogo.morreuNoBoss ? 'Você volta para a luta contra o boss.' : CFG.retornoPorTrecho ? 'Você volta para a última bandeira.' : 'Você volta para o começo da fase.'], 'Toque ou aperte Enter para tentar de novo');

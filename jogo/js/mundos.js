@@ -65,7 +65,7 @@ var MUNDOS = (function () {
   return [
     {
       nome: 'Mundo das Plantas', tema: 'plantas',
-      boss: { tipo: 'cthulhu', peca: 'Casco', fala: 'Essa peça brilhante é minha! Vou embrulhar ela!', nome: 'Cthulhu Higiênico', vida: 24, aviso: 1.1, ondaAbaixoDe: 0.5, trocaDeLado: 2.5 },
+      boss: { tipo: 'cthulhu', peca: 'Casco', conversa: ['Olha só o que caiu no meu jardim! Um casco brilhante!', 'Isso é da minha nave! Devolve!', 'Só se você passar por todo este papel. Ninguém escapa sem se enrolar!'], rendicao: 'Tá bom, tá bom! Me desenrolei todo. Toma o seu casco.', nome: 'Cthulhu Higiênico', art: 'o', vida: 24, aviso: 1.1, ondaAbaixoDe: 0.5, trocaDeLado: 2.5 },
       fase: construir(['planta', 'espinho', 'cogumelo', 'semente'], function (b) {
         b.trecho('Trecho 1');
         b.placa(190, 'Ande para a direita'); b.placa(410, 'PULO para subir'); b.placa(745, 'RAIO de longe!');
@@ -87,7 +87,7 @@ var MUNDOS = (function () {
     },
     {
       nome: 'Mundo Vulcânico', tema: 'vulcao', poder: 'Raio longo',
-      boss: { tipo: 'rainha', peca: 'Cúpula', fala: 'A peça da sua nave esquenta meu vulcão. Não devolvo!', nome: 'Bruxa Vulcânica', vida: 28, aviso: 1.0, ondaAbaixoDe: 0.4, trocaDeLado: 2.3, brasa: 1.2 },
+      boss: { tipo: 'rainha', peca: 'Cúpula', conversa: ['Essa cúpula esquenta o meu caldeirão direitinho.', 'É a cúpula da minha nave!', 'Então vem pegar, geleca. Cuidado para não derreter!'], rendicao: 'Ufa... esfriei. Pode levar a sua cúpula.', nome: 'Bruxa Vulcânica', art: 'a', vida: 28, aviso: 1.0, ondaAbaixoDe: 0.4, trocaDeLado: 2.3, brasa: 1.2 },
       fase: construir(['lava', 'rocha', 'brasa', 'fumaca'], function (b) {
         b.trecho('Trecho 1');
         b.placa(200, 'Cuidado com a lava!');
@@ -109,7 +109,7 @@ var MUNDOS = (function () {
     },
     {
       nome: 'Mundo do Céu', tema: 'ceu', poder: 'Pulo duplo',
-      boss: { tipo: 'anjo', peca: 'Antena', fala: 'Caiu do céu, então é minha!', nome: 'Anjo', vida: 30, aviso: 1.2, ondaAbaixoDe: 0.4, trocaDeLado: 2.0, persegue: true },
+      boss: { tipo: 'anjo', peca: 'Antena', conversa: ['A antena caiu do céu. O céu é meu, então a antena é minha.', 'Ela caiu da MINHA nave!', 'Prove que merece. Aqui em cima quem manda sou eu!'], rendicao: 'Você mereceu. A antena é sua.', nome: 'Anjo', art: 'o', vida: 30, aviso: 1.2, ondaAbaixoDe: 0.4, trocaDeLado: 2.0, persegue: true },
       fase: construir(['nuvem', 'estrela', 'passaro', 'vento'], function (b) {
         b.trecho('Trecho 1');
         b.placa(200, 'Algumas plataformas se mexem!');
@@ -133,7 +133,7 @@ var MUNDOS = (function () {
     },
     {
       nome: 'Mundo de Pelúcia', tema: 'pelucia', poder: 'Raio rápido',
-      boss: { tipo: 'coelho', peca: 'Motor', fala: 'É o meu brinquedo novo! Não empresto!', nome: 'Coelho de Pelúcia', vida: 32, aviso: 1.0, ondaAbaixoDe: 0.4, trocaDeLado: 1.7, chao: true },
+      boss: { tipo: 'coelho', peca: 'Motor', conversa: ['Brinquedo novo! Esse motor faz vrum-vrum!', 'Não é brinquedo. É o motor da minha nave!', 'Quer de volta? Então vamos brincar. Eu brinco pesado!'], rendicao: 'Cansei de brincar... Toma o seu motor.', nome: 'Coelho de Pelúcia', art: 'o', vida: 32, aviso: 1.0, ondaAbaixoDe: 0.4, trocaDeLado: 1.7, chao: true },
       fase: construir(['urso', 'coelhinho', 'novelo', 'almofada'], function (b) {
         b.trecho('Trecho 1');
         b.placa(200, 'Pise na almofada rosa!');
@@ -156,7 +156,7 @@ var MUNDOS = (function () {
     },
     {
       nome: 'Mundo dos Blocos', tema: 'blocos', poder: 'Raio forte',
-      boss: { tipo: 'guardiao', peca: 'Luzes', fala: 'A última peça segura a minha torre. Vem buscar!', nome: 'Guardião de Blocos', vida: 40, aviso: 1.0, ondaAbaixoDe: 1, trocaDeLado: 1.8, chao: true },
+      boss: { tipo: 'guardiao', peca: 'Luzes', conversa: ['As luzes da sua nave seguram o topo da minha torre.', 'É a última peça. Preciso dela para voltar para casa!', 'Então tente me desmontar, pequenino!'], rendicao: 'Desmontei! As luzes são suas. Boa viagem, pequenino.', nome: 'Guardião de Blocos', art: 'o', vida: 40, aviso: 1.0, ondaAbaixoDe: 1, trocaDeLado: 1.8, chao: true },
       fase: construir(['bloco', 'arco', 'pilha', 'piramide'], function (b) {
         b.trecho('Trecho 1');
         b.dourada(335, 165);
