@@ -345,10 +345,12 @@ var Fase = (function () {
         c.save();
         c.translate(j.x - cam + (d.portalX - j.x) * j.entrando, j.y - 60 * j.entrando);
         c.rotate(j.entrando * 7); c.scale(k, k);
-        Arte.concreto(c, 0, 26, { w: JW + 8, h: JH + 8, dir: j.dir, t: f.t, semSombra: true });
+        Arte.concreto(c, 0, 26, { w: JW + 8, h: JH + 8, dir: j.dir, t: f.t, semSombra: true, pose: 'sobe' });
         c.restore();
       } else {
-        Arte.concreto(c, j.x - cam, j.y, { w: JW + 8, h: JH + 8, dir: j.dir, t: f.t + (j.vx ? f.t : 0), espichar: esp, atacando: j.atacando > 0, dano: j.trava > 0 });
+        var pose = j.trava > 0 ? 'carrega' : j.atacando > 0 ? 'dispara' : j.pouso > 0 ? 'pousa' : !j.noChao ? (j.vy < 0 ? 'sobe' : 'desce')
+          : j.vx ? ['anda1', 'anda2', 'anda3', 'anda2'][Math.floor(f.t * 9) % 4] : 'parado';
+        Arte.concreto(c, j.x - cam, j.y, { w: JW + 8, h: JH + 8, dir: j.dir, t: f.t + (j.vx ? f.t : 0), espichar: esp, atacando: j.atacando > 0, dano: j.trava > 0, pose: pose });
         if (f.escudoAtivo) Arte.bolha(c, j.x - cam, j.y - 28, 44, f.t);
       }
     }

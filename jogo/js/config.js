@@ -6,6 +6,8 @@ var CFG = {
   altura: 540,
 
   concreto: {
+    visual: 'pranchas',        // 'pranchas' = recortes da prancha de estudos (em avaliação); 'codigo' = desenho feito por código
+    nomeCor: 'verde',
     // Cor atual. As quatro alternativas da prancha de estudos ficam em `cores`; a escolha definitiva (P04) segue em aberto.
     cor: '#a8e61d', corEscura: '#1d6b1a', clara: '#c9f545', funda: '#8ed412', mancha: '92,176,10', luz: '240,255,170',
     cores: {

@@ -18,8 +18,8 @@
     try {
       var p = JSON.parse(localStorage.getItem(CHAVE) || '{}');
       return { liberado: Math.max(0, Math.min(MUNDOS.length - 1, p.liberado | 0)), recordes: p.recordes || [], zerou: !!p.zerou,
-        cor: CFG.concreto.cores[p.cor] ? p.cor : 'verde', mudo: !!p.mudo, viuHistoria: !!p.viuHistoria, douradas: p.douradas || [] };
-    } catch (e) { return { liberado: 0, recordes: [], zerou: false, cor: 'verde', mudo: false, viuHistoria: false }; }
+        visual: p.visual === 'codigo' ? 'codigo' : 'pranchas', cor: CFG.concreto.cores[p.cor] ? p.cor : 'verde', mudo: !!p.mudo, viuHistoria: !!p.viuHistoria, douradas: p.douradas || [] };
+    } catch (e) { return { liberado: 0, recordes: [], zerou: false, visual: 'pranchas', cor: 'verde', mudo: false, viuHistoria: false }; }
   }
   function salvar() { try { localStorage.setItem(CHAVE, JSON.stringify(Jogo.progresso)); } catch (e) {} }
 
@@ -44,7 +44,7 @@
   function aplicarCor(nome) {
     var pal = CFG.concreto.cores[nome], C = CFG.concreto;
     ['cor', 'corEscura', 'clara', 'funda', 'mancha', 'luz'].forEach(function (k) { C[k] = pal[k]; });
-    Jogo.progresso.cor = nome;
+    Jogo.progresso.cor = nome; C.nomeCor = nome;
   }
   function bolinhaCor(i) { return { x: W / 2 + 150, y: 196 + i * 40, r: 14 }; }
   // estrelas do mundo: 1 por vencer, 2 com 60% das gotinhas, 3 com 90% (PROVISÓRIO)
@@ -56,6 +56,7 @@
   }
   Jogo.estrelas = estrelas;
   aplicarCor(Jogo.progresso.cor);
+  CFG.concreto.visual = Jogo.progresso.visual;
   Som.ligar(!Jogo.progresso.mudo);
   function alternarSom() { Jogo.progresso.mudo = !Jogo.progresso.mudo; Som.ligar(!Jogo.progresso.mudo); salvar(); }
 
@@ -119,6 +120,10 @@
       if (Entrada.corApertou) { var ic = NOMES_COR.indexOf(Jogo.progresso.cor); do { ic = (ic + 1) % 4; } while (!corLiberada(NOMES_COR[ic])); nova = NOMES_COR[ic]; }
       if (toque) NOMES_COR.forEach(function (nome, k) { var bc = bolinhaCor(k); if (Math.abs(toque.x - bc.x) < 24 && Math.abs(toque.y - bc.y) < 20) { toque = null; if (corLiberada(nome)) nova = nome; } });
       if (nova) { aplicarCor(nova); salvar(); Som.gotinha(); }
+      // trocar entre o desenho da prancha e o desenho por código: tecla V ou toque no botão
+      if (Entrada.visualApertou || (toque && Math.abs(toque.x - (W / 2 - 170)) < 84 && Math.abs(toque.y - 196) < 18)) {
+        CFG.concreto.visual = CFG.concreto.visual === 'pranchas' ? 'codigo' : 'pranchas'; Jogo.progresso.visual = CFG.concreto.visual; salvar(); toque = null;
+      }
       if (Entrada.esqApertou && Jogo.mundo > 0) Jogo.mundo--;
       if (Entrada.dirApertou && Jogo.mundo < lib) Jogo.mundo++;
       if (Entrada.esqApertou || Entrada.dirApertou) Jogo.fase = Fase.criar(mundoAtual());
@@ -202,7 +207,7 @@
     c.fillStyle = 'rgba(30,14,64,0.62)'; c.fillRect(0, 0, W, H);
     Arte.texto(c, 'CONCRETO', W / 2, 102, 84, '#4a1f8a', 'center', 800, '#4a1f8a');
     Arte.texto(c, 'CONCRETO', W / 2, 96, 84, '#b6f03a', 'center', 800, '#1d6b1a');
-    Arte.concreto(c, W / 2, 300, { w: 100, h: 116, dir: 1, t: Jogo.t, espichar: Math.sin(Jogo.t * 3) * 0.1 });
+    Arte.concreto(c, W / 2, 300, { w: 100, h: 116, dir: 1, t: Jogo.t, espichar: Math.sin(Jogo.t * 3) * 0.1, pose: 'grande' });
     for (var i = 0; i < MUNDOS.length; i++) {
       var b = bolinha(i), aberto = i <= lib, sel = i === Jogo.mundo;
       if (i < MUNDOS.length - 1) {
@@ -227,11 +232,14 @@
       c.beginPath(); c.arc(bc.x, bc.y, bc.r, 0, 7); c.fill(); c.stroke();
       if (!ok) { Arte.gota(c, bc.x + 30, bc.y + 2, 7); Arte.texto(c, String(pal.gotinhas), bc.x + 58, bc.y, 15, '#f2fbf4', 'center', 700); }
     });
+    c.fillStyle = 'rgba(242,251,244,0.16)'; c.strokeStyle = 'rgba(242,251,244,0.6)'; c.lineWidth = 2;
+    Arte.retArred(c, W / 2 - 252, 180, 164, 32, 16); c.fill(); c.stroke();
+    Arte.texto(c, CFG.concreto.visual === 'pranchas' ? 'Desenho: prancha' : 'Desenho: código', W / 2 - 170, 196, 14, '#f2fbf4', 'center', 700);
     Arte.texto(c, 'Gotinhas: ' + somaRecordes(), W / 2 - 170, 240, 17, '#f2fbf4', 'center', 700);
     listaPoderes().forEach(function (pn, k) { Arte.texto(c, pn, W / 2 - 170, 266 + k * 22, 14, '#fff27a', 'center', 700); });
     botaoSom();
     if (pisca()) Arte.texto(c, 'Toque em um mundo ou aperte Enter para jogar', W / 2, 505, 20, '#fff27a');
-    Arte.texto(c, 'Setas andam · espaço pula · X raio · P pausa · C cor · S som', W / 2, 20, 14, '#d9f3e2', 'center', 600);
+    Arte.texto(c, 'Setas andam · espaço pula · X raio · P pausa · C cor · V desenho · S som', W / 2, 20, 14, '#d9f3e2', 'center', 600);
   }
 
   function botaoSom() {
@@ -273,7 +281,7 @@
     if (e === 'titulo') telaTitulo();
     else if (e === 'historia') { // história PROVISÓRIA: o criador ainda vai inventar a dele
       c.fillStyle = 'rgba(30,14,64,0.72)'; c.fillRect(0, 0, W, H);
-      Arte.concreto(c, W / 2, 200, { w: 90, h: 104, dir: 1, t: Jogo.t, espichar: Math.sin(Jogo.t * 3) * 0.1 });
+      Arte.concreto(c, W / 2, 200, { w: 90, h: 104, dir: 1, t: Jogo.t, espichar: Math.sin(Jogo.t * 3) * 0.1, pose: 'grande' });
       ['Cinco chefes bagunçaram os cinco mundos.', 'Só o Concreto, uma geleca corajosa,', 'consegue atravessar os portais.', 'Atravesse cada mundo e enfrente o chefe no final!']
         .forEach(function (ln, k) { Arte.texto(c, ln, W / 2, 262 + k * 36, 23, '#f2fbf4', 'center', 600); });
       if (Jogo.espera <= 0 && pisca()) Arte.texto(c, 'Toque ou aperte Enter para começar', W / 2, 460, 24, '#fff27a');
@@ -293,7 +301,7 @@
       c.fillStyle = 'rgba(30,14,64,0.55)'; c.fillRect(0, 0, W, H);
       for (var i = 0; i < 14; i++) Arte.estrela(c, (Arte.acaso(i) * W + Jogo.t * 30 * (0.5 + Arte.acaso(i + 3))) % W, 40 + Arte.acaso(i + 8) * 460, 8 + Arte.acaso(i + 5) * 10, '#ffd84a', '#a06a08');
       Arte.texto(c, 'Você venceu os cinco mundos!', W / 2, 110, 44, '#fff27a');
-      Arte.concreto(c, W / 2, 330 - Math.abs(Math.sin(Jogo.t * 4)) * 40, { w: 110, h: 128, dir: 1, t: Jogo.t, espichar: Math.sin(Jogo.t * 8) * 0.25 });
+      Arte.concreto(c, W / 2, 330 - Math.abs(Math.sin(Jogo.t * 4)) * 40, { w: 110, h: 128, dir: 1, t: Jogo.t, espichar: Math.sin(Jogo.t * 8) * 0.25, pose: 'grande' });
       Arte.texto(c, 'Gotinhas: ' + totalGotinhas(), W / 2, 400, 24, '#f2fbf4');
       Arte.texto(c, 'Os cinco mundos estão em paz de novo. Obrigado, Concreto!', W / 2, 440, 19, '#d9f3e2', 'center', 600);
       if (Jogo.espera <= 0 && pisca()) Arte.texto(c, 'Toque ou aperte Enter para voltar aos mundos', W / 2, 490, 22, '#fff27a');

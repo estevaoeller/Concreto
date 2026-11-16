@@ -23,6 +23,7 @@ var Entrada = (function () {
     if (ev.key === 'Enter') { e.confirmou = true; ev.preventDefault(); }
     if (ev.key === 'p' || ev.key === 'P' || ev.key === 'Escape') e.pausou = true;
     if (ev.key === 'c' || ev.key === 'C') e.corApertou = true;
+    if (ev.key === 'v' || ev.key === 'V') e.visualApertou = true;
     if (ev.key === 's' || ev.key === 'S') e.somApertou = true;
     Som.acordar();
   });
@@ -66,7 +67,7 @@ var Entrada = (function () {
 
   e.limparQuadro = function () {
     e.esqApertou = e.dirApertou = e.puloApertou = e.ataqueApertou = false;
-    e.confirmou = false; e.pausou = false; e.corApertou = false; e.somApertou = false; e.toque = null;
+    e.confirmou = false; e.pausou = false; e.corApertou = false; e.visualApertou = false; e.somApertou = false; e.toque = null;
   };
   return e;
 })();

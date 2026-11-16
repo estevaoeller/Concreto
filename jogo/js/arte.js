@@ -194,8 +194,48 @@ var Arte = (function () {
   // Concreto visto de lado. (x, y) = meio dos pés.
   // Segue a alternativa A da prancha de estudos: geleca verde-limão de contorno grosso,
   // topo que tomba para o lado (P02), barra de baixo escorrendo, olhos pretos grandes e boca aberta.
+  // ---- Concreto a partir da prancha de estudos (sprites.js). Em avaliação; o desenho por código continua disponível. ----
+  var folha = null, folhas = {};
+  if (typeof SPRITES !== 'undefined') { folha = new Image(); folha.src = SPRITES.concreto.dados; }
+  var MATIZ = { verde: 0, azul: 115, roxo: 190, laranja: -45 }; // quanto girar o verde da prancha para chegar em cada cor
+  function folhaDaCor(nome) {
+    if (!folha || !folha.complete || !folha.naturalWidth) return null;
+    if (folhas[nome]) return folhas[nome];
+    var cv = document.createElement('canvas'); cv.width = folha.naturalWidth; cv.height = folha.naturalHeight;
+    var k = cv.getContext('2d'); k.drawImage(folha, 0, 0);
+    var giro = MATIZ[nome] || 0;
+    if (giro) { // troca só o que é verde; olhos, boca e brilhos ficam como estão
+      var d = k.getImageData(0, 0, cv.width, cv.height), p = d.data;
+      for (var i = 0; i < p.length; i += 4) {
+        if (!p[i + 3]) continue;
+        var r = p[i] / 255, g = p[i + 1] / 255, b = p[i + 2] / 255, mx = Math.max(r, g, b), mn = Math.min(r, g, b), df = mx - mn;
+        if (df < 0.12 || mx !== g) continue;
+        var h = (60 * ((b - r) / df + 2) + giro + 360) % 360, l = (mx + mn) / 2, s = df / (1 - Math.abs(2 * l - 1));
+        var q = (1 - Math.abs(2 * l - 1)) * Math.min(1, s), xx = q * (1 - Math.abs((h / 60) % 2 - 1)), m = l - q / 2, t = h < 60 ? [q, xx, 0] : h < 120 ? [xx, q, 0] : h < 180 ? [0, q, xx] : h < 240 ? [0, xx, q] : h < 300 ? [xx, 0, q] : [q, 0, xx];
+        p[i] = (t[0] + m) * 255; p[i + 1] = (t[1] + m) * 255; p[i + 2] = (t[2] + m) * 255;
+      }
+      k.putImageData(d, 0, 0);
+    }
+    folhas[nome] = cv;
+    return cv;
+  }
+  function concretoDaPrancha(c, x, y, o) {
+    var cv = folhaDaCor(o.cor || CFG.concreto.nomeCor || 'verde');
+    if (!cv) return false;
+    var q = SPRITES.concreto.quadros[o.pose] || SPRITES.concreto.quadros.parado, ref = SPRITES.concreto.quadros[o.pose === 'grande' ? 'grande' : 'parado'];
+    var k = (o.h || 58) * 1.2 / ref.h, esp = (o.espichar || 0) * 0.35, dir = o.dir || 1;
+    c.save(); c.translate(x, y);
+    if (!o.semSombra) { c.fillStyle = 'rgba(60,40,110,0.2)'; c.beginPath(); c.ellipse(0, 3, q.w * k * 0.42, q.h * k * 0.07, 0, 0, 7); c.fill(); }
+    c.scale(dir * (1 - esp * 0.5), 1 + esp);
+    c.imageSmoothingQuality = 'high';
+    c.drawImage(cv, q.x, q.y, q.w, q.h, -q.w * k / 2, -q.h * k + 4 * k, q.w * k, q.h * k);
+    c.restore();
+    return true;
+  }
+
   function concreto(c, x, y, o) {
     o = o || {};
+    if (CFG.concreto.visual === 'pranchas' && concretoDaPrancha(c, x, y, o)) return;
     var dir = o.dir || 1, t = o.t || 0, esp = o.espichar || 0; // esp > 0 estica (pulo), < 0 achata
     var ww = (o.w || 48) * 1.3 * (1 - esp * 0.18), hh = (o.h || 58) * 0.95 * (1 + esp * 0.22);
     var bal = Math.sin(t * 5) * 0.025;               // o topo balança como gelatina

@@ -168,3 +168,11 @@ Implementado: bandeiras de retorno por trecho, gotinha dourada por mundo, quatro
 Publicação: adicionada página inicial na raiz que leva a `jogo/`, para uso com GitHub Pages a partir de `main`. A ativação do Pages é feita nas configurações do repositório.
 
 Próximo passo combinado: substituir o desenho por código pelas pranchas, com aprovação dos recursos antes de integrar (AGENTS.md).
+
+## 2026-11-16 — Rodada 015 — Concreto a partir da prancha
+
+- Autorizado pelo responsável: começar a troca do desenho por código pelas pranchas, pelo Concreto, com comparação lado a lado.
+- Criada a ferramenta `ferramentas/recortar_concreto.py`, que recorta dez poses e o desenho grande da prancha `personagens/concreto-v01.png` e gera a folha de sprites. A prancha original não foi alterada.
+- Integrado ao jogo com troca imediata entre "Desenho: prancha" e "Desenho: código" na tela inicial (tecla V). As quatro cores funcionam nos dois modos.
+- Estado do recurso: em avaliação, registrado em `assets/game/README.md` com origem, preparação e limitações. Monstros, cenários e bosses continuam desenhados por código.
+- Testes: bateria completa executada com o modo prancha ativo; resultado registrado no relato da rodada.
