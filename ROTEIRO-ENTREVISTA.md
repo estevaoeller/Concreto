@@ -54,7 +54,8 @@ Para confirmar ou mudar o que está no jogo. Cada pergunta traz o que o jogo faz
 | 17 ★ | Ir para o lado para escapar do golpe: era isso que você queria dizer com "bater nos lados"? | Três lados; o aviso mostra onde o golpe cai (X11) | |
 | 18 | Só dá para acertar o boss quando ele cansa. Está certo? | Sim, nos 10 segundos depois dos dois ataques (B01, X12) | |
 | 19 ★ | Algum boss está difícil demais? Algum fácil demais? | Vida: 24, 28, 30, 32 e 40 (X13) | |
-| 20 | O golpe de cada boss ficou legal? Mudaria algum? | Onda de papel, brasa no chão, aviso que muda de lado, golpe no chão que pede pulo (X13) | |
+| 20 | Os bosses desenhados do jeito antigo ficaram melhores? Tem algum que você quer diferente? | Voltaram a ser desenhados por código, como você pediu (G14) | |
+| 20b | O golpe de cada boss ficou legal? Mudaria algum? | Onda de papel, brasa no chão, aviso que muda de lado, golpe no chão que pede pulo (X13) | |
 | 21 | Todas as lutas são vistas pelos olhos do Concreto. Fica assim para todos? | Sim (B04, X10) | |
 | 22 ★ | No mundo 2 fizemos a Bruxa Vulcânica no lugar da Malgosha, e no mundo 5 blocos de montar no lugar do Lego. O que você achou? | Versões só nossas, porque as outras são de outras pessoas (X07) | |
 

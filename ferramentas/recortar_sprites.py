@@ -1,6 +1,6 @@
 """Recorta as folhas de sprites de fundo magenta e gera jogo/js/sprites.js.
 
-Uso: python3 ferramentas/recortar_sprites.py   (precisa de Pillow, numpy e scipy)
+Uso: python3 ferramentas/recortar_sprites.py [--com-bosses]   (precisa de Pillow, numpy e scipy)
 Entrada: assets/concept-art/sprites/*-sprites-v01.png
 Saída: jogo/js/sprites.js, com cada folha recortada embutida (WebP com transparência), para o jogo abrir sem servidor.
 
@@ -20,6 +20,10 @@ ESTADOS = ['neutro', 'prepara', 'ataca', 'cansado']
 FOLHAS = {
     'concreto': ('concreto-sprites-v01.png', 3,
                  ['parado', 'anda1', 'anda2', 'anda3', 'agacha', 'sobe', 'desce', 'pousa', 'carrega', 'dispara', 'susto', 'feliz'], 200),
+}
+# Folhas dos bosses: o criador preferiu os bosses desenhados por código (rodada 022).
+# Ficam fora do jogo; para voltar a usá-las: python3 ferramentas/recortar_sprites.py --com-bosses
+FOLHAS_BOSSES = {
     'cthulhu': ('cthulhu-sprites-v01.png', 1, ESTADOS, 380),
     'rainha': ('bruxa-vulcanica-sprites-v01.png', 1, ESTADOS, 380),
     'anjo': ('anjo-sprites-v01.png', 1, ESTADOS, 380),
@@ -66,7 +70,9 @@ def recortar_folha(caminho, linhas, nomes, alt_max):
 
 def main():
     saida, previa = {}, os.environ.get('PREVIA')
-    for nome, (arq, linhas, nomes, alt_max) in FOLHAS.items():
+    import sys
+    folhas = dict(FOLHAS, **(FOLHAS_BOSSES if '--com-bosses' in sys.argv else {}))
+    for nome, (arq, linhas, nomes, alt_max) in folhas.items():
         folha, mapa = recortar_folha(os.path.join(PASTA, arq), linhas, nomes, alt_max)
         mem = io.BytesIO(); folha.save(mem, 'WEBP', quality=92, method=6)
         saida[nome] = {'quadros': mapa, 'dados': 'data:image/webp;base64,' + base64.b64encode(mem.getvalue()).decode()}

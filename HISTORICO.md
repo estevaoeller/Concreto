@@ -234,3 +234,10 @@ Pedido do responsável: manter o desenho por código (prompts ficam como opção
 
 - Criado `ROTEIRO-ENTREVISTA.md`: 38 perguntas em linguagem simples, cada uma com o que o jogo faz hoje e o identificador da regra, para o criador confirmar, mudar ou tirar. Dez estão marcadas como prioritárias.
 - Avaliação do desenvolvimento: o jogo está completo de ponta a ponta; o que falta é validação com o criador, não funcionalidade.
+
+## 2026-11-17 — Rodada 022 — Bosses de volta ao código
+
+- Retorno do criador, pelo responsável: não gostou dos bosses em sprite. Decisão: bosses desenhados por código; por enquanto, só o Concreto em sprite (G14).
+- As folhas dos quatro bosses saíram do jogo e continuam no repositório. `ferramentas/recortar_sprites.py` passou a gerar só o Concreto; a opção `--com-bosses` traz as folhas de volta. O arquivo de imagens do jogo caiu de cerca de 1,3 MB para 190 KB.
+- Ajuste causado pela troca: o radar dos três lados e os recados da luta ficavam em cima do rosto dos bosses desenhados por código. O radar foi para o canto de baixo à direita e os recados para baixo, perto do Concreto.
+- Testes: todas as verificações passaram. Lutas e cenas conferidas visualmente com os bosses em código.

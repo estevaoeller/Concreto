@@ -65,14 +65,14 @@ Imagens feitas para recorte: fundo magenta liso, sem texto, poses separadas. Env
 | ID | Folha | Arquivo | Conteúdo | Uso |
 |---|---|---|---|---|
 | SP01 | Concreto | [sprites/concreto-sprites-v01.png](sprites/concreto-sprites-v01.png) | 12 poses: parado, três de andar, agachar, subir, descer, pousar, carregar, disparar, susto, feliz | No jogo |
-| SP02 | Cthulhu Higiênico | [sprites/cthulhu-sprites-v01.png](sprites/cthulhu-sprites-v01.png) | 4 estados de frente: neutro, preparando, atacando, cansado | No jogo |
-| SP03 | Bruxa Vulcânica | [sprites/bruxa-vulcanica-sprites-v01.png](sprites/bruxa-vulcanica-sprites-v01.png) | 4 estados de frente | No jogo, como boss do mundo 2 |
-| SP04 | Anjo | [sprites/anjo-sprites-v01.png](sprites/anjo-sprites-v01.png) | 4 estados de frente | No jogo |
-| SP05 | Coelho de Pelúcia | [sprites/coelho-sprites-v01.png](sprites/coelho-sprites-v01.png) | 4 estados de frente | No jogo |
+| SP02 | Cthulhu Higiênico | [sprites/cthulhu-sprites-v01.png](sprites/cthulhu-sprites-v01.png) | 4 estados de frente: neutro, preparando, atacando, cansado | Retirado do jogo (rodada 022) |
+| SP03 | Bruxa Vulcânica | [sprites/bruxa-vulcanica-sprites-v01.png](sprites/bruxa-vulcanica-sprites-v01.png) | 4 estados de frente | Retirado do jogo (rodada 022) |
+| SP04 | Anjo | [sprites/anjo-sprites-v01.png](sprites/anjo-sprites-v01.png) | 4 estados de frente | Retirado do jogo (rodada 022) |
+| SP05 | Coelho de Pelúcia | [sprites/coelho-sprites-v01.png](sprites/coelho-sprites-v01.png) | 4 estados de frente | Retirado do jogo (rodada 022) |
 | SP06 | Urso de pelúcia | [sprites/urso-sprites-v01.png](sprites/urso-sprites-v01.png) | 4 estados de frente | Não usado: o boss do mundo 4 é o coelho |
 
 Não há folha do Guardião de Blocos; ele continua desenhado por código.
 
 ## Uso no jogo
 
-O Concreto e os quatro bosses acima vêm das folhas de sprites. Monstros, cenários, itens e o Guardião de Blocos são desenhados por código, com as pranchas como referência. Detalhes da preparação em [assets/game](../game/README.md).
+Só o Concreto vem da folha de sprites. O criador não gostou dos bosses em sprite, e eles voltaram a ser desenhados por código, como os monstros, os cenários e os itens. Tudo é desenhado por código, com as pranchas como referência. Detalhes da preparação em [assets/game](../game/README.md).

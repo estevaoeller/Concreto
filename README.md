@@ -41,7 +41,7 @@ Nas lutas contra os bosses: esquerda e direita trocam de lado para fugir do golp
 - [Recursos integrados ao jogo](assets/game/README.md): o que está no jogo, de onde veio e como foi preparado.
 - [Prompts](prompts/README.md): textos usados para gerar pranchas e folhas de sprites.
 
-O Concreto e quatro bosses usam folhas de sprites. O quinto boss, os monstros, os cenários e a interface são desenhados por código. A branch `desenho-por-codigo-v1` guarda a versão em que tudo era desenhado por código.
+Só o Concreto usa folha de sprites. Os bosses, os monstros, os cenários e a interface são desenhados por código; o criador preferiu os bosses assim. A branch `desenho-por-codigo-v1` guarda a versão em que tudo era desenhado por código.
 
 ## Para quem desenvolve
 

@@ -405,7 +405,7 @@ var Boss = (function () {
     c.globalAlpha = vencido ? Math.max(0, 1 - b.vencido / 2) : 1;
     if (vencido) c.rotate(b.vencido * 0.25);
     if (b.flash > 0) c.scale(1.05, 1.05);
-    // folha de sprites do boss (quatro estados), quando existe; senão, o desenho por código
+    // folha de sprites do boss, só se tiver sido incluída em sprites.js; por decisão do criador, hoje os bosses são desenhados por código
     var quadro = est.tonto ? 'cansado' : b.fase === 'golpe' ? 'ataca' : b.fase === 'aviso' ? 'prepara' : 'neutro';
     if (typeof SPRITES === 'undefined' || !SPRITES[b.cfg.tipo] || !Arte.sprite(c, b.cfg.tipo, quadro, 0, 218, 372, 'neutro')) b.vis.corpo(c, b, b.t, est);
     c.restore();
@@ -546,7 +546,7 @@ var Boss = (function () {
     // pista: radar dos três lados. Verde = onde você está; vermelho = onde o golpe vai cair; a bolinha de cima é o boss.
     var perigoso = (b.fase === 'aviso' || b.fase === 'golpe') ? b.alvos : [];
     [-1, 0, 1].forEach(function (l) {
-      var rx = W / 2 + l * 46, ry = 150, ruim = perigoso.indexOf(l) >= 0 || b.brasas.some(function (q) { return q.lado === l; });
+      var rx = W - 112 + l * 46, ry = H - 40, ruim = perigoso.indexOf(l) >= 0 || b.brasas.some(function (q) { return q.lado === l; });
       c.fillStyle = ruim ? 'rgba(255,70,60,' + (0.55 + 0.35 * Math.abs(Math.sin(b.t * 12))) + ')' : 'rgba(8,20,16,0.5)';
       c.strokeStyle = l === b.lado ? '#7aff8a' : 'rgba(255,255,255,0.55)'; c.lineWidth = l === b.lado ? 5 : 2;
       R(c, rx - 18, ry - 14, 36, 28, 8); c.fill(); c.stroke();
@@ -569,10 +569,10 @@ var Boss = (function () {
       }
     }
     // recados
-    if (b.fase === 'pausa') Arte.texto(c, 'Cansou! Atire o raio!', W / 2, 108, 24, '#fff27a');
-    else if (b.fase === 'aviso' || b.fase === 'golpe') Arte.texto(c, b.tipoAtaque === 'chao' ? 'Golpe no chão! Aperte PULO!' : b.alvos.length > 1 ? 'Ache o lado livre!' : 'Cuidado! Vá para o lado!', W / 2, 100, 22, '#ffb0a6');
+    if (b.fase === 'pausa') Arte.texto(c, 'Cansou! Atire o raio!', W / 2, 446, 26, '#fff27a');
+    else if (b.fase === 'aviso' || b.fase === 'golpe') Arte.texto(c, b.tipoAtaque === 'chao' ? 'Golpe no chão! Aperte PULO!' : b.alvos.length > 1 ? 'Ache o lado livre!' : 'Cuidado! Vá para o lado!', W / 2, 446, 24, '#ffb0a6');
     else if (b.fase === 'entrada') {
-      if (b.tempo < 1 || !B.fala) Arte.texto(c, B.nome + ' apareceu!', W / 2, 92, 30, '#f2fbf4');
+      if (b.tempo < 1 || !B.fala) Arte.texto(c, B.nome + ' apareceu!', W / 2, 446, 30, '#f2fbf4');
       else { // fala do boss (texto PROVISÓRIO)
         c.font = '700 21px "Trebuchet MS", "Segoe UI", system-ui, sans-serif';
         var lw = c.measureText(B.fala).width + 44;
@@ -583,7 +583,7 @@ var Boss = (function () {
         c.fillStyle = '#2a2050'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(B.fala, W / 2, 425);
       }
     }
-    else if (b.fase === 'vencido') Arte.texto(c, 'Você venceu: ' + B.nome + '!', W / 2, 300, 32, '#fff27a');
+    else if (b.fase === 'vencido') Arte.texto(c, 'Você venceu: ' + B.nome + '!', W / 2, 446, 32, '#fff27a');
   }
 
   // Retrato do boss para as cenas de história. (x, y) = centro; quadro: neutro, prepara, ataca ou cansado.

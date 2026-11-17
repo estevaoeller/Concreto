@@ -1,6 +1,6 @@
 # Concreto — Especificação do jogo
 
-Versão: 1.2 — 2026-11-16
+Versão: 1.3 — 2026-11-17
 Estado: jogo completo em protótipo (cinco mundos), em validação com o criador. Esta versão reorganiza o documento; nenhuma regra foi alterada na reorganização. O percurso das decisões está em [HISTORICO.md](HISTORICO.md).
 
 ## 1. Como ler
@@ -174,8 +174,9 @@ Tudo nesta seção é Delegado.
 
 ## 12. Arte e recursos
 
-- O Concreto e quatro bosses (Cthulhu, Bruxa Vulcânica, Anjo, Coelho) usam folhas de sprites enviadas pelo responsável, recortadas por `ferramentas/recortar_sprites.py`. Estado: em avaliação.
-- O Guardião de Blocos, os monstros, os cenários, os itens e a interface são desenhados por código, tendo as pranchas de concept art como referência (Responsável: o restante segue em código).
+- Só o Concreto usa folha de sprites, recortada por `ferramentas/recortar_sprites.py`. Estado: em avaliação.
+- G14 (Criador): os bosses são desenhados por código. Ele não gostou das folhas de sprites dos bosses; elas continuam no repositório, fora do jogo.
+- Os monstros, os cenários, os itens e a interface também são desenhados por código, tendo as pranchas de concept art como referência (Responsável).
 - A opção "Desenho" na tela inicial troca entre as folhas de sprites e o desenho por código. A branch `desenho-por-codigo-v1` guarda a versão anterior aos sprites.
 - Catálogo e origem de cada imagem: [assets/concept-art/README.md](assets/concept-art/README.md) e [assets/game/README.md](assets/game/README.md).
 - Inventário de recursos G01 a G19 (personagem, efeitos, monstros, portal, cenários, bosses, interface, sons): todos têm versão no protótipo; nenhum está aprovado como final.
